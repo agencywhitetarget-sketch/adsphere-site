@@ -533,6 +533,43 @@ window.addEventListener("scroll", () => {
   lastScroll = currentScroll;
 });
 </script>
+  <script>
+(() => {
+  const header = document.querySelector('header');
+  if (!header) return;
+
+  let last = window.pageYOffset || 0;
+  const threshold = 20; // щоб дрібні рухи не смикали шапку
+
+  // Якщо сторінка завантажилась не з самого верху — одразу сховати
+  if (last > 10) {
+    header.classList.remove('is-visible');
+    header.classList.add('is-hidden');
+  }
+
+  const onScroll = () => {
+    const y = window.pageYOffset || 0;
+
+    if (y <= 10) {
+      // самий верх — шапка завжди видима
+      header.classList.remove('is-hidden');
+      header.classList.add('is-visible');
+    } else if (y > last + threshold) {
+      // скролимо вниз — ховаємо
+      header.classList.add('is-hidden');
+      header.classList.remove('is-visible');
+    } else if (y < last - threshold) {
+      // скролимо вгору — показуємо
+      header.classList.remove('is-hidden');
+      header.classList.add('is-visible');
+    }
+
+    last = y;
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+</script>
 </body>
 </html>
 
