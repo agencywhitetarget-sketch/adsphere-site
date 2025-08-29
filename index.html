@@ -1,42 +1,396 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AdSphere Global — Certified Google Partner</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AdSphere Global — Certified Google Partner</title>
+<meta name="description" content="AdSphere Global — Certified Google Partner. We create, set up and manage compliant Google Ads campaigns (crypto, gambling, fintech, e-commerce), plus certificates and business verification.">
+<style>
+  :root{
+    --bg:#0b0b0c; --panel:#121214; --card:#141417; --muted:#b0b0b8; --text:#f5f6f7;
+    --line:#22232a; --accent:#6ee7b7; --pill:#1f2937; --brand:#79ffa8;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:1120px;margin:0 auto;padding:0 20px}
+  .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 1.15rem;border:1px solid var(--brand);border-radius:14px;background:var(--brand);color:#03140b;font-weight:700}
+  .btn.outline{background:transparent;color:var(--text);border-color:#3b3d45}
+  .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .6rem;border-radius:999px;background:#0e1b14;color:#a7f3d0;border:1px solid #1f4934;font-size:.82rem}
+  .pill{display:inline-flex;align-items:center;padding:.25rem .6rem;border-radius:999px;background:var(--pill);color:#cfd2d8;font-size:.75rem;border:1px solid #2b2d36}
+  header{position:sticky;top:0;z-index:40;background:rgba(11,11,12,.6);backdrop-filter:saturate(160%) blur(10px);border-bottom:1px solid var(--line)}
+  .nav{height:64px;display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:.6rem}
+  .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#1b1f1b,#1e2d24);}
+  .nav-links{display:none;gap:18px}
+  @media(min-width:900px){ .nav-links{display:flex} }
+  select.lang{background:#121417;color:#e6e8ee;border:1px solid #2e3038;border-radius:10px;padding:.45rem .6rem}
+  .banner{background:#1a1c22;border-bottom:1px solid #2a2c33;color:#e6e6f1}
+  .banner .container{padding:12px 20px;font-size:.95rem}
+  section{padding:64px 0}
+  .hero{background:
+    radial-gradient(1000px 500px at 100% -100%, rgba(121,255,168,.12), transparent 60%),
+    radial-gradient(1000px 500px at 0% -100%, rgba(102,204,255,.08), transparent 60%);}
+  .grid{display:grid;gap:20px}
+  .hero-grid{grid-template-columns:1fr}
+  @media(min-width:980px){ .hero-grid{grid-template-columns:1.1fr .9fr} }
+  h1{font-size:40px;line-height:1.15;margin:.4rem 0 1rem}
+  h2{font-size:28px;margin:0 0 16px}
+  p.lead{font-size:18px;color:var(--muted)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .muted{color:var(--muted)}
+  .list{display:grid;grid-template-columns:1fr;gap:14px}
+  @media(min-width:960px){ .cols-3{grid-template-columns:repeat(3,1fr)} .cols-4{grid-template-columns:repeat(4,1fr)}}
+  .price{font-weight:800;font-size:26px;margin:8px 0}
+  footer{border-top:1px solid var(--line);background:#101114;color:#c8cbd2}
+  .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .kpi .label{font-size:12px;color:#a7aab4}
+  .kpi .value{font-weight:800;font-size:20px}
+  .chip{display:inline-block;border:1px dashed #2b2e36;color:#c9ced6;padding:.25rem .6rem;border-radius:999px;font-size:.78rem}
+  .ok{color:#34d399}
+  .warn{color:#fbbf24}
+  /* language visibility */
+  .i18n{display:none}
+  .i18n.active{display:initial}
+</style>
 </head>
-<body style="font-family:Arial, sans-serif; margin:40px; background:#f7f7f7; color:#111;">
+<body>
 
-  <h1>AdSphere Global 🌐</h1>
-  <h2>Certified Google Partner</h2>
-  <p>
-    From crypto and gambling to fintech and e‑commerce — we build, set up and manage compliant Google Ads campaigns,
-    then scale them with ROI‑focused optimization.
-  </p>
+<header>
+  <div class="container nav">
+    <div class="brand">
+      <div class="logo"></div>
+      <div class="row" style="gap:.5rem">
+        <strong>AdSphere Global</strong>
+        <span class="pill" id="t_partner_badge">Certified Google Partner</span>
+      </div>
+    </div>
+    <nav class="nav-links">
+      <a href="#services" class="i18n active" data-key="nav_services">Services</a>
+      <a href="#geo" class="i18n active" data-key="nav_geo">GEO</a>
+      <a href="#pricing" class="i18n active" data-key="nav_pricing">Pricing</a>
+      <a href="#faq" class="i18n active" data-key="nav_faq">FAQ</a>
+      <a href="#contact" class="i18n active" data-key="nav_contact">Contact</a>
+    </nav>
+    <div class="row">
+      <a class="btn outline" id="sheetsBtn" target="_blank" rel="noopener">Google Sheets</a>
+      <a class="btn" id="tgBtn" target="_blank" rel="noopener">@GOOGLEADSBRAZIL</a>
+      <select class="lang" id="langSel" aria-label="Language">
+        <option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option><option value="ru">RU</option>
+      </select>
+    </div>
+  </div>
+</header>
 
-  <p>
-    📩 <a href="https://t.me/GOOGLEADSBRAZIL" target="_blank">Contact us on Telegram</a><br>
-    📊 <a href="https://docs.google.com/spreadsheets/d/1rfCcHIL9k31HTwuc-DpyQE5Lvz1513q99jW5qFjbJiQ/edit?usp=sharing" target="_blank">View available packages (Google Sheets)</a>
-  </p>
+<div class="banner">
+  <div class="container i18n active" data-key="compliance">
+    We do not sell or transfer Google Ads accounts. We provide creation, setup, management, audits and policy compliance services in line with Google policies.
+  </div>
+</div>
 
-  <hr>
+<section class="hero">
+  <div class="container grid hero-grid">
+    <div>
+      <span class="badge i18n active" data-key="hero_kicker">Performance marketing for growth</span>
+      <h1 class="i18n active" data-key="hero_title">Your Certified Google Partner for High-Performance Advertising</h1>
+      <p class="lead i18n active" data-key="hero_sub">
+        From crypto and gambling to fintech and e-commerce — we build, set up and manage compliant Google Ads campaigns, then scale them with ROI-focused optimization.
+      </p>
+      <div class="row" style="margin-top:14px">
+        <a class="btn" id="ctaTelegram" target="_blank" rel="noopener"><span class="i18n active" data-key="cta_telegram">Message on Telegram</span></a>
+        <a class="btn outline" href="#services"><span class="i18n active" data-key="cta_services">Explore services</span></a>
+        <a class="btn outline" id="ctaSheets" target="_blank" rel="noopener"><span class="i18n active" data-key="cta_sheets">View packages (Sheets)</span></a>
+      </div>
+      <div class="row muted" style="gap:16px;margin-top:12px;font-size:14px">
+        <span>⏱ 2–5 days to start</span><span>📈 ROI-driven</span><span>💳 Transparent pricing</span>
+      </div>
+    </div>
+    <div class="list cols-2">
+      <div class="card">
+        <div class="i18n active" data-key="s1_title"><strong>Account Creation & Policy Compliance</strong></div>
+        <div class="muted i18n active" data-key="s1_desc">Safe creation, verification, billing setup, and guidance to stay compliant.</div>
+      </div>
+      <div class="card">
+        <div class="i18n active" data-key="s2_title"><strong>Campaign Setup & Structure</strong></div>
+        <div class="muted i18n active" data-key="s2_desc">Keywords, tracking, assets, and conversion architecture.</div>
+      </div>
+      <div class="card">
+        <div class="i18n active" data-key="s3_title"><strong>Ongoing Optimization</strong></div>
+        <div class="muted i18n active" data-key="s3_desc">Tests, negatives, bids, audiences, creatives.</div>
+      </div>
+      <div class="card">
+        <div class="i18n active" data-key="s4_title"><strong>Certificates & Business Verification</strong></div>
+        <div class="muted i18n active" data-key="s4_desc">Official documents and assistance for smoother approvals.</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <h3>Services</h3>
-  <ul>
-    <li>Account Creation & Policy Compliance</li>
-    <li>Campaign Setup & Structure</li>
-    <li>Ongoing Optimization</li>
-    <li>Certificates & Business Verification</li>
-  </ul>
+<section id="geo">
+  <div class="container">
+    <h2 class="i18n active" data-key="geo_title">GEO Coverage</h2>
+    <p class="muted i18n active" data-key="geo_desc">Primary markets we serve. For Europe, Asia and LATAM — contact us for availability.</p>
+    <div class="row" style="gap:8px">
+      <span class="chip">Ukraine (UA)</span>
+      <span class="chip">Belarus (BY)</span>
+      <span class="chip">Kazakhstan (KZ)</span>
+      <span class="chip">United States (USA)</span>
+    </div>
+  </div>
+</section>
 
-  <h3>GEO Coverage</h3>
-  <p>Ukraine (UA), Belarus (BY), Kazakhstan (KZ), United States (USA), + other regions on request.</p>
+<section id="services">
+  <div class="container">
+    <h2 class="i18n active" data-key="services_title">What we do</h2>
+    <div class="list cols-4">
+      <div class="card"><strong class="i18n active" data-key="s1_title">Account Creation & Policy Compliance</strong><div class="muted i18n active" data-key="s1_desc">Safe creation, verification, billing setup, and guidance to stay compliant.</div></div>
+      <div class="card"><strong class="i18n active" data-key="s2_title">Campaign Setup & Structure</strong><div class="muted i18n active" data-key="s2_desc">Keywords, tracking, assets, and conversion architecture.</div></div>
+      <div class="card"><strong class="i18n active" data-key="s3_title">Ongoing Optimization</strong><div class="muted i18n active" data-key="s3_desc">Tests, negatives, bids, audiences, creatives.</div></div>
+      <div class="card"><strong class="i18n active" data-key="s4_title">Certificates & Business Verification</strong><div class="muted i18n active" data-key="s4_desc">Official documents and assistance for smoother approvals.</div></div>
+    </div>
+  </div>
+</section>
 
-  <hr>
+<section id="pricing" style="background:#0e0f13;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="container">
+    <h2 class="i18n active" data-key="pricing_title">Simple pricing</h2>
+    <div class="list cols-3">
+      <div class="card">
+        <h3 class="i18n active" data-key="p1_title">Starter</h3>
+        <div class="muted i18n active" data-key="p1_desc">Best for testing and MVPs</div>
+        <div class="price i18n active" data-key="p1_price">$499/mo</div>
+        <ul class="muted" style="padding-left:18px;margin:0">
+          <li>Account creation & billing</li>
+          <li>1 conversion goal setup</li>
+          <li>Up to $5k monthly ad spend</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:#2f9e6a">
+        <h3 class="i18n active" data-key="p2_title">Growth</h3>
+        <div class="muted i18n active" data-key="p2_desc">For growing brands</div>
+        <div class="price i18n active" data-key="p2_price">$1,200/mo</div>
+        <ul class="muted" style="padding-left:18px;margin:0">
+          <li>Full campaign build-out</li>
+          <li>Weekly optimization</li>
+          <li>Up to $50k monthly ad spend</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="i18n active" data-key="p3_title">Scale</h3>
+        <div class="muted i18n active" data-key="p3_desc">Custom for high spend</div>
+        <div class="price i18n active" data-key="p3_price">Custom</div>
+        <ul class="muted" style="padding-left:18px;margin:0">
+          <li>Dedicated strategist</li>
+          <li>Experiments & audits</li>
+          <li>Unlimited spend advisory</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted i18n active" data-key="pricing_note" style="margin-top:10px">All plans exclude media spend and include a monthly performance report.</p>
+  </div>
+</section>
 
-  <footer style="margin-top:40px; font-size:14px; color:#555;">
-    © 2025 AdSphere Global. All rights reserved.
-  </footer>
+<section id="faq">
+  <div class="container">
+    <h2 class="i18n active" data-key="faq_title">Frequently asked questions</h2>
+    <div class="list cols-3">
+      <div class="card">
+        <h3 class="i18n active" data-key="faq_q1">Do you sell Google Ads accounts?</h3>
+        <div class="muted i18n active" data-key="faq_a1">No. We never sell or transfer accounts. We create and manage them in your or your company's name to keep everything compliant.</div>
+      </div>
+      <div class="card">
+        <h3 class="i18n active" data-key="faq_q2">Can you work with existing accounts?</h3>
+        <div class="muted i18n active" data-key="faq_a2">Yes. We can audit and manage your current account, fix policy issues, and restructure campaigns.</div>
+      </div>
+      <div class="card">
+        <h3 class="i18n active" data-key="faq_q3">How fast can we start?</h3>
+        <div class="muted i18n active" data-key="faq_a3">Usually within 2–5 business days after scope alignment and access.</div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<section id="contact" style="background:#0e0f13;border-top:1px solid var(--line)">
+  <div class="container grid" style="grid-template-columns:1fr;gap:20px">
+    <div>
+      <h2 class="i18n active" data-key="contact_title">Get a free consultation</h2>
+      <p class="muted i18n active" data-key="contact_sub">Tell us about your goals, industry, and monthly budget. We’ll reply with next steps and a proposed plan.</p>
+      <div class="row" style="gap:10px">
+        <a class="btn" id="contactTg" target="_blank" rel="noopener">@GOOGLEADSBRAZIL</a>
+        <a class="btn outline" id="contactSheets" target="_blank" rel="noopener">Google Sheets</a>
+      </div>
+      <div class="kpis" style="margin-top:16px">
+        <div class="card kpi"><div class="label">Avg. ROAS lift</div><div class="value ok">+38%</div></div>
+        <div class="card kpi"><div class="label">Kickoff</div><div class="value">2–5 days</div></div>
+        <div class="card kpi"><div class="label">Keywords managed</div><div class="value">&gt;120k</div></div>
+        <div class="card kpi"><div class="label">Policy issues fixed</div><div class="value">&gt;200</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container row" style="justify-content:space-between;padding:18px 0">
+    <div class="row"><div class="logo" style="width:28px;height:28px"></div><strong>&nbsp;AdSphere Global</strong></div>
+    <div class="muted">© <span id="year"></span> AdSphere Global. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+/* ===== Config: your links ===== */
+const TELEGRAM_HANDLE = "GOOGLEADSBRAZIL";
+const SHEETS_URL = "https://docs.google.com/spreadsheets/d/1rfCcHIL9k31HTwuc-DpyQE5Lvz1513q99jW5qFjbJiQ/edit?usp=sharing";
+
+/* Wire links */
+const tgUrl = "https://t.me/" + TELEGRAM_HANDLE;
+["tgBtn","ctaTelegram","contactTg"].forEach(id=>{ const el=document.getElementById(id); if(el) el.href=tgUrl; });
+["sheetsBtn","ctaSheets","contactSheets"].forEach(id=>{ const el=document.getElementById(id); if(el) el.href=SHEETS_URL; });
+document.getElementById("year").textContent = new Date().getFullYear();
+
+/* ===== i18n dictionaries (EN/ES/PT/RU) ===== */
+const dict = {
+  en:{
+    partner_badge:"Certified Google Partner",
+    compliance:"We do not sell or transfer Google Ads accounts. We provide creation, setup, management, audits and policy compliance services in line with Google policies.",
+    nav_services:"Services", nav_geo:"GEO", nav_pricing:"Pricing", nav_faq:"FAQ", nav_contact:"Contact",
+    hero_kicker:"Performance marketing for growth",
+    hero_title:"Your Certified Google Partner for High-Performance Advertising",
+    hero_sub:"From crypto and gambling to fintech and e-commerce — we build, set up and manage compliant Google Ads campaigns, then scale them with ROI-focused optimization.",
+    cta_telegram:"Message on Telegram", cta_services:"Explore services", cta_sheets:"View packages (Sheets)",
+    services_title:"What we do",
+    s1_title:"Account Creation & Policy Compliance", s1_desc:"Safe creation, verification, billing setup, and guidance to stay compliant.",
+    s2_title:"Campaign Setup & Structure", s2_desc:"Keywords, tracking, assets, and conversion architecture.",
+    s3_title:"Ongoing Optimization", s3_desc:"Tests, negatives, bids, audiences, creatives.",
+    s4_title:"Certificates & Business Verification", s4_desc:"Official documents and assistance for smoother approvals.",
+    geo_title:"GEO Coverage", geo_desc:"Primary markets we serve. For Europe, Asia and LATAM — contact us for availability.",
+    pricing_title:"Simple pricing",
+    p1_title:"Starter", p1_desc:"Best for testing and MVPs", p1_price:"$499/mo",
+    p2_title:"Growth",  p2_desc:"For growing brands",      p2_price:"$1,200/mo",
+    p3_title:"Scale",   p3_desc:"Custom for high spend",  p3_price:"Custom",
+    pricing_note:"All plans exclude media spend and include a monthly performance report.",
+    faq_title:"Frequently asked questions",
+    faq_q1:"Do you sell Google Ads accounts?", faq_a1:"No. We never sell or transfer accounts. We create and manage them in your or your company's name to keep everything compliant.",
+    faq_q2:"Can you work with existing accounts?", faq_a2:"Yes. We can audit and manage your current account, fix policy issues, and restructure campaigns.",
+    faq_q3:"How fast can we start?", faq_a3:"Usually within 2–5 business days after scope alignment and access.",
+    contact_title:"Get a free consultation", contact_sub:"Tell us about your goals, industry, and monthly budget. We’ll reply with next steps and a proposed plan."
+  },
+  es:{
+    partner_badge:"Google Partner certificado",
+    compliance:"No vendemos ni transferimos cuentas de Google Ads. Ofrecemos creación, configuración, gestión, auditorías y cumplimiento conforme a las políticas de Google.",
+    nav_services:"Servicios", nav_geo:"GEO", nav_pricing:"Precios", nav_faq:"FAQ", nav_contact:"Contacto",
+    hero_kicker:"Marketing de rendimiento para crecer",
+    hero_title:"Tu Google Partner certificado para publicidad de alto rendimiento",
+    hero_sub:"Desde crypto y gambling hasta fintech y e-commerce: creamos, configuramos y gestionamos campañas en cumplimiento y las escalamos con optimización enfocada al ROI.",
+    cta_telegram:"Escribir por Telegram", cta_services:"Ver servicios", cta_sheets:"Ver paquetes (Sheets)",
+    services_title:"Qué hacemos",
+    s1_title:"Creación de cuenta y cumplimiento", s1_desc:"Creación segura, verificación y facturación con guía de políticas.",
+    s2_title:"Configuración y estructura de campañas", s2_desc:"Keywords, tracking, assets y arquitectura de conversiones.",
+    s3_title:"Optimización continua", s3_desc:"Tests, negativas, pujas, audiencias y creatividades.",
+    s4_title:"Certificados y verificación empresarial", s4_desc:"Documentos oficiales y asistencia para aprobaciones más fluidas.",
+    geo_title:"Cobertura GEO", geo_desc:"Mercados principales. Para Europa, Asia y LATAM — consúltanos.",
+    pricing_title:"Precios sencillos",
+    p1_title:"Starter", p1_desc:"Ideal para pruebas y MVPs", p1_price:"$499/mes",
+    p2_title:"Growth",  p2_desc:"Para marcas en crecimiento", p2_price:"$1.200/mes",
+    p3_title:"Scale",   p3_desc:"A medida para alto gasto",   p3_price:"A medida",
+    pricing_note:"Todos los planes excluyen la inversión en medios e incluyen un informe mensual.",
+    faq_title:"Preguntas frecuentes",
+    faq_q1:"¿Venden cuentas de Google Ads?", faq_a1:"No. Nunca vendemos ni transferimos cuentas. Las creamos y gestionamos a tu nombre o el de tu empresa.",
+    faq_q2:"¿Pueden trabajar con cuentas existentes?", faq_a2:"Sí. Auditamos y gestionamos tu cuenta, resolvemos políticas y reestructuramos campañas.",
+    faq_q3:"¿Qué tan rápido podemos empezar?", faq_a3:"Normalmente en 2–5 días laborables tras alinear alcance y accesos.",
+    contact_title:"Pide una consulta gratuita", contact_sub:"Cuéntanos tus objetivos, sector y presupuesto mensual. Te responderemos con los próximos pasos."
+  },
+  pt:{
+    partner_badge:"Google Partner certificado",
+    compliance:"Não vendemos nem transferimos contas do Google Ads. Prestamos serviços de criação, configuração, gestão, auditorias e conformidade com as políticas do Google.",
+    nav_services:"Serviços", nav_geo:"GEO", nav_pricing:"Planos", nav_faq:"FAQ", nav_contact:"Contato",
+    hero_kicker:"Marketing de performance para crescer",
+    hero_title:"Seu Google Partner certificado para publicidade de alta performance",
+    hero_sub:"De crypto e gambling a fintech e e-commerce — criamos, configuramos e gerimos campanhas em conformidade e escalamos com otimização focada em ROI.",
+    cta_telegram:"Falar no Telegram", cta_services:"Ver serviços", cta_sheets:"Ver pacotes (Sheets)",
+    services_title:"O que fazemos",
+    s1_title:"Criação de conta & conformidade", s1_desc:"Criação segura, verificação, faturamento e orientação de políticas.",
+    s2_title:"Setup & estrutura de campanhas", s2_desc:"Palavras-chave, tracking, assets e conversões.",
+    s3_title:"Otimização contínua", s3_desc:"Testes, negativas, lances, audiências, criativos.",
+    s4_title:"Certificados & verificação empresarial", s4_desc:"Documentos oficiais e suporte para aprovações mais suaves.",
+    geo_title:"Cobertura GEO", geo_desc:"Mercados principais. Para Europa, Ásia e LATAM — fale conosco.",
+    pricing_title:"Planos simples",
+    p1_title:"Starter", p1_desc:"Ideal para testes e MVPs", p1_price:"$499/mês",
+    p2_title:"Growth",  p2_desc:"Para marcas em crescimento", p2_price:"$1.200/mês",
+    p3_title:"Scale",   p3_desc:"Sob medida para alto investimento", p3_price:"Sob consulta",
+    pricing_note:"Todos os planos excluem mídia e incluem relatório mensal.",
+    faq_title:"Perguntas frequentes",
+    faq_q1:"Vocês vendem contas do Google Ads?", faq_a1:"Não. Criamos e gerimos em seu nome para manter a conformidade.",
+    faq_q2:"Podem trabalhar com contas existentes?", faq_a2:"Sim. Auditamos e gerimos, corrigimos políticas e reestruturamos campanhas.",
+    faq_q3:"Quão rápido podemos começar?", faq_a3:"Geralmente em 2–5 dias úteis após alinhamento e acessos.",
+    contact_title:"Peça uma consultoria gratuita", contact_sub:"Conte seus objetivos, setor e orçamento mensal. Responderemos com próximos passos."
+  },
+  ru:{
+    partner_badge:"Сертифицированный Google Partner",
+    compliance:"Мы не продаём и не передаём аккаунты Google Ads. Оказываем услуги по созданию, настройке, ведению, аудитам и комплаенсу согласно политикам Google.",
+    nav_services:"Услуги", nav_geo:"GEO", nav_pricing:"Тарифы", nav_faq:"FAQ", nav_contact:"Контакты",
+    hero_kicker:"Performance-маркетинг для роста",
+    hero_title:"Ваш сертифицированный Google Partner для высокоэффективной рекламы",
+    hero_sub:"От crypto и gambling до fintech и e-commerce — создаём, настраиваем и ведём кампании в соответствии с политиками и масштабируем их с упором на ROI.",
+    cta_telegram:"Написать в Telegram", cta_services:"Посмотреть услуги", cta_sheets:"Пакеты (Sheets)",
+    services_title:"Что мы делаем",
+    s1_title:"Создание аккаунта и комплаенс", s1_desc:"Безопасное создание, верификация, биллинг и рекомендации по политикам.",
+    s2_title:"Настройка и структура кампаний", s2_desc:"Ключевые слова, трекинг, ассеты и архитектура конверсий.",
+    s3_title:"Постоянная оптимизация", s3_desc:"Тесты, минус-слова, ставки, аудитории, креативы.",
+    s4_title:"Сертификаты и проверка бизнеса", s4_desc:"Официальные документы и помощь для более плавных апрувов.",
+    geo_title:"GEO покрытие", geo_desc:"Основные рынки. Для Европы, Азии и LATAM — напишите нам.",
+    pricing_title:"Простые тарифы",
+    p1_title:"Starter", p1_desc:"Для тестов и MVP", p1_price:"$499/мес",
+    p2_title:"Growth",  p2_desc:"Для растущих брендов", p2_price:"$1,200/мес",
+    p3_title:"Scale",   p3_desc:"Индивидуально для большого бюджета", p3_price:"Индивидуально",
+    pricing_note:"Тарифы не включают рекламный бюджет и содержат ежемесячный отчёт.",
+    faq_title:"Частые вопросы",
+    faq_q1:"Вы продаёте аккаунты Google Ads?", faq_a1:"Нет. Мы создаём и ведём их на ваше имя/компании для соответствия политикам.",
+    faq_q2:"Работаете с существующими аккаунтами?", faq_a2:"Да. Проведём аудит, исправим проблемы и перестроим кампании.",
+    faq_q3:"Как быстро стартуем?", faq_a3:"Обычно 2–5 рабочих дней после согласования и доступов.",
+    contact_title:"Получите бесплатную консультацию", contact_sub:"Опишите цели, нишу и бюджет — ответим с планом и шагами."
+  }
+};
+
+/* apply language */
+const mapKeys = [
+  "partner_badge","compliance","nav_services","nav_geo","nav_pricing","nav_faq","nav_contact",
+  "hero_kicker","hero_title","hero_sub","cta_telegram","cta_services","cta_sheets",
+  "services_title","s1_title","s1_desc","s2_title","s2_desc","s3_title","s3_desc","s4_title","s4_desc",
+  "geo_title","geo_desc","pricing_title","p1_title","p1_desc","p1_price","p2_title","p2_desc","p2_price","p3_title","p3_desc","p3_price","pricing_note",
+  "faq_title","faq_q1","faq_a1","faq_q2","faq_a2","faq_q3","faq_a3","contact_title","contact_sub"
+];
+
+function setLang(lang){
+  const d = dict[lang] || dict.en;
+  document.querySelectorAll("[data-key]").forEach(el=>{
+    const key = el.getAttribute("data-key");
+    if(d[key]) el.textContent = d[key];
+    el.classList.add("active");
+  });
+  document.getElementById("t_partner_badge").textContent = d.partner_badge;
+}
+const sel = document.getElementById("langSel");
+sel.addEventListener("change",()=>{ setLang(sel.value); try{localStorage.setItem("ads_lang", sel.value);}catch(e){} });
+setLang( (localStorage.getItem("ads_lang")||"en") );
+sel.value = (localStorage.getItem("ads_lang")||"en");
+</script>
+
+<!-- Optional structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "AdSphere Global",
+  "url": "https://whitetargetagency.site",
+  "sameAs": ["https://t.me/GOOGLEADSBRAZIL"],
+  "description": "Certified Google Partner agency for compliant Google Ads creation, setup, optimization, and verification.",
+  "contactPoint": [{
+    "@type": "ContactPoint",
+    "contactType": "sales",
+    "url": "https://t.me/GOOGLEADSBRAZIL"
+  }]
+}
+</script>
 </body>
 </html>
