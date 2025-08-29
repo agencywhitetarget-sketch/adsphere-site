@@ -53,6 +53,43 @@
   /* language visibility */
   .i18n{display:none}
   .i18n.active{display:initial}
+  .ok{color:#34d399}
+.warn{color:#fbbf24}
+
+/* language visibility */
+.i18n{display:none}
+.i18n.active{display:initial}
+
+/* 📱 Mobile fixes */
+@media (max-width: 560px) {
+  header .nav {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    padding: 8px 0;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .row {
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  select.lang {
+    margin-top: 8px;
+    width: 100%;
+  }
+}
 </style>
 </head>
 <body>
@@ -105,7 +142,7 @@
         <a class="btn outline" id="ctaSheets" target="_blank" rel="noopener"><span class="i18n active" data-key="cta_sheets">View packages (Sheets)</span></a>
       </div>
       <div class="row muted" style="gap:16px;margin-top:12px;font-size:14px">
-        <span>⏱ 2–5 days to start</span><span>📈 ROI-driven</span><span>💳 Transparent pricing</span>
+        <span>⏱ 1 days to start</span><span>📈 ROI-driven</span><span>💳 Transparent pricing</span>
       </div>
     </div>
     <div class="list cols-2">
