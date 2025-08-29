@@ -91,7 +91,26 @@
   }
 }
 </style>
+  header {
+  transition: transform 0.3s ease;
+}
 </head>
+  <script>
+let lastScroll = 0;
+const header = document.querySelector("header");
+
+window.addEventListener("scroll", () => {
+  const currentScroll = window.pageYOffset;
+
+  if (currentScroll > lastScroll && currentScroll > 60) {
+    header.style.transform = "translateY(-100%)"; // ховаємо при скролі вниз
+  } else {
+    header.style.transform = "translateY(0)"; // показуємо при скролі вгору
+  }
+
+  lastScroll = currentScroll;
+});
+</script>
 <body>
 
 <header>
