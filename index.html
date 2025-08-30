@@ -98,6 +98,23 @@
     section{padding:64px 0}
     .nav{padding:10px 16px}
   }
+  /* Contact section CTA spacing fix */
+#contactCtas {
+  margin: 14px 0 22px;  /* відступ зверху і знизу */
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+#contactCtas > a {
+  flex: 1 1 260px;       /* ширина кнопки */
+}
+@media (max-width:560px) {
+  #contactCtas > a {
+    flex-basis: 100%;   /* на мобілках одна під одною */
+  }
+  #contact .list.cols-2 {
+    margin-top: 14px !important;
+  }
 </style>
 </head>
 <body>
@@ -320,7 +337,7 @@
     <div>
       <h2 class="i18n active" data-key="contact_title">Get a free consultation</h2>
       <p class="muted i18n active" data-key="contact_sub">Tell us about your goals, industry, and monthly budget. We’ll reply with next steps and a proposed plan.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <div id="contactCtas" style="display:flex;gap:10px;flex-wrap:wrap">
         <a class="btn primary" id="contactTg" target="_blank" rel="noopener">CONTACT US</a>
         <a class="link-btn" id="contactSheets" target="_blank" rel="noopener">Shop Google ads accounts</a>
       </div>
