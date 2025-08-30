@@ -54,6 +54,7 @@
     -webkit-mask:linear-gradient(160deg, #000 65%, transparent 66%);
             mask:linear-gradient(160deg, #000 65%, transparent 66%);
     border-bottom:1px solid var(--line);
+    pointer-events:none;           /* <<— щоб не блокував кліки */
   }
   .container{max-width:1200px;margin:0 auto;padding:0 20px}
   section{padding:82px 0}
@@ -76,8 +77,13 @@
   .muted{color:var(--muted)}
   .chip{display:inline-block;border:1px dashed rgba(255,255,255,.22);color:#e5e9f2;padding:.35rem .7rem;border-radius:999px;font-size:.82rem;background:rgba(255,255,255,.05)}
   .price{font-weight:800;font-size:26px;margin:8px 0;color:#ffd7dc}
+
   .section-alt{position:relative;background:linear-gradient(180deg, rgba(255,255,255,.02), transparent)}
-  .section-alt:before{content:"";position:absolute;inset:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);-webkit-mask:linear-gradient(180deg,#000 92%, transparent);mask:linear-gradient(180deg,#000 92%, transparent)}
+  .section-alt:before{content:"";position:absolute;inset:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    -webkit-mask:linear-gradient(180deg,#000 92%, transparent);mask:linear-gradient(180deg,#000 92%, transparent);
+    pointer-events:none;           /* <<— щоб не блокував кліки */
+  }
+
   footer{border-top:1px solid var(--line);background:rgba(10,12,16,.9);backdrop-filter:blur(6px);color:#cdd4e3}
 
   /* Dock */
@@ -98,22 +104,20 @@
     section{padding:64px 0}
     .nav{padding:10px 16px}
   }
-  /* Contact section CTA spacing fix */
-#contactCtas {
-  margin: 14px 0 22px;  /* відступ зверху і знизу */
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-#contactCtas > a {
-  flex: 1 1 260px;       /* ширина кнопки */
-}
-@media (max-width:560px) {
-  #contactCtas > a {
-    flex-basis: 100%;   /* на мобілках одна під одною */
+
+  /* Contact section CTA spacing + z-index fix */
+  #contactCtas{
+    margin:14px 0 22px;     /* відступ зверху і знизу */
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    position:relative;      /* підняти поверх декоративних шарів */
+    z-index:1;
   }
-  #contact .list.cols-2 {
-    margin-top: 14px !important;
+  #contactCtas > a{ flex:1 1 260px }  /* ширина кнопки */
+  @media (max-width:560px){
+    #contactCtas > a{ flex-basis:100% }  /* на мобілках одна під одною */
+    #contact .list.cols-2{ margin-top:14px !important }
   }
 </style>
 </head>
@@ -141,7 +145,6 @@
       </nav>
 
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <!-- compact link button instead of big ghost -->
         <a class="link-btn" id="sheetsBtn" target="_blank" rel="noopener">Shop Google Ads accounts</a>
         <a class="btn primary" id="tgBtn" target="_blank" rel="noopener">CONTACT US</a>
         <select class="lang" id="langSel" aria-label="Language">
@@ -376,140 +379,140 @@ document.getElementById("year").textContent = new Date().getFullYear();
 /* i18n dictionaries */
 const dict = {
   en:{ partner_badge:"Certified Google Partner",
-      compliance:"We sell and transfer Google Ads accounts. We also provide services for creating, configuring, managing, auditing, and complying with policies in accordance with Google policies.",
-      nav_services:"Services", nav_geo:"GEO", nav_pricing:"Pricing", nav_certificates:"Certificates", nav_policy:"Policy", nav_faq:"FAQ", nav_contact:"Contact",
-      hero_kicker:"Performance marketing for growth",
-      hero_title:"Your Certified Google Partner for High-Performance Advertising",
-      hero_sub:"From crypto and gambling to fintech and e-commerce — we build, set up and manage compliant Google Ads campaigns, then scale them with ROI-focused optimization.",
-      cta_telegram:"Message on Telegram", cta_services:"Explore services", cta_sheets:"View packages (Sheets)",
-      services_title:"What we do",
-      s1_title:"Account Creation & Policy Compliance", s1_desc:"Safe creation, verification, billing setup, and guidance to stay compliant.",
-      s2_title:"Campaign Setup & Structure", s2_desc:"Keywords, tracking, assets, and conversion architecture.",
-      s3_title:"Ongoing Optimization", s3_desc:"Tests, negatives, bids, audiences, creatives.",
-      s4_title:"Certificates & Business Verification", s4_desc:"Official documents and assistance for smoother approvals.",
-      geo_title:"GEO Coverage", geo_desc:"Primary markets we serve. For Europe, Asia and LATAM — contact us for availability.",
-      pricing_title:"Simple pricing",
-      p1_title:"Starter", p1_desc:"Best for testing and MVPs", p1_price:"$499/mo",
-      p2_title:"Growth",  p2_desc:"For growing brands", p2_price:"$1,200/mo",
-      p3_title:"Scale",   p3_desc:"Custom for high spend",  p3_price:"Custom",
-      pricing_note:"All plans exclude media spend and include a monthly performance report.",
-      faq_title:"Frequently asked questions",
-      faq_q1:"Do you sell Google Ads accounts?", faq_a1:"Yes. We sell and transfer accounts. We also create and manage them on your behalf or on behalf of your company to ensure full compliance.",
-      faq_q2:"Can you work with existing accounts?", faq_a2:"Yes. We can audit and manage your current account, fix policy issues, and restructure campaigns.",
-      faq_q3:"How fast can we start?", faq_a3:"Usually within 1 business days after scope alignment and access.",
-      contact_title:"Get a free consultation", contact_sub:"Tell us about your goals, industry, and monthly budget. We’ll reply with next steps and a proposed plan.",
-      certificates_title:"Certificates & Compliance Packages",
-      certificates_intro:"New additional services. Choose a package that matches your vertical and compliance needs.",
-      cert_casino_title:"CASINO CERTIFICATE", cert_casino_price:"$800", cert_casino_desc:"Documentation and guidance for compliant advertising workflows.",
-      cert_gambling_title:"GAMBLING CERTIFICATE", cert_gambling_price:"$800", cert_gambling_desc:"Documentation and guidance for compliant advertising workflows.",
-      cert_crypto_title:"CERTIFICATE FOR CRYPTO", cert_crypto_price:"$1000", cert_crypto_desc:"Documentation and guidance for compliant advertising workflows.",
-      policy_title:"Substitution & Change Policy",
-      policy_sub_title:"Substitutions",
-      policy_sub_text:"The replacement is carried out if the accounts were blocked before you made any changes to the advertising campaigns, payment data or to bind your payment method, or if you could not log in to the purchased/provided accounts.",
-      policy_changes_title:"Changes in the account",
-      policy_changes_text:"You can't make any changes to the account: edit anything, attach a card, or modify billing details."
+    compliance:"We sell and transfer Google Ads accounts. We also provide services for creating, configuring, managing, auditing, and complying with policies in accordance with Google policies.",
+    nav_services:"Services", nav_geo:"GEO", nav_pricing:"Pricing", nav_certificates:"Certificates", nav_policy:"Policy", nav_faq:"FAQ", nav_contact:"Contact",
+    hero_kicker:"Performance marketing for growth",
+    hero_title:"Your Certified Google Partner for High-Performance Advertising",
+    hero_sub:"From crypto and gambling to fintech and e-commerce — we build, set up and manage compliant Google Ads campaigns, then scale them with ROI-focused optimization.",
+    cta_telegram:"Message on Telegram", cta_services:"Explore services", cta_sheets:"View packages (Sheets)",
+    services_title:"What we do",
+    s1_title:"Account Creation & Policy Compliance", s1_desc:"Safe creation, verification, billing setup, and guidance to stay compliant.",
+    s2_title:"Campaign Setup & Structure", s2_desc:"Keywords, tracking, assets, and conversion architecture.",
+    s3_title:"Ongoing Optimization", s3_desc:"Tests, negatives, bids, audiences, creatives.",
+    s4_title:"Certificates & Business Verification", s4_desc:"Official documents and assistance for smoother approvals.",
+    geo_title:"GEO Coverage", geo_desc:"Primary markets we serve. For Europe, Asia and LATAM — contact us for availability.",
+    pricing_title:"Simple pricing",
+    p1_title:"Starter", p1_desc:"Best for testing and MVPs", p1_price:"$499/mo",
+    p2_title:"Growth",  p2_desc:"For growing brands", p2_price:"$1,200/mo",
+    p3_title:"Scale",   p3_desc:"Custom for high spend",  p3_price:"Custom",
+    pricing_note:"All plans exclude media spend and include a monthly performance report.",
+    faq_title:"Frequently asked questions",
+    faq_q1:"Do you sell Google Ads accounts?", faq_a1:"Yes. We sell and transfer accounts. We also create and manage them on your behalf or on behalf of your company to ensure full compliance.",
+    faq_q2:"Can you work with existing accounts?", faq_a2:"Yes. We can audit and manage your current account, fix policy issues, and restructure campaigns.",
+    faq_q3:"How fast can we start?", faq_a3:"Usually within 1 business days after scope alignment and access.",
+    contact_title:"Get a free consultation", contact_sub:"Tell us about your goals, industry, and monthly budget. We’ll reply with next steps and a proposed plan.",
+    certificates_title:"Certificates & Compliance Packages",
+    certificates_intro:"New additional services. Choose a package that matches your vertical and compliance needs.",
+    cert_casino_title:"CASINO CERTIFICATE", cert_casino_price:"$800", cert_casino_desc:"Documentation and guidance for compliant advertising workflows.",
+    cert_gambling_title:"GAMBLING CERTIFICATE", cert_gambling_price:"$800", cert_gambling_desc:"Documentation and guidance for compliant advertising workflows.",
+    cert_crypto_title:"CERTIFICATE FOR CRYPTO", cert_crypto_price:"$1000", cert_crypto_desc:"Documentation and guidance for compliant advertising workflows.",
+    policy_title:"Substitution & Change Policy",
+    policy_sub_title:"Substitutions",
+    policy_sub_text:"The replacement is carried out if the accounts were blocked before you made any changes to the advertising campaigns, payment data or to bind your payment method, or if you could not log in to the purchased/provided accounts.",
+    policy_changes_title:"Changes in the account",
+    policy_changes_text:"You can't make any changes to the account: edit anything, attach a card, or modify billing details."
   },
   es:{ partner_badge:"Google Partner certificado",
-      compliance:"Vendemos y transferimos cuentas de Google Ads. También ofrecemos servicios de creación, configuración, gestión, auditoría y cumplimiento de las políticas de Google.",
-      nav_services:"Servicios", nav_geo:"GEO", nav_pricing:"Precios", nav_certificates:"Certificados", nav_policy:"Política", nav_faq:"FAQ", nav_contact:"Contacto",
-      hero_kicker:"Marketing de rendimiento para crecer",
-      hero_title:"Tu Google Partner certificado para publicidad de alto rendimiento",
-      hero_sub:"Desde crypto y gambling hasta fintech y e-commerce: creamos, configuramos y gestionamos campañas en cumplimiento y las escalamos con optimización enfocada al ROI.",
-      cta_telegram:"Escribir por Telegram", cta_services:"Ver servicios", cta_sheets:"Ver paquetes (Sheets)",
-      services_title:"Qué hacemos",
-      s1_title:"Creación de cuenta y cumplimiento", s1_desc:"Creación segura, verificación y facturación con guía de políticas.",
-      s2_title:"Configuración y estructura de campañas", s2_desc:"Keywords, tracking, assets y arquitectura de conversiones.",
-      s3_title:"Optimización continua", s3_desc:"Tests, negativas, pujas, audiencias y creatividades.",
-      s4_title:"Certificados y verificación empresarial", s4_desc:"Documentos oficiales y asistencia para aprobaciones más fluidas.",
-      geo_title:"Cobertura GEO", geo_desc:"Mercados principales. Para Europa, Asia y LATAM — consúltanos.",
-      pricing_title:"Precios sencillos",
-      p1_title:"Starter", p1_desc:"Ideal para pruebas y MVPs", p1_price:"$499/mes",
-      p2_title:"Growth",  p2_desc:"Para marcas en crecimiento", p2_price:"$1.200/mes",
-      p3_title:"Scale",   p3_desc:"A medida para alto gasto",   p3_price:"A medida",
-      pricing_note:"Todos los planes excluyen la inversión en medios e incluyen un informe mensual.",
-      faq_title:"Preguntas frecuentes",
-      faq_q1:"¿Venden cuentas de Google Ads?", faq_a1:"Sí. Vendemos y transferimos cuentas. También las creamos y gestionamos en su nombre o en nombre de su empresa.",
-      faq_q2:"¿Pueden trabajar con cuentas existentes?", faq_a2:"Sí. Auditamos y gestionamos tu cuenta, resolvemos políticas y reestructuramos campañas.",
-      faq_q3:"¿Qué tan rápido podemos empezar?", faq_a3:"Normalmente en 1 días laborables tras alinear alcance y accesos.",
-      contact_title:"Pide una consulta gratuita", contact_sub:"Cuéntanos tus objetivos, sector y presupuesto mensual. Te responderemos con los próximos pasos.",
-      certificates_title:"Paquetes de certificados y cumplimiento",
-      certificates_intro:"Nuevos servicios adicionales. Elige el paquete que se ajuste a tu vertical y necesidades de cumplimiento.",
-      cert_casino_title:"CERTIFICADO DE CASINO", cert_casino_price:"$800", cert_casino_desc:"Documentación y guía para flujos publicitarios en cumplimiento.",
-      cert_gambling_title:"CERTIFICADO DE APUESTAS", cert_gambling_price:"$800", cert_gambling_desc:"Documentación y guía para flujos publicitarios en cumplimiento.",
-      cert_crypto_title:"CERTIFICADO PARA CRYPTO", cert_crypto_price:"$1000", cert_crypto_desc:"Documentación y guía para flujos publicitarios en cumplimiento.",
-      policy_title:"Política de sustitución y cambios",
-      policy_sub_title:"Sustituciones",
-      policy_sub_text:"La sustitución se realiza si las cuentas fueron bloqueadas antes de que realizaras cambios en las campañas publicitarias, en los datos de pago o al vincular tu método de pago, o si no pudiste iniciar sesión en las cuentas proporcionadas.",
-      policy_changes_title:"Cambios en la cuenta",
-      policy_changes_text:"No puedes realizar cambios en la cuenta: editar ajustes, adjuntar tarjeta de pago ni modificar la facturación."
+    compliance:"Vendemos y transferimos cuentas de Google Ads. También ofrecemos servicios de creación, configuración, gestión, auditoría y cumplimiento de las políticas de Google.",
+    nav_services:"Servicios", nav_geo:"GEO", nav_pricing:"Precios", nav_certificates:"Certificados", nav_policy:"Política", nav_faq:"FAQ", nav_contact:"Contacto",
+    hero_kicker:"Marketing de rendimiento para crecer",
+    hero_title:"Tu Google Partner certificado para publicidad de alto rendimiento",
+    hero_sub:"Desde crypto y gambling hasta fintech y e-commerce: creamos, configuramos y gestionamos campañas en cumplimiento y las escalamos con optimización enfocada al ROI.",
+    cta_telegram:"Escribir por Telegram", cta_services:"Ver servicios", cta_sheets:"Ver paquetes (Sheets)",
+    services_title:"Qué hacemos",
+    s1_title:"Creación de cuenta y cumplimiento", s1_desc:"Creación segura, verificación y facturación con guía de políticas.",
+    s2_title:"Configuración y estructura de campañas", s2_desc:"Keywords, tracking, assets y arquitectura de conversiones.",
+    s3_title:"Optimización continua", s3_desc:"Tests, negativas, pujas, audiencias y creatividades.",
+    s4_title:"Certificados y verificación empresarial", s4_desc:"Documentos oficiales y asistencia para aprobaciones más fluidas.",
+    geo_title:"Cobertura GEO", geo_desc:"Mercados principales. Para Europa, Asia y LATAM — consúltanos.",
+    pricing_title:"Precios sencillos",
+    p1_title:"Starter", p1_desc:"Ideal para pruebas y MVPs", p1_price:"$499/mes",
+    p2_title:"Growth",  p2_desc:"Para marcas en crecimiento", p2_price:"$1.200/mes",
+    p3_title:"Scale",   p3_desc:"A medida para alto gasto",   p3_price:"A medida",
+    pricing_note:"Todos los planes excluyen la inversión en medios e incluyen un informe mensual.",
+    faq_title:"Preguntas frecuentes",
+    faq_q1:"¿Venden cuentas de Google Ads?", faq_a1:"Sí. Vendemos y transferimos cuentas. También las creamos y gestionamos en su nombre o en nombre de su empresa.",
+    faq_q2:"¿Pueden trabajar con cuentas existentes?", faq_a2:"Sí. Auditamos y gestionamos tu cuenta, resolvemos políticas y reestructuramos campañas.",
+    faq_q3:"¿Qué tan rápido podemos empezar?", faq_a3:"Normalmente en 1 días laborables tras alinear alcance y accesos.",
+    contact_title:"Pide una consulta gratuita", contact_sub:"Cuéntanos tus objetivos, sector y presupuesto mensual. Te responderemos con los próximos pasos.",
+    certificates_title:"Paquetes de certificados y cumplimiento",
+    certificates_intro:"Nuevos servicios adicionales. Elige el paquete que se ajuste a tu vertical y necesidades de cumplimiento.",
+    cert_casino_title:"CERTIFICADO DE CASINO", cert_casino_price:"$800", cert_casino_desc:"Documentación y guía para flujos publicitarios en cumplimiento.",
+    cert_gambling_title:"CERTIFICADO DE APUESTAS", cert_gambling_price:"$800", cert_gambling_desc:"Documentación y guía para flujos publicitarios en cumplimiento.",
+    cert_crypto_title:"CERTIFICADO PARA CRYPTO", cert_crypto_price:"$1000", cert_crypto_desc:"Documentación y guía para flujos publicitarios en cumplimiento.",
+    policy_title:"Política de sustitución y cambios",
+    policy_sub_title:"Sustituciones",
+    policy_sub_text:"La sustitución se realiza si las cuentas fueron bloqueadas antes de que realizaras cambios en las campañas publicitarias, en los datos de pago o al vincular tu método de pago, o si no pudiste iniciar sesión en las cuentas proporcionadas.",
+    policy_changes_title:"Cambios en la cuenta",
+    policy_changes_text:"No puedes realizar cambios en la cuenta: editar ajustes, adjuntar tarjeta de pago ni modificar la facturación."
   },
   pt:{ partner_badge:"Google Partner certificado",
-      compliance:"Nós vendemos e transferimos contas do Google Ads. Além disso, prestamos serviços de criação, configuração, gerenciamento, auditoria e garantia de conformidade com as políticas do Google.",
-      nav_services:"Serviços", nav_geo:"GEO", nav_pricing:"Planos", nav_certificates:"Certificados", nav_policy:"Política", nav_faq:"FAQ", nav_contact:"Contato",
-      hero_kicker:"Marketing de performance para crescer",
-      hero_title:"Seu Google Partner certificado para publicidade de alta performance",
-      hero_sub:"De crypto e gambling a fintech e e-commerce — criamos, configuramos e gerimos campanhas em conformidade e escalamos com otimização focada em ROI.",
-      cta_telegram:"Falar no Telegram", cta_services:"Ver serviços", cta_sheets:"Ver pacotes (Sheets)",
-      services_title:"O que fazemos",
-      s1_title:"Criação de conta & conformidade", s1_desc:"Criação segura, verificação, faturamento e orientação de políticas.",
-      s2_title:"Setup & estrutura de campanhas", s2_desc:"Palavras-chave, tracking, assets e conversões.",
-      s3_title:"Otimização contínua", s3_desc:"Testes, negativas, lances, audiências, criativos.",
-      s4_title:"Certificados & verificação empresarial", s4_desc:"Documentos oficiais e suporte para aprovações mais suaves.",
-      geo_title:"Cobertura GEO", geo_desc:"Mercados principais. Para Europa, Ásia e LATAM — fale conosco.",
-      pricing_title:"Planos simples",
-      p1_title:"Starter", p1_desc:"Ideal para testes e MVPs", p1_price:"$499/mês",
-      p2_title:"Growth",  p2_desc:"Para marcas em crescimento", p2_price:"$1.200/mês",
-      p3_title:"Scale",   p3_desc:"Sob medida para alto investimento", p3_price:"Sob consulta",
-      pricing_note:"Todos os planos excluem mídia e incluem relatório mensal.",
-      faq_title:"Perguntas frequentes",
-      faq_q1:"Vocês vendem contas do Google Ads?", faq_a1:"Sim. Também criamos e gerenciamos em seu nome para garantir a conformidade com os requisitos.",
-      faq_q2:"Podem trabalhar com contas existentes?", faq_a2:"Sim. Auditamos e gerimos, corrigimos políticas e reestruturamos campanhas.",
-      faq_q3:"Quão rápido podemos começar?", faq_a3:"Geralmente em 1 dias úteis após alinhamento e acessos.",
-      contact_title:"Peça uma consultoria gratuita", contact_sub:"Conte seus objetivos, setor e orçamento mensal. Responderemos com próximos passos.",
-      certificates_title:"Pacotes de certificados e conformidade",
-      certificates_intro:"Novos serviços adicionais. Escolha o pacote que se encaixa no seu vertical e nas exigências de conformidade.",
-      cert_casino_title:"CERTIFICADO DE CASSINO", cert_casino_price:"$800", cert_casino_desc:"Documentação e orientação para fluxos de publicidade em conformidade.",
-      cert_gambling_title:"CERTIFICADO DE APOSTAS", cert_gambling_price:"$800", cert_gambling_desc:"Documentação e orientação para fluxos de publicidade em conformidade.",
-      cert_crypto_title:"CERTIFICADO PARA CRYPTO", cert_crypto_price:"$1000", cert_crypto_desc:"Documentação e orientação para fluxos de publicidade em conformidade.",
-      policy_title:"Política de substituição e alterações",
-      policy_sub_title:"Substituições",
-      policy_sub_text:"A substituição é realizada se as contas forem bloqueadas antes de você fazer quaisquer alterações nas campanhas publicitárias, nos dados de pagamento ou na vinculação do método de pagamento, ou se você não conseguir fazer login nas contas fornecidas.",
-      policy_changes_title:"Alterações na conta",
-      policy_changes_text:"Você não pode fazer alterações na conta: editar configurações, anexar cartão ou modificar dados de faturamento."
+    compliance:"Nós vendemos e transferimos contas do Google Ads. Além disso, prestamos serviços de criação, configuração, gerenciamento, auditoria e garantia de conformidade com as políticas do Google.",
+    nav_services:"Serviços", nav_geo:"GEO", nav_pricing:"Planos", nav_certificates:"Certificados", nav_policy:"Política", nav_faq:"FAQ", nav_contact:"Contato",
+    hero_kicker:"Marketing de performance para crescer",
+    hero_title:"Seu Google Partner certificado para publicidade de alta performance",
+    hero_sub:"De crypto e gambling a fintech e e-commerce — criamos, configuramos e gerimos campanhas em conformidade e escalamos com otimização focada em ROI.",
+    cta_telegram:"Falar no Telegram", cta_services:"Ver serviços", cta_sheets:"Ver pacotes (Sheets)",
+    services_title:"O que fazemos",
+    s1_title:"Criação de conta & conformidade", s1_desc:"Criação segura, verificação, faturamento e orientação de políticas.",
+    s2_title:"Setup & estrutura de campanhas", s2_desc:"Palavras-chave, tracking, assets e conversões.",
+    s3_title:"Otimização contínua", s3_desc:"Testes, negativas, lances, audiências, criativos.",
+    s4_title:"Certificados & verificação empresarial", s4_desc:"Documentos oficiais e suporte para aprovações mais suaves.",
+    geo_title:"Cobertura GEO", geo_desc:"Mercados principais. Para Europa, Ásia e LATAM — fale conosco.",
+    pricing_title:"Planos simples",
+    p1_title:"Starter", p1_desc:"Ideal para testes e MVPs", p1_price:"$499/mês",
+    p2_title:"Growth",  p2_desc:"Para marcas em crescimento", p2_price:"$1.200/mês",
+    p3_title:"Scale",   p3_desc:"Sob medida para alto investimento", p3_price:"Sob consulta",
+    pricing_note:"Todos os planos excluem mídia e incluem relatório mensal.",
+    faq_title:"Perguntas frequentes",
+    faq_q1:"Vocês vendem contas do Google Ads?", faq_a1:"Sim. Também criamos e gerenciamos em seu nome para garantir a conformidade com os requisitos.",
+    faq_q2:"Podem trabalhar com contas existentes?", faq_a2:"Sim. Auditamos e gerimos, corrigimos políticas e reestruturamos campanhas.",
+    faq_q3:"Quão rápido podemos começar?", faq_a3:"Geralmente em 1 dias úteis após alinhamento e acessos.",
+    contact_title:"Peça uma consultoria gratuita", contact_sub:"Conte seus objetivos, setor e orçamento mensal. Responderemos com próximos passos.",
+    certificates_title:"Pacotes de certificados e conformidade",
+    certificates_intro:"Novos serviços adicionais. Escolha o pacote que se encaixa no seu vertical e nas exigências de conformidade.",
+    cert_casino_title:"CERTIFICADO DE CASSINO", cert_casino_price:"$800", cert_casino_desc:"Documentação e orientação para fluxos de publicidade em conformidade.",
+    cert_gambling_title:"CERTIFICADO DE APOSTAS", cert_gambling_price:"$800", cert_gambling_desc:"Documentação e orientação para fluxos de publicidade em conformidade.",
+    cert_crypto_title:"CERTIFICADO PARA CRYPTO", cert_crypto_price:"$1000", cert_crypto_desc:"Documentação e orientação para fluxos de publicidade em conformidade.",
+    policy_title:"Política de substituição e alterações",
+    policy_sub_title:"Substituições",
+    policy_sub_text:"A substituição é realizada se as contas forem bloqueadas antes de você fazer quaisquer alterações nas campanhas publicitárias, nos dados de pagamento ou na vinculação do método de pagamento, ou se você não conseguir fazer login nas contas fornecidas.",
+    policy_changes_title:"Alterações na conta",
+    policy_changes_text:"Você não pode fazer alterações na conta: editar configurações, anexar cartão ou modificar dados de faturamento."
   },
   ru:{ partner_badge:"Сертифицированный Google Partner",
-      compliance:"Мы продаём и передаём аккаунты Google Ads. И оказываем услуги по созданию, настройке, ведению, аудитам и комплаенсу согласно политикам Google.",
-      nav_services:"Услуги", nav_geo:"GEO", nav_pricing:"Тарифы", nav_certificates:"Сертификаты", nav_policy:"Политика", nav_faq:"FAQ", nav_contact:"Контакты",
-      hero_kicker:"Performance-маркетинг для роста",
-      hero_title:"Ваш сертифицированный Google Partner для высокоэффективной рекламы",
-      hero_sub:"От crypto и gambling до fintech и e-commerce — создаём, настраиваем и ведём кампании в соответствии с политикам и масштабируем их с упором на ROI.",
-      cta_telegram:"Написать в Telegram", cta_services:"Посмотреть услуги", cta_sheets:"Пакеты (Sheets)",
-      services_title:"Что мы делаем",
-      s1_title:"Создание аккаунта и комплаенс", s1_desc:"Безопасное создание, верификация, биллинг и рекомендации по политикам.",
-      s2_title:"Настройка и структура кампаний", s2_desc:"Ключевые слова, трекинг, ассеты и архитектура конверсий.",
-      s3_title:"Постоянная оптимизация", s3_desc:"Тесты, минус-слова, ставки, аудитории, креативы.",
-      s4_title:"Сертификаты и проверка бизнеса", s4_desc:"Официальные документы и помощь для более плавных апрувов.",
-      geo_title:"GEO покрытие", geo_desc:"Основные рынки. Для Европы, Азии и LATAM — напишите нам.",
-      pricing_title:"Простые тарифы",
-      p1_title:"Starter", p1_desc:"Для тестов и MVP", p1_price:"$499/мес",
-      p2_title:"Growth",  p2_desc:"Для растущих брендов", p2_price:"$1,200/мес",
-      p3_title:"Scale",   p3_desc:"Индивидуально для большого бюджета", p3_price:"Индивидуально",
-      pricing_note:"Тарифы не включают рекламный бюджет и содержат ежемесячный отчёт.",
-      faq_title:"Частые вопросы",
-      faq_q1:"Вы продаёте аккаунты Google Ads?", faq_a1:"Да. Мы продаем аккаунты гугл адс с историей расходов.",
-      faq_q2:"Работаете с существующими аккаунтами?", faq_a2:"Да. Проведём аудит, исправим проблемы и перестроим кампании.",
-      faq_q3:"Как быстро стартуем?", faq_a3:"Обычно 1 рабочих дней после согласования и доступов.",
-      contact_title:"Получите бесплатную консультацию", contact_sub:"Опишите цели, нишу и бюджет — ответим с планом и шагами.",
-      certificates_title:"Пакеты сертификатов и комплаенса",
-      certificates_intro:"Новые дополнительные услуги. Выберите пакет под вашу вертикаль и требования комплаенса.",
-      cert_casino_title:"СЕРТИФИКАТ ДЛЯ CASINO", cert_casino_price:"$800", cert_casino_desc:"Документация и рекомендации для рекламных процессов в соответствии с правилами.",
-      cert_gambling_title:"СЕРТИФИКАТ ДЛЯ GAMBLING", cert_gambling_price:"$800", cert_gambling_desc:"Документация и рекомендации для рекламных процессов в соответствии с правилами.",
-      cert_crypto_title:"СЕРТИФИКАТ ДЛЯ CRYPTO", cert_crypto_price:"$1000", cert_crypto_desc:"Документация и рекомендации для рекламных процессов в соответствии с правилами.",
-      policy_title:"Политика замены и изменений",
-      policy_sub_title:"Замены",
-      policy_sub_text:"Замена выполняется, если аккаунты были заблокированы до того, как вы внесли какие-либо изменения в рекламные кампании, платёжные данные или привязку метода оплаты, либо если вы не смогли войти в предоставленные аккаунты.",
-      policy_changes_title:"Изменения в аккаунте",
-      policy_changes_text:"Нельзя вносить изменения в аккаунт: редактировать настройки, прикреплять карту или менять биллинг."
+    compliance:"Мы продаём и передаём аккаунты Google Ads. И оказываем услуги по созданию, настройке, ведению, аудитам и комплаенсу согласно политикам Google.",
+    nav_services:"Услуги", nav_geo:"GEO", nav_pricing:"Тарифы", nav_certificates:"Сертификаты", nav_policy:"Политика", nav_faq:"FAQ", nav_contact:"Контакты",
+    hero_kicker:"Performance-маркетинг для роста",
+    hero_title:"Ваш сертифицированный Google Partner для высокоэффективной рекламы",
+    hero_sub:"От crypto и gambling до fintech и e-commerce — создаём, настраиваем и ведём кампании в соответствии с политикам и масштабируем их с упором на ROI.",
+    cta_telegram:"Написать в Telegram", cta_services:"Посмотреть услуги", cta_sheets:"Пакеты (Sheets)",
+    services_title:"Что мы делаем",
+    s1_title:"Создание аккаунта и комплаенс", s1_desc:"Безопасное создание, верификация, биллинг и рекомендации по политикам.",
+    s2_title:"Настройка и структура кампаний", s2_desc:"Ключевые слова, трекинг, ассеты и архитектура конверсий.",
+    s3_title:"Постоянная оптимизация", s3_desc:"Тесты, минус-слова, ставки, аудитории, креативы.",
+    s4_title:"Сертификаты и проверка бизнеса", s4_desc:"Официальные документы и помощь для более плавных апрувов.",
+    geo_title:"GEO покрытие", geo_desc:"Основные рынки. Для Европы, Азии и LATAM — напишите нам.",
+    pricing_title:"Простые тарифы",
+    p1_title:"Starter", p1_desc:"Для тестов и MVP", p1_price:"$499/мес",
+    p2_title:"Growth",  p2_desc:"Для растущих брендов", p2_price:"$1,200/мес",
+    p3_title:"Scale",   p3_desc:"Индивидуально для большого бюджета", p3_price:"Индивидуально",
+    pricing_note:"Тарифы не включают рекламный бюджет и содержат ежемесячный отчёт.",
+    faq_title:"Частые вопросы",
+    faq_q1:"Вы продаёте аккаунты Google Ads?", faq_a1:"Да. Мы продаем аккаунты гугл адс с историей расходов.",
+    faq_q2:"Работаете с существующими аккаунтами?", faq_a2:"Да. Проведём аудит, исправим проблемы и перестроим кампании.",
+    faq_q3:"Как быстро стартуем?", faq_a3:"Обычно 1 рабочих дней после согласования и доступов.",
+    contact_title:"Получите бесплатную консультацию", contact_sub:"Опишите цели, нишу и бюджет — ответим с планом и шагами.",
+    certificates_title:"Пакеты сертификатов и комплаенса",
+    certificates_intro:"Новые дополнительные услуги. Выберите пакет под вашу вертикаль и требования комплаенса.",
+    cert_casino_title:"СЕРТИФИКАТ ДЛЯ CASINO", cert_casino_price:"$800", cert_casino_desc:"Документация и рекомендации для рекламных процессов в соответствии с правилами.",
+    cert_gambling_title:"СЕРТИФИКАТ ДЛЯ GAMBLING", cert_gambling_price:"$800", cert_gambling_desc:"Документация и рекомендации для рекламных процессов в соответствии с правилами.",
+    cert_crypto_title:"СЕРТИФИКАТ ДЛЯ CRYPTO", cert_crypto_price:"$1000", cert_crypto_desc:"Документация и рекомендации для рекламных процессов в соответствии с правилами.",
+    policy_title:"Политика замены и изменений",
+    policy_sub_title:"Замены",
+    policy_sub_text:"Замена выполняется, если аккаунты были заблокированы до того, как вы внесли какие-либо изменения в рекламные кампании, платёжные данные или привязку метода оплаты, либо если вы не смогли войти в предоставленные аккаунты.",
+    policy_changes_title:"Изменения в аккаунте",
+    policy_changes_text:"Нельзя вносить изменения в аккаунт: редактировать настройки, прикреплять карту или менять биллинг."
   }
 };
 
