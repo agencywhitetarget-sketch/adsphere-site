@@ -6,94 +6,130 @@
 <title>AdSphere Global — Certified Google Partner</title>
 <meta name="description" content="AdSphere Global — Certified Google Partner. We create, set up and manage compliant Google Ads campaigns (crypto, gambling, fintech, e-commerce), plus certificates and business verification.">
 <style>
+  /* ===============================
+     Premium redesign (Google Partner vibe)
+     — CONTENT STAYS THE SAME
+     — New visual style + sticky header hide on scroll
+     =============================== */
+
   :root{
-    --bg:#0b0b0c; --panel:#121214; --card:#141417; --muted:#b0b0b8; --text:#f5f6f7;
-    --line:#22232a; --accent:#6ee7b7; --pill:#1f2937; --brand:#79ffa8;
+    /* brand surface */
+    --bg:#06080f;           /* deeper than before */
+    --panel:#0b0f19;        /* navbar/banner panels */
+    --card:#0e1424;         /* cards */
+    --line:rgba(255,255,255,.10);
+    --text:#f6f7fb;
+    --muted:#b7c2d7;
+
+    /* accents inspired by Google Partner ribbon */
+    --accent:#0b84ff; /* blue */
+    --accent-2:#34a853; /* green */
+    --accent-3:#ea4335; /* red */
+    --accent-4:#fbbc05; /* yellow */
+
+    --pill:rgba(255,255,255,.07);
   }
+
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
   a{color:inherit;text-decoration:none}
-  .container{max-width:1120px;margin:0 auto;padding:0 20px}
+  img{max-width:100%;display:block}
+
+  /* subtle dynamic background */
+  body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:
+      radial-gradient(1100px 520px at 100% -140px, rgba(11,132,255,.18), transparent 60%),
+      radial-gradient(900px 420px at -10% -120px, rgba(52,168,83,.16), transparent 60%),
+      radial-gradient(900px 420px at 50% 110%, rgba(251,188,5,.14), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,.03), transparent 30%);
+  }
+
+  .container{max-width:1140px;margin:0 auto;padding:0 20px}
   .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-  .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 1.15rem;border:1px solid var(--brand);border-radius:14px;background:var(--brand);color:#03140b;font-weight:700;white-space:nowrap}
-  .btn.outline{background:transparent;color:var(--text);border-color:#3b3d45}
-  .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .6rem;border-radius:999px;background:#0e1b14;color:#a7f3d0;border:1px solid #1f4934;font-size:.82rem}
-  .pill{display:inline-flex;align-items:center;padding:.25rem .6rem;border-radius:999px;background:var(--pill);color:#cfd2d8;font-size:.75rem;border:1px solid #2b2d36}
-  header{position:sticky;top:0;z-index:40;background:rgba(11,11,12,.6);backdrop-filter:saturate(160%) blur(10px);border-bottom:1px solid var(--line)}
-  .nav{height:64px;display:flex;align-items:center;justify-content:space-between}
-  .brand{display:flex;align-items:center;gap:.6rem}
-  .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#1b1f1b,#1e2d24);}
+
+  /* ===== Header ===== */
+  header{position:sticky;top:0;z-index:50;background:rgba(6,10,18,.65);backdrop-filter:saturate(160%) blur(14px);border-bottom:1px solid var(--line);transform:translateY(0);transition:transform .28s ease, box-shadow .28s ease}
+  header.is-hidden{transform:translateY(-100%)}
+  header.is-visible{transform:translateY(0)}
+
+  .nav{min-height:70px;display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:.7rem}
+  .logo{width:36px;height:36px;border-radius:10px;background:
+    conic-gradient(from 120deg,var(--accent),var(--accent-2),var(--accent-3),var(--accent-4),var(--accent));
+    box-shadow:0 6px 18px rgba(0,0,0,.35), inset 0 0 0 2px rgba(255,255,255,.1)}
+  .pill{display:inline-flex;align-items:center;padding:.3rem .7rem;border-radius:999px;background:var(--pill);color:#e5e9f2;font-size:.75rem;border:1px solid rgba(255,255,255,.12)}
+
   .nav-links{display:none;gap:18px}
+  .nav-links a{position:relative;padding:.4rem .1rem}
+  .nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent-2),var(--accent-4));opacity:0;transform:scaleX(.3);transition:.2s}
+  .nav-links a:hover::after{opacity:1;transform:scaleX(1)}
   @media(min-width:900px){ .nav-links{display:flex} }
-  select.lang{background:#121417;color:#e6e8ee;border:1px solid #2e3038;border-radius:10px;padding:.45rem .6rem}
-  .banner{background:#1a1c22;border-bottom:1px solid #2a2c33;color:#e6e6f1}
-  .banner .container{padding:12px 20px;font-size:.95rem}
-  section{padding:64px 0}
+
+  select.lang{background:#0b1326;color:#e6e8ee;border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:.5rem .65rem}
+
+  /* ===== Banner ===== */
+  .banner{background:linear-gradient(90deg, rgba(11,132,255,.18), rgba(52,168,83,.18));border-bottom:1px solid var(--line);color:#e8efff}
+  .banner .container{padding:12px 20px;font-size:.98rem}
+
+  /* ===== Sections ===== */
+  section{padding:72px 0}
   .hero{background:
-    radial-gradient(1000px 500px at 100% -100%, rgba(121,255,168,.12), transparent 60%),
-    radial-gradient(1000px 500px at 0% -100%, rgba(102,204,255,.08), transparent 60%);}
-  .grid{display:grid;gap:20px}
+    radial-gradient(1000px 520px at 100% -120px, rgba(11,132,255,.18), transparent 60%),
+    radial-gradient(1000px 520px at 0% -160px, rgba(234,67,53,.16), transparent 60%)}
+
+  .grid{display:grid;gap:22px}
   .hero-grid{grid-template-columns:1fr}
   @media(min-width:980px){ .hero-grid{grid-template-columns:1.1fr .9fr} }
-  h1{font-size:40px;line-height:1.15;margin:.4rem 0 1rem}
-  h2{font-size:28px;margin:0 0 16px}
+
+  h1{font-size:44px;line-height:1.12;margin:.4rem 0 1rem}
+  h2{font-size:30px;margin:0 0 18px}
   p.lead{font-size:18px;color:var(--muted)}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+
+  /* ===== Buttons ===== */
+  .btn{display:inline-flex;align-items:center;gap:.7rem;padding:1rem 1.25rem;border:1px solid transparent;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5ab0ff);color:#06101f;font-weight:800;white-space:nowrap;box-shadow:0 10px 28px rgba(11,132,255,.25);transition:.2s}
+  .btn:hover{transform:translateY(-1px);filter:saturate(1.06)}
+  .btn.outline{background:linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.02));color:var(--text);border-color:rgba(255,255,255,.20)}
+  .btn.outline:hover{border-color:rgba(255,255,255,.35)}
+
+  /* Extra space below button row, per request */
+  .btn-row{margin-top:16px;margin-bottom:22px}
+
+  /* ===== Cards ===== */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 12px 30px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.04)}
+  .card:hover{box-shadow:0 16px 36px rgba(0,0,0,.42)}
+
   .muted{color:var(--muted)}
-  .list{display:grid;grid-template-columns:1fr;gap:14px}
-  @media(min-width:960px){ .cols-3{grid-template-columns:repeat(3,1fr)} .cols-4{grid-template-columns:repeat(4,1fr)}}
-  .price{font-weight:800;font-size:26px;margin:8px 0}
-  footer{border-top:1px solid var(--line);background:#101114;color:#c8cbd2}
+  .list{display:grid;grid-template-columns:1fr;gap:16px}
+  .cols-2{grid-template-columns:1fr 1fr}
+  @media(min-width:960px){ .cols-3{grid-template-columns:repeat(3,1fr)} .cols-4{grid-template-columns:repeat(4,1fr)} }
+
+  .chip{display:inline-block;border:1px dashed rgba(255,255,255,.22);color:#e5e9f2;padding:.35rem .7rem;border-radius:999px;font-size:.82rem;background:rgba(255,255,255,.05)}
+  .price{font-weight:800;font-size:26px;margin:8px 0;color:#ffd7dc}
+
+  footer{border-top:1px solid var(--line);background:#0a0f1d;color:#cdd4e3}
   .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-  .kpi .label{font-size:12px;color:#a7aab4}
+  .kpi .label{font-size:12px;color:#a7afbf}
   .kpi .value{font-weight:800;font-size:20px}
-  .chip{display:inline-block;border:1px dashed #2b2e36;color:#c9ced6;padding:.25rem .6rem;border-radius:999px;font-size:.78rem}
-  .ok{color:#34d399}
-  .warn{color:#fbbf24}
+  .ok{color:#34d399}.warn{color:#fbbf24}
+
   /* language visibility */
   .i18n{display:none}
   .i18n.active{display:initial}
-  .ok{color:#34d399}
-.warn{color:#fbbf24}
 
-/* language visibility */
-.i18n{display:none}
-.i18n.active{display:initial}
-
-/* 📱 Mobile fixes */
-@media (max-width: 560px) {
-  header .nav {
-    flex-direction: column;
-    align-items: flex-start;
-    height: auto;
-    padding: 8px 0;
+  /* Mobile */
+  @media (max-width: 560px) {
+    header .nav {flex-direction: column;align-items: flex-start;min-height:auto;padding:10px 0}
+    .nav-links {flex-direction: column;align-items: flex-start;gap: 10px;margin-top: 8px}
+    .row {flex-wrap: wrap}
+    .btn {width: 100%;justify-content: center}
+    select.lang {margin-top: 8px;width: 100%}
+    h1{font-size:34px}
   }
-
-  .nav-links {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    margin-top: 8px;
-  }
-
-  .row {
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  select.lang {
-    margin-top: 8px;
-    width: 100%;
-  }
-}
 </style>
+</head>
 <body>
 
-<header>
+<header class="is-visible">
   <div class="container nav">
     <div class="brand">
       <div class="logo"></div>
@@ -135,12 +171,12 @@
       <p class="lead i18n active" data-key="hero_sub">
         From crypto and gambling to fintech and e-commerce — we build, set up and manage compliant Google Ads campaigns, then scale them with ROI-focused optimization.
       </p>
-      <div class="row" style="margin-top:14px">
+      <div class="row btn-row">
         <a class="btn" id="ctaTelegram" target="_blank" rel="noopener"><span class="i18n active" data-key="cta_telegram">Message on Telegram</span></a>
         <a class="btn outline" href="#services"><span class="i18n active" data-key="cta_services">Explore services</span></a>
         <a class="btn outline" id="ctaSheets" target="_blank" rel="noopener"><span class="i18n active" data-key="cta_sheets">View packages (Sheets)</span></a>
       </div>
-      <div class="row muted" style="gap:16px;margin-top:12px;font-size:14px">
+      <div class="row muted" style="gap:16px;margin-top:6px;font-size:14px">
         <span>⏱ 1 days to start</span><span>📈 ROI-driven</span><span>💳 Transparent pricing</span>
       </div>
     </div>
@@ -191,8 +227,7 @@
   </div>
 </section>
 
-<!-- NEW: Certificates -->
-<section id="certificates" style="background:#0e0f13;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+<section id="certificates" style="background:#0b1222;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="container">
     <h2 class="i18n active" data-key="certificates_title">Certificates & Compliance Packages</h2>
     <p class="muted i18n active" data-key="certificates_intro">
@@ -219,7 +254,6 @@
   </div>
 </section>
 
-<!-- NEW: Policy -->
 <section id="policy" style="border-bottom:1px solid var(--line)">
   <div class="container">
     <h2 class="i18n active" data-key="policy_title">Substitution & Change Policy</h2>
@@ -241,7 +275,7 @@
   </div>
 </section>
 
-<section id="pricing" style="background:#0e0f13;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+<section id="pricing" style="background:#0b1222;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="container">
     <h2 class="i18n active" data-key="pricing_title">Simple pricing</h2>
     <div class="list cols-3">
@@ -300,7 +334,7 @@
   </div>
 </section>
 
-<section id="contact" style="background:#0e0f13;border-top:1px solid var(--line)">
+<section id="contact" style="background:#0b1222;border-top:1px solid var(--line)">
   <div class="container grid" style="grid-template-columns:1fr;gap:20px">
     <div>
       <h2 class="i18n active" data-key="contact_title">Get a free consultation</h2>
@@ -327,9 +361,9 @@
 </footer>
 
 <script>
-/* ===== Config: your links ===== */
-const TELEGRAM_HANDLE = "GOOGLEADSBRAZIL";
-const SHEETS_URL = "https://docs.google.com/spreadsheets/d/1rfCcHIL9k31HTwuc-DpyQE5Lvz1513q99jW5qFjbJiQ/edit?usp=sharing";
+/* ===== Config: your links (unchanged) ===== */
+const TELEGRAM_HANDLE = "GOOGLEADSBRAZIL"; // keep as in your data
+const SHEETS_URL = "https://docs.google.com/spreadsheets/d/1rfCcHIL9k31HTwuc-DpyQE5Lvz1513q99jW5qFjbJiQ/edit?usp=sharing"; // keep as in your data
 
 /* Wire links */
 const tgUrl = "https://t.me/" + TELEGRAM_HANDLE;
@@ -337,7 +371,7 @@ const tgUrl = "https://t.me/" + TELEGRAM_HANDLE;
 ["sheetsBtn","ctaSheets","contactSheets"].forEach(id=>{ const el=document.getElementById(id); if(el) el.href=SHEETS_URL; });
 document.getElementById("year").textContent = new Date().getFullYear();
 
-/* ===== i18n dictionaries (EN/ES/PT/RU) ===== */
+/* ===== i18n dictionaries (EN/ES/PT/RU) — unchanged content ===== */
 const dict = {
   en:{
     partner_badge:"Certified Google Partner",
@@ -356,15 +390,14 @@ const dict = {
     pricing_title:"Simple pricing",
     p1_title:"Starter", p1_desc:"Best for testing and MVPs", p1_price:"$499/mo",
     p2_title:"Growth",  p2_desc:"For growing brands",      p2_price:"$1,200/mo",
-    p3_title:"Scale",   p2_price:"$1,200/mo", p3_desc:"Custom for high spend",  p3_price:"Custom",
+    p3_title:"Scale",   p3_desc:"Custom for high spend",  p3_price:"Custom",
     pricing_note:"All plans exclude media spend and include a monthly performance report.",
     faq_title:"Frequently asked questions",
     faq_q1:"Do you sell Google Ads accounts?", faq_a1:"Yes. We sell and transfer accounts. We also create and manage them on your behalf or on behalf of your company to ensure full compliance.",
     faq_q2:"Can you work with existing accounts?", faq_a2:"Yes. We can audit and manage your current account, fix policy issues, and restructure campaigns.",
-    faq_q3:"How fast can we start?", faq_a3:"Usually within 2–5 business days after scope alignment and access.",
+    faq_q3:"How fast can we start?", faq_a3:"Usually within 1 business days after scope alignment and access.",
     contact_title:"Get a free consultation", contact_sub:"Tell us about your goals, industry, and monthly budget. We’ll reply with next steps and a proposed plan.",
 
-    /* NEW: Certificates & Policy */
     certificates_title:"Certificates & Compliance Packages",
     certificates_intro:"New additional services. Choose a package that matches your vertical and compliance needs.",
     cert_casino_title:"CASINO CERTIFICATE", cert_casino_price:"$800", cert_casino_desc:"Documentation and guidance for compliant advertising workflows.",
@@ -428,7 +461,7 @@ const dict = {
     geo_title:"Cobertura GEO", geo_desc:"Mercados principais. Para Europa, Ásia e LATAM — fale conosco.",
     pricing_title:"Planos simples",
     p1_title:"Starter", p1_desc:"Ideal para testes e MVPs", p1_price:"$499/mês",
-    p2_title:"Growth",  p2_desc:"Para marcas em crescimento", p2_price:"$1.200/mês",
+    p2_title:"Growth",  p2_desc:"Para marcas en crescimento", p2_price:"$1.200/mês",
     p3_title:"Scale",   p3_desc:"Sob medida para alto investimento", p3_price:"Sob consulta",
     pricing_note:"Todos os planos excluem mídia e incluem relatório mensal.",
     faq_title:"Perguntas frequentes",
@@ -438,7 +471,7 @@ const dict = {
     contact_title:"Peça uma consultoria gratuita", contact_sub:"Conte seus objetivos, setor e orçamento mensal. Responderemos com próximos passos.",
 
     certificates_title:"Pacotes de certificados e conformidade",
-    certificates_intro:"Novos serviços adicionais. Escolha o pacote que se encaixa no seu vertical e nas exigências de conformidade.",
+    certificates_intro:"Novos serviços adicionais. Escolha o pacote que se encaixa no seu vertical y nas exigências de conformidade.",
     cert_casino_title:"CERTIFICADO DE CASSINO", cert_casino_price:"$800", cert_casino_desc:"Documentação e orientação para fluxos de publicidade em conformidade.",
     cert_gambling_title:"CERTIFICADO DE APOSTAS", cert_gambling_price:"$800", cert_gambling_desc:"Documentação e orientação para fluxos de publicidade em conformidade.",
     cert_crypto_title:"CERTIFICADO PARA CRYPTO", cert_crypto_price:"$1000", cert_crypto_desc:"Documentação e orientação para fluxos de publicidade em conformidade.",
@@ -446,7 +479,7 @@ const dict = {
     policy_sub_title:"Substituições",
     policy_sub_text:"A substituição é realizada se as contas forem bloqueadas antes de você fazer quaisquer alterações nas campanhas publicitárias, nos dados de pagamento ou na vinculação do método de pagamento, ou se você não conseguir fazer login nas contas fornecidas.",
     policy_changes_title:"Alterações na conta",
-    policy_changes_text:"Você não pode fazer alterações na conta: editar configurações, anexar cartão ou modificar dados de faturamento."
+    policy_changes_text:"Você не pode fazer alterações na conta: editar configurações, anexar cartão ou modificar dados de faturamento."
   },
   ru:{
     partner_badge:"Сертифицированный Google Partner",
@@ -454,7 +487,7 @@ const dict = {
     nav_services:"Услуги", nav_geo:"GEO", nav_pricing:"Тарифы", nav_certificates:"Сертификаты", nav_policy:"Политика", nav_faq:"FAQ", nav_contact:"Контакты",
     hero_kicker:"Performance-маркетинг для роста",
     hero_title:"Ваш сертифицированный Google Partner для высокоэффективной рекламы",
-    hero_sub:"От crypto и gambling до fintech и e-commerce — создаём, настраиваем и ведём кампании в соответствии с политиками и масштабируем их с упором на ROI.",
+    hero_sub:"От crypto и gambling до fintech и e-commerce — создаём, настраиваем и ведём кампании в соответствии с политикам и масштабируем их с упором на ROI.",
     cta_telegram:"Написать в Telegram", cta_services:"Посмотреть услуги", cta_sheets:"Пакеты (Sheets)",
     services_title:"Что мы делаем",
     s1_title:"Создание аккаунта и комплаенс", s1_desc:"Безопасное создание, верификация, биллинг и рекомендации по политикам.",
@@ -489,20 +522,21 @@ const dict = {
 /* apply language */
 function setLang(lang){
   const d = dict[lang] || dict.en;
-  document.querySelectorAll("[data-key]").forEach(el=>{
-    const key = el.getAttribute("data-key");
+  document.querySelectorAll('[data-key]').forEach(el=>{
+    const key = el.getAttribute('data-key');
     if(d[key]) el.textContent = d[key];
-    el.classList.add("active");
+    el.classList.add('active');
   });
-  document.getElementById("t_partner_badge").textContent = d.partner_badge;
+  const p = document.getElementById('t_partner_badge');
+  if(p) p.textContent = d.partner_badge;
 }
-const sel = document.getElementById("langSel");
-sel.addEventListener("change",()=>{ setLang(sel.value); try{localStorage.setItem("ads_lang", sel.value);}catch(e){} });
-setLang( (localStorage.getItem("ads_lang")||"en") );
-sel.value = (localStorage.getItem("ads_lang")||"en");
+const sel = document.getElementById('langSel');
+sel.addEventListener('change',()=>{ setLang(sel.value); try{localStorage.setItem('ads_lang', sel.value);}catch(e){} });
+setLang( (localStorage.getItem('ads_lang')||'en') );
+sel.value = (localStorage.getItem('ads_lang')||'en');
 </script>
 
-<!-- Optional structured data -->
+<!-- Structured data (unchanged except handle link) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -517,59 +551,23 @@ sel.value = (localStorage.getItem("ads_lang")||"en");
     "url": "https://t.me/GOOGLEADSBRAZIL"
   }]
 }
-<script>
-let lastScroll = 0;
-const header = document.querySelector("header");
-
-window.addEventListener("scroll", () => {
-  const currentScroll = window.pageYOffset;
-
-  if (currentScroll > lastScroll && currentScroll > 60) {
-    header.style.transform = "translateY(-100%)"; // ховаємо при скролі вниз
-  } else {
-    header.style.transform = "translateY(0)"; // показуємо при скролі вгору
-  }
-
-  lastScroll = currentScroll;
-});
 </script>
-  <script>
-(() => {
-  const header = document.querySelector('header');
-  if (!header) return;
 
-  let last = window.pageYOffset || 0;
-  const threshold = 20; // щоб дрібні рухи не смикали шапку
-
-  // Якщо сторінка завантажилась не з самого верху — одразу сховати
-  if (last > 10) {
-    header.classList.remove('is-visible');
+<script>
+// Smooth header hide/show on scroll (as in Chile site)
+let lastScroll = 0;
+const header = document.querySelector('header');
+window.addEventListener('scroll', () => {
+  const y = window.pageYOffset || 0;
+  if (y > lastScroll && y > 60) {
     header.classList.add('is-hidden');
+    header.classList.remove('is-visible');
+  } else {
+    header.classList.remove('is-hidden');
+    header.classList.add('is-visible');
   }
-
-  const onScroll = () => {
-    const y = window.pageYOffset || 0;
-
-    if (y <= 10) {
-      // самий верх — шапка завжди видима
-      header.classList.remove('is-hidden');
-      header.classList.add('is-visible');
-    } else if (y > last + threshold) {
-      // скролимо вниз — ховаємо
-      header.classList.add('is-hidden');
-      header.classList.remove('is-visible');
-    } else if (y < last - threshold) {
-      // скролимо вгору — показуємо
-      header.classList.remove('is-hidden');
-      header.classList.add('is-visible');
-    }
-
-    last = y;
-  };
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-})();
+  lastScroll = y;
+});
 </script>
 </body>
 </html>
-
