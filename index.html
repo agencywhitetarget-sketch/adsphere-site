@@ -6,177 +6,181 @@
 <title>AdSphere Global — Certified Google Partner</title>
 <meta name="description" content="AdSphere Global — Certified Google Partner. We create, set up and manage compliant Google Ads campaigns (crypto, gambling, fintech, e-commerce), plus certificates and business verification.">
 <style>
-  /* ===============================
-     Premium redesign (Google Partner vibe)
-     — CONTENT STAYS THE SAME
-     — New visual style + sticky header hide on scroll
-     =============================== */
+  /* ==========================================
+     PREMIER CONCEPT REDESIGN
+     - Diagonal hero
+     - Glassmorphism cards
+     - Floating CTA dock
+     - Sticky header hides on scroll
+     - Content/links/i18n KEPT the same
+     ========================================== */
 
   :root{
-    /* brand surface */
-    --bg:#06080f;           /* deeper than before */
-    --panel:#0b0f19;        /* navbar/banner panels */
-    --card:#0e1424;         /* cards */
-    --line:rgba(255,255,255,.10);
-    --text:#f6f7fb;
-    --muted:#b7c2d7;
+    --bg:#060709;               /* deep charcoal */
+    --ink:#f5f7fb;              /* primary text */
+    --muted:#b8c1d1;            /* secondary text */
+    --line:rgba(255,255,255,.08);
 
-    /* accents inspired by Google Partner ribbon */
-    --accent:#0b84ff; /* blue */
-    --accent-2:#34a853; /* green */
-    --accent-3:#ea4335; /* red */
-    --accent-4:#fbbc05; /* yellow */
+    /* Google Partner ribbon accents */
+    --blue:#0b84ff; --green:#34a853; --red:#ea4335; --yellow:#fbbc05;
 
-    --pill:rgba(255,255,255,.07);
+    /* surfaces */
+    --panel:rgba(14,17,26,.65);        /* navbar backdrop */
+    --card:rgba(20,24,36,.55);         /* glass cards */
+    --glass-border:rgba(255,255,255,.18);
   }
 
   *{box-sizing:border-box}
-  html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
   a{color:inherit;text-decoration:none}
-  img{max-width:100%;display:block}
 
-  /* subtle dynamic background */
-  body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
-    background:
-      radial-gradient(1100px 520px at 100% -140px, rgba(11,132,255,.18), transparent 60%),
-      radial-gradient(900px 420px at -10% -120px, rgba(52,168,83,.16), transparent 60%),
-      radial-gradient(900px 420px at 50% 110%, rgba(251,188,5,.14), transparent 60%),
-      linear-gradient(180deg, rgba(255,255,255,.03), transparent 30%);
-  }
+  /* --- Ambient background shapes / animated gradient --- */
+  body:before, body:after{content:"";position:fixed;inset:auto;z-index:-2;border-radius:50%;filter:blur(70px);opacity:.35}
+  body:before{width:700px;height:700px;left:-140px;top:-180px;background:radial-gradient(closest-side, rgba(11,132,255,.6), transparent)}
+  body:after{width:780px;height:780px;right:-180px;bottom:-220px;background:radial-gradient(closest-side, rgba(52,168,83,.55), transparent)}
 
-  .container{max-width:1140px;margin:0 auto;padding:0 20px}
-  .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-
-  /* ===== Header ===== */
-  header{position:sticky;top:0;z-index:50;background:rgba(6,10,18,.65);backdrop-filter:saturate(160%) blur(14px);border-bottom:1px solid var(--line);transform:translateY(0);transition:transform .28s ease, box-shadow .28s ease}
+  /* ===== Header (sticky + hide on scroll) ===== */
+  header{position:sticky;top:0;z-index:60;transform:translateY(0);transition:transform .28s ease, box-shadow .28s ease}
+  header .wrap{backdrop-filter:saturate(160%) blur(14px);background:var(--panel);border-bottom:1px solid var(--line)}
   header.is-hidden{transform:translateY(-100%)}
-  header.is-visible{transform:translateY(0)}
-
-  .nav{min-height:70px;display:flex;align-items:center;justify-content:space-between}
+  .nav{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
   .brand{display:flex;align-items:center;gap:.7rem}
   .logo{width:36px;height:36px;border-radius:10px;background:
-    conic-gradient(from 120deg,var(--accent),var(--accent-2),var(--accent-3),var(--accent-4),var(--accent));
+    conic-gradient(from 120deg,var(--blue),var(--green),var(--red),var(--yellow),var(--blue));
     box-shadow:0 6px 18px rgba(0,0,0,.35), inset 0 0 0 2px rgba(255,255,255,.1)}
-  .pill{display:inline-flex;align-items:center;padding:.3rem .7rem;border-radius:999px;background:var(--pill);color:#e5e9f2;font-size:.75rem;border:1px solid rgba(255,255,255,.12)}
+  .pill{display:inline-flex;align-items:center;padding:.32rem .7rem;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);font-size:.78rem;color:#e6ecff}
 
-  .nav-links{display:none;gap:18px}
+  .nav-links{display:none;gap:20px}
   .nav-links a{position:relative;padding:.4rem .1rem}
-  .nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent-2),var(--accent-4));opacity:0;transform:scaleX(.3);transition:.2s}
-  .nav-links a:hover::after{opacity:1;transform:scaleX(1)}
+  .nav-links a:after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:linear-gradient(90deg,var(--blue),var(--green),var(--yellow));opacity:0;transform:scaleX(.3);transition:.2s}
+  .nav-links a:hover:after{opacity:1;transform:scaleX(1)}
   @media(min-width:900px){ .nav-links{display:flex} }
 
   select.lang{background:#0b1326;color:#e6e8ee;border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:.5rem .65rem}
 
-  /* ===== Banner ===== */
-  .banner{background:linear-gradient(90deg, rgba(11,132,255,.18), rgba(52,168,83,.18));border-bottom:1px solid var(--line);color:#e8efff}
-  .banner .container{padding:12px 20px;font-size:.98rem}
+  /* ===== Diagonal HERO ===== */
+  .hero{position:relative;isolation:isolate}
+  .hero:before{content:"";position:absolute;inset:0;z-index:-1;
+    background:linear-gradient(135deg, rgba(11,132,255,.28), rgba(251,188,5,.24) 45%, transparent 55%),
+               linear-gradient(180deg, rgba(255,255,255,.04), transparent);
+    -webkit-mask:linear-gradient(160deg, #000 65%, transparent 66%);
+            mask:linear-gradient(160deg, #000 65%, transparent 66%);
+    border-bottom:1px solid var(--line);
+  }
 
-  /* ===== Sections ===== */
-  section{padding:72px 0}
-  .hero{background:
-    radial-gradient(1000px 520px at 100% -120px, rgba(11,132,255,.18), transparent 60%),
-    radial-gradient(1000px 520px at 0% -160px, rgba(234,67,53,.16), transparent 60%)}
+  .container{max-width:1200px;margin:0 auto;padding:0 20px}
+  section{padding:82px 0}
 
   .grid{display:grid;gap:22px}
-  .hero-grid{grid-template-columns:1fr}
-  @media(min-width:980px){ .hero-grid{grid-template-columns:1.1fr .9fr} }
+  .hero-grid{grid-template-columns:1.12fr .88fr}
+  @media(max-width:980px){ .hero-grid{grid-template-columns:1fr} }
 
-  h1{font-size:44px;line-height:1.12;margin:.4rem 0 1rem}
-  h2{font-size:30px;margin:0 0 18px}
+  h1{font-size:48px;line-height:1.08;margin:.25rem 0 1rem}
+  h2{font-size:32px;margin:0 0 18px}
   p.lead{font-size:18px;color:var(--muted)}
 
-  /* ===== Buttons ===== */
-  .btn{display:inline-flex;align-items:center;gap:.7rem;padding:1rem 1.25rem;border:1px solid transparent;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5ab0ff);color:#06101f;font-weight:800;white-space:nowrap;box-shadow:0 10px 28px rgba(11,132,255,.25);transition:.2s}
-  .btn:hover{transform:translateY(-1px);filter:saturate(1.06)}
-  .btn.outline{background:linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.02));color:var(--text);border-color:rgba(255,255,255,.20)}
-  .btn.outline:hover{border-color:rgba(255,255,255,.35)}
+  /* ===== Buttons (elevated, animated) ===== */
+  .btn{display:inline-flex;align-items:center;gap:.7rem;padding:1rem 1.25rem;border-radius:14px;border:1px solid transparent;font-weight:800;white-space:nowrap;transition:.2s}
+  .btn.primary{background:linear-gradient(135deg,var(--blue),#5ab0ff);color:#06101f;box-shadow:0 10px 28px rgba(11,132,255,.25)}
+  .btn.primary:hover{transform:translateY(-1px) scale(1.02)}
+  .btn.ghost{background:linear-gradient(135deg, rgba(255,255,255,.09), rgba(255,255,255,.02));color:var(--ink);border:1px solid rgba(255,255,255,.18)}
+  .btn.ghost:hover{border-color:rgba(255,255,255,.35)}
 
-  /* Extra space below button row, per request */
-  .btn-row{margin-top:16px;margin-bottom:22px}
+  /* requested extra spacing under CTA row */
+  .btn-row{margin:16px 0 26px}
 
-  /* ===== Cards ===== */
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 12px 30px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.04)}
+  /* ===== Glass cards ===== */
+  .card{background:var(--card);border:1px solid var(--glass-border);border-radius:16px;padding:18px;box-shadow:0 12px 30px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.04)}
   .card:hover{box-shadow:0 16px 36px rgba(0,0,0,.42)}
 
-  .muted{color:var(--muted)}
   .list{display:grid;grid-template-columns:1fr;gap:16px}
-  .cols-2{grid-template-columns:1fr 1fr}
-  @media(min-width:960px){ .cols-3{grid-template-columns:repeat(3,1fr)} .cols-4{grid-template-columns:repeat(4,1fr)} }
+  .cols-2{grid-template-columns:repeat(2,1fr)}
+  .cols-3{grid-template-columns:repeat(3,1fr)}
+  .cols-4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:960px){ .cols-2,.cols-3,.cols-4{grid-template-columns:1fr} }
 
+  .muted{color:var(--muted)}
   .chip{display:inline-block;border:1px dashed rgba(255,255,255,.22);color:#e5e9f2;padding:.35rem .7rem;border-radius:999px;font-size:.82rem;background:rgba(255,255,255,.05)}
   .price{font-weight:800;font-size:26px;margin:8px 0;color:#ffd7dc}
 
-  footer{border-top:1px solid var(--line);background:#0a0f1d;color:#cdd4e3}
-  .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-  .kpi .label{font-size:12px;color:#a7afbf}
-  .kpi .value{font-weight:800;font-size:20px}
-  .ok{color:#34d399}.warn{color:#fbbf24}
+  /* ===== Divider sections with subtle diagonals ===== */
+  .section-alt{position:relative;background:linear-gradient(180deg, rgba(255,255,255,.02), transparent)}
+  .section-alt:before{content:"";position:absolute;inset:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);-webkit-mask:linear-gradient(180deg,#000 92%, transparent);mask:linear-gradient(180deg,#000 92%, transparent)}
+
+  /* ===== Footer ===== */
+  footer{border-top:1px solid var(--line);background:rgba(10,12,16,.9);backdrop-filter:blur(6px);color:#cdd4e3}
+
+  /* ===== Floating CTA Dock ===== */
+  .dock{position:fixed;right:18px;bottom:18px;z-index:65;display:flex;flex-direction:column;gap:10px}
+  .dock .btn{border-radius:16px}
+  .dock .btn:hover{transform:translateY(-2px)}
 
   /* language visibility */
   .i18n{display:none}
   .i18n.active{display:initial}
 
-  /* Mobile */
-  @media (max-width: 560px) {
-    header .nav {flex-direction: column;align-items: flex-start;min-height:auto;padding:10px 0}
-    .nav-links {flex-direction: column;align-items: flex-start;gap: 10px;margin-top: 8px}
-    .row {flex-wrap: wrap}
-    .btn {width: 100%;justify-content: center}
-    select.lang {margin-top: 8px;width: 100%}
-    h1{font-size:34px}
+  /* responsive tweaks */
+  @media(max-width:560px){
+    h1{font-size:36px}
+    section{padding:64px 0}
+    .nav{padding:10px 16px}
   }
 </style>
 </head>
 <body>
 
 <header class="is-visible">
-  <div class="container nav">
-    <div class="brand">
-      <div class="logo"></div>
-      <div class="row" style="gap:.5rem">
-        <strong>AdSphere Global</strong>
-        <span class="pill" id="t_partner_badge">Certified Google Partner</span>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand">
+        <div class="logo"></div>
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+          <strong>AdSphere Global</strong>
+          <span class="pill" id="t_partner_badge">Certified Google Partner</span>
+        </div>
       </div>
-    </div>
-    <nav class="nav-links">
-      <a href="#services" class="i18n active" data-key="nav_services">Services</a>
-      <a href="#geo" class="i18n active" data-key="nav_geo">GEO</a>
-      <a href="#pricing" class="i18n active" data-key="nav_pricing">Pricing</a>
-      <a href="#certificates" class="i18n active" data-key="nav_certificates">Certificates</a>
-      <a href="#policy" class="i18n active" data-key="nav_policy">Policy</a>
-      <a href="#faq" class="i18n active" data-key="nav_faq">FAQ</a>
-      <a href="#contact" class="i18n active" data-key="nav_contact">Contact</a>
-    </nav>
-    <div class="row">
-      <a class="btn outline" id="sheetsBtn" target="_blank" rel="noopener">Shop Google Ads accounts</a>
-      <a class="btn" id="tgBtn" target="_blank" rel="noopener">CONTACT US</a>
-      <select class="lang" id="langSel" aria-label="Language">
-        <option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option><option value="ru">RU</option>
-      </select>
+      <nav class="nav-links">
+        <a href="#services" class="i18n active" data-key="nav_services">Services</a>
+        <a href="#geo" class="i18n active" data-key="nav_geo">GEO</a>
+        <a href="#pricing" class="i18n active" data-key="nav_pricing">Pricing</a>
+        <a href="#certificates" class="i18n active" data-key="nav_certificates">Certificates</a>
+        <a href="#policy" class="i18n active" data-key="nav_policy">Policy</a>
+        <a href="#faq" class="i18n active" data-key="nav_faq">FAQ</a>
+        <a href="#contact" class="i18n active" data-key="nav_contact">Contact</a>
+      </nav>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <a class="btn ghost" id="sheetsBtn" target="_blank" rel="noopener">Shop Google Ads accounts</a>
+        <a class="btn primary" id="tgBtn" target="_blank" rel="noopener">CONTACT US</a>
+        <select class="lang" id="langSel" aria-label="Language">
+          <option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option><option value="ru">RU</option>
+        </select>
+      </div>
     </div>
   </div>
 </header>
 
-<div class="banner">
-  <div class="container i18n active" data-key="compliance">
+<!-- Banner (text unchanged) -->
+<div class="container" style="padding:10px 20px;color:#dfe8ff">
+  <div class="i18n active" data-key="compliance">
     We sell and transfer Google Ads accounts. We also provide services for creating, configuring, managing, auditing, and complying with policies in accordance with Google policies.
   </div>
 </div>
 
+<!-- HERO with diagonal backdrop -->
 <section class="hero">
   <div class="container grid hero-grid">
     <div>
-      <span class="badge i18n active" data-key="hero_kicker">Performance marketing for growth</span>
+      <span class="pill i18n active" data-key="hero_kicker">Performance marketing for growth</span>
       <h1 class="i18n active" data-key="hero_title">Your Certified Google Partner for High-Performance Advertising</h1>
       <p class="lead i18n active" data-key="hero_sub">
         From crypto and gambling to fintech and e-commerce — we build, set up and manage compliant Google Ads campaigns, then scale them with ROI-focused optimization.
       </p>
-      <div class="row btn-row">
-        <a class="btn" id="ctaTelegram" target="_blank" rel="noopener"><span class="i18n active" data-key="cta_telegram">Message on Telegram</span></a>
-        <a class="btn outline" href="#services"><span class="i18n active" data-key="cta_services">Explore services</span></a>
-        <a class="btn outline" id="ctaSheets" target="_blank" rel="noopener"><span class="i18n active" data-key="cta_sheets">View packages (Sheets)</span></a>
+      <div class="btn-row" style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn primary" id="ctaTelegram" target="_blank" rel="noopener"><span class="i18n active" data-key="cta_telegram">Message on Telegram</span></a>
+        <a class="btn ghost" href="#services"><span class="i18n active" data-key="cta_services">Explore services</span></a>
+        <a class="btn ghost" id="ctaSheets" target="_blank" rel="noopener"><span class="i18n active" data-key="cta_sheets">View packages (Sheets)</span></a>
       </div>
-      <div class="row muted" style="gap:16px;margin-top:6px;font-size:14px">
+      <div style="display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:14px">
         <span>⏱ 1 days to start</span><span>📈 ROI-driven</span><span>💳 Transparent pricing</span>
       </div>
     </div>
@@ -201,11 +205,11 @@
   </div>
 </section>
 
-<section id="geo">
+<section id="geo" class="section-alt">
   <div class="container">
     <h2 class="i18n active" data-key="geo_title">GEO Coverage</h2>
     <p class="muted i18n active" data-key="geo_desc">Primary markets we serve. For Europe, Asia and LATAM — contact us for availability.</p>
-    <div class="row" style="gap:8px">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
       <span class="chip">Ukraine (UA)</span>
       <span class="chip">Belarus (BY)</span>
       <span class="chip">Kazakhstan (KZ)</span>
@@ -227,7 +231,7 @@
   </div>
 </section>
 
-<section id="certificates" style="background:#0b1222;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+<section id="certificates" class="section-alt">
   <div class="container">
     <h2 class="i18n active" data-key="certificates_title">Certificates & Compliance Packages</h2>
     <p class="muted i18n active" data-key="certificates_intro">
@@ -254,7 +258,7 @@
   </div>
 </section>
 
-<section id="policy" style="border-bottom:1px solid var(--line)">
+<section id="policy">
   <div class="container">
     <h2 class="i18n active" data-key="policy_title">Substitution & Change Policy</h2>
 
@@ -275,7 +279,7 @@
   </div>
 </section>
 
-<section id="pricing" style="background:#0b1222;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+<section id="pricing" class="section-alt">
   <div class="container">
     <h2 class="i18n active" data-key="pricing_title">Simple pricing</h2>
     <div class="list cols-3">
@@ -334,44 +338,50 @@
   </div>
 </section>
 
-<section id="contact" style="background:#0b1222;border-top:1px solid var(--line)">
-  <div class="container grid" style="grid-template-columns:1fr;gap:20px">
+<section id="contact" class="section-alt">
+  <div class="container" style="display:grid;grid-template-columns:1fr;gap:20px">
     <div>
       <h2 class="i18n active" data-key="contact_title">Get a free consultation</h2>
       <p class="muted i18n active" data-key="contact_sub">Tell us about your goals, industry, and monthly budget. We’ll reply with next steps and a proposed plan.</p>
-      <div class="row" style="gap:10px">
-        <a class="btn" id="contactTg" target="_blank" rel="noopener">CONtACT US</a>
-        <a class="btn outline" id="contactSheets" target="_blank" rel="noopener">Shop Google ads accounts</a>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn primary" id="contactTg" target="_blank" rel="noopener">CONtACT US</a>
+        <a class="btn ghost" id="contactSheets" target="_blank" rel="noopener">Shop Google ads accounts</a>
       </div>
-      <div class="kpis" style="margin-top:16px">
-        <div class="card kpi"><div class="label">Avg. ROAS lift</div><div class="value ok">+38%</div></div>
-        <div class="card kpi"><div class="label">Kickoff</div><div class="value">1 days</div></div>
-        <div class="card kpi"><div class="label">Keywords managed</div><div class="value">&gt;120k</div></div>
-        <div class="card kpi"><div class="label">Policy issues fixed</div><div class="value">&gt;200</div></div>
+      <div class="list cols-2" style="margin-top:16px">
+        <div class="card kpi"><div class="muted" style="font-size:12px">Avg. ROAS lift</div><div style="font-weight:800;font-size:20px;color:#34d399">+38%</div></div>
+        <div class="card kpi"><div class="muted" style="font-size:12px">Kickoff</div><div style="font-weight:800;font-size:20px">1 days</div></div>
+        <div class="card kpi"><div class="muted" style="font-size:12px">Keywords managed</div><div style="font-weight:800;font-size:20px">&gt;120k</div></div>
+        <div class="card kpi"><div class="muted" style="font-size:12px">Policy issues fixed</div><div style="font-weight:800;font-size:20px">&gt;200</div></div>
       </div>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="container row" style="justify-content:space-between;padding:18px 0">
-    <div class="row"><div class="logo" style="width:28px;height:28px"></div><strong>&nbsp;AdSphere Global</strong></div>
+  <div class="container" style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:18px 0">
+    <div style="display:flex;align-items:center;gap:.5rem"><div class="logo" style="width:28px;height:28px"></div><strong>AdSphere Global</strong></div>
     <div class="muted">© <span id="year"></span> AdSphere Global. All rights reserved.</div>
   </div>
 </footer>
 
+<!-- Floating CTA Dock -->
+<div class="dock">
+  <a class="btn primary" id="tgDock" target="_blank" rel="noopener">Contact on Telegram</a>
+  <a class="btn ghost" id="sheetsDock" target="_blank" rel="noopener">View packages</a>
+</div>
+
 <script>
-/* ===== Config: your links (unchanged) ===== */
-const TELEGRAM_HANDLE = "GOOGLEADSBRAZIL"; // keep as in your data
-const SHEETS_URL = "https://docs.google.com/spreadsheets/d/1rfCcHIL9k31HTwuc-DpyQE5Lvz1513q99jW5qFjbJiQ/edit?usp=sharing"; // keep as in your data
+/* ===== Config: your links (unchanged data) ===== */
+const TELEGRAM_HANDLE = "GOOGLEADSBRAZIL";
+const SHEETS_URL = "https://docs.google.com/spreadsheets/d/1rfCcHIL9k31HTwuc-DpyQE5Lvz1513q99jW5qFjbJiQ/edit?usp=sharing";
 
 /* Wire links */
 const tgUrl = "https://t.me/" + TELEGRAM_HANDLE;
-["tgBtn","ctaTelegram","contactTg"].forEach(id=>{ const el=document.getElementById(id); if(el) el.href=tgUrl; });
-["sheetsBtn","ctaSheets","contactSheets"].forEach(id=>{ const el=document.getElementById(id); if(el) el.href=SHEETS_URL; });
+["tgBtn","ctaTelegram","contactTg","tgDock"].forEach(id=>{ const el=document.getElementById(id); if(el) el.href=tgUrl; });
+["sheetsBtn","ctaSheets","contactSheets","sheetsDock"].forEach(id=>{ const el=document.getElementById(id); if(el) el.href=SHEETS_URL; });
 document.getElementById("year").textContent = new Date().getFullYear();
 
-/* ===== i18n dictionaries (EN/ES/PT/RU) — unchanged content ===== */
+/* ===== i18n dictionaries (EN/ES/PT/RU) — CONTENT UNCHANGED ===== */
 const dict = {
   en:{
     partner_badge:"Certified Google Partner",
@@ -461,7 +471,7 @@ const dict = {
     geo_title:"Cobertura GEO", geo_desc:"Mercados principais. Para Europa, Ásia e LATAM — fale conosco.",
     pricing_title:"Planos simples",
     p1_title:"Starter", p1_desc:"Ideal para testes e MVPs", p1_price:"$499/mês",
-    p2_title:"Growth",  p2_desc:"Para marcas en crescimento", p2_price:"$1.200/mês",
+    p2_title:"Growth",  p2_desc:"Para marcas em crescimento", p2_price:"$1.200/mês",
     p3_title:"Scale",   p3_desc:"Sob medida para alto investimento", p3_price:"Sob consulta",
     pricing_note:"Todos os planos excluem mídia e incluem relatório mensal.",
     faq_title:"Perguntas frequentes",
@@ -471,7 +481,7 @@ const dict = {
     contact_title:"Peça uma consultoria gratuita", contact_sub:"Conte seus objetivos, setor e orçamento mensal. Responderemos com próximos passos.",
 
     certificates_title:"Pacotes de certificados e conformidade",
-    certificates_intro:"Novos serviços adicionais. Escolha o pacote que se encaixa no seu vertical y nas exigências de conformidade.",
+    certificates_intro:"Novos serviços adicionais. Escolha o pacote que se encaixa no seu vertical e nas exigências de conformidade.",
     cert_casino_title:"CERTIFICADO DE CASSINO", cert_casino_price:"$800", cert_casino_desc:"Documentação e orientação para fluxos de publicidade em conformidade.",
     cert_gambling_title:"CERTIFICADO DE APOSTAS", cert_gambling_price:"$800", cert_gambling_desc:"Documentação e orientação para fluxos de publicidade em conformidade.",
     cert_crypto_title:"CERTIFICADO PARA CRYPTO", cert_crypto_price:"$1000", cert_crypto_desc:"Documentação e orientação para fluxos de publicidade em conformidade.",
@@ -479,7 +489,7 @@ const dict = {
     policy_sub_title:"Substituições",
     policy_sub_text:"A substituição é realizada se as contas forem bloqueadas antes de você fazer quaisquer alterações nas campanhas publicitárias, nos dados de pagamento ou na vinculação do método de pagamento, ou se você não conseguir fazer login nas contas fornecidas.",
     policy_changes_title:"Alterações na conta",
-    policy_changes_text:"Você не pode fazer alterações na conta: editar configurações, anexar cartão ou modificar dados de faturamento."
+    policy_changes_text:"Você não pode fazer alterações na conta: editar configurações, anexar cartão ou modificar dados de faturamento."
   },
   ru:{
     partner_badge:"Сертифицированный Google Partner",
@@ -519,24 +529,22 @@ const dict = {
   }
 };
 
-/* apply language */
 function setLang(lang){
   const d = dict[lang] || dict.en;
-  document.querySelectorAll('[data-key]').forEach(el=>{
-    const key = el.getAttribute('data-key');
-    if(d[key]) el.textContent = d[key];
-    el.classList.add('active');
-  });
-  const p = document.getElementById('t_partner_badge');
-  if(p) p.textContent = d.partner_badge;
+  document.querySelectorAll('[data-key]').forEach(el=>{ const k = el.getAttribute('data-key'); if(d[k]) el.textContent = d[k]; el.classList.add('active'); });
+  const p = document.getElementById('t_partner_badge'); if(p) p.textContent = d.partner_badge;
 }
 const sel = document.getElementById('langSel');
 sel.addEventListener('change',()=>{ setLang(sel.value); try{localStorage.setItem('ads_lang', sel.value);}catch(e){} });
 setLang( (localStorage.getItem('ads_lang')||'en') );
 sel.value = (localStorage.getItem('ads_lang')||'en');
+
+/* Header hide/show on scroll */
+let lastY = 0; const header = document.querySelector('header');
+window.addEventListener('scroll',()=>{ const y = window.pageYOffset||0; if(y>lastY && y>64){ header.classList.add('is-hidden'); } else { header.classList.remove('is-hidden'); } lastY = y; });
 </script>
 
-<!-- Structured data (unchanged except handle link) -->
+<!-- Structured data (unchanged) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -545,29 +553,8 @@ sel.value = (localStorage.getItem('ads_lang')||'en');
   "url": "https://whitetargetagency.site",
   "sameAs": ["https://t.me/GOOGLEADSBRAZIL"],
   "description": "Certified Google Partner agency for compliant Google Ads creation, setup, optimization, and verification.",
-  "contactPoint": [{
-    "@type": "ContactPoint",
-    "contactType": "sales",
-    "url": "https://t.me/GOOGLEADSBRAZIL"
-  }]
+  "contactPoint": [{"@type": "ContactPoint", "contactType": "sales", "url": "https://t.me/GOOGLEADSBRAZIL"}]
 }
-</script>
-
-<script>
-// Smooth header hide/show on scroll (as in Chile site)
-let lastScroll = 0;
-const header = document.querySelector('header');
-window.addEventListener('scroll', () => {
-  const y = window.pageYOffset || 0;
-  if (y > lastScroll && y > 60) {
-    header.classList.add('is-hidden');
-    header.classList.remove('is-visible');
-  } else {
-    header.classList.remove('is-hidden');
-    header.classList.add('is-visible');
-  }
-  lastScroll = y;
-});
 </script>
 </body>
 </html>
