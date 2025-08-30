@@ -119,6 +119,13 @@
   .i18n{display:none}
   .i18n.active{display:initial}
 
+  /* ---------- ДОПОВНЕНО (кнопка у хедері) ---------- */
+  .nav-cta{padding:.62rem .9rem;font-weight:700;border:1px solid rgba(255,255,255,.18)}
+  @media(max-width:700px){ .nav-cta{display:none} }
+
+  /* ---------- ДОПОВНЕНО (перенос першого слова hero) ---------- */
+  .hero-title .break-first-word{display:block}
+
   /* responsive tweaks */
   @media(max-width:560px){
     h1{font-size:36px}
@@ -149,7 +156,8 @@
         <a href="#contact" class="i18n active" data-key="nav_contact">Contact</a>
       </nav>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <a class="btn ghost" id="sheetsBtn" target="_blank" rel="noopener">Shop Google Ads accounts</a>
+        <!-- ДОДАНО клас nav-cta для акуратного вигляду -->
+        <a class="btn ghost nav-cta" id="sheetsBtn" target="_blank" rel="noopener">Shop Google Ads accounts</a>
         <a class="btn primary" id="tgBtn" target="_blank" rel="noopener">CONTACT US</a>
         <select class="lang" id="langSel" aria-label="Language">
           <option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option><option value="ru">RU</option>
@@ -171,7 +179,8 @@
   <div class="container grid hero-grid">
     <div>
       <span class="pill i18n active" data-key="hero_kicker">Performance marketing for growth</span>
-      <h1 class="i18n active" data-key="hero_title">Your Certified Google Partner for High-Performance Advertising</h1>
+      <!-- ДОДАНО клас hero-title (текст не змінював) -->
+      <h1 class="hero-title i18n active" data-key="hero_title">Your Certified Google Partner for High-Performance Advertising</h1>
       <p class="lead i18n active" data-key="hero_sub">
         From crypto and gambling to fintech and e-commerce — we build, set up and manage compliant Google Ads campaigns, then scale them with ROI-focused optimization.
       </p>
@@ -370,6 +379,7 @@
   <a class="btn ghost" id="sheetsDock" target="_blank" rel="noopener">View packages</a>
 </div>
 
+<!-- СКРИПТИ нижче ідуть у Частині 2/2 -->
 <script>
 /* ===== Config: your links (unchanged data) ===== */
 const TELEGRAM_HANDLE = "GOOGLEADSBRAZIL";
@@ -529,10 +539,27 @@ const dict = {
   }
 };
 
+/* ---------- НОВА ФУНКЦІЯ: перенос першого слова ---------- */
+function breakFirstWordInHero(){
+  const el = document.querySelector('.hero-title');
+  if(!el) return;
+  const text = el.textContent.trim();
+  const firstSpace = text.indexOf(' ');
+  if(firstSpace>0){
+    el.innerHTML = '<span class="break-first-word">'+text.slice(0,firstSpace)+'</span>'+text.slice(firstSpace);
+  }
+}
+
 function setLang(lang){
   const d = dict[lang] || dict.en;
-  document.querySelectorAll('[data-key]').forEach(el=>{ const k = el.getAttribute('data-key'); if(d[k]) el.textContent = d[k]; el.classList.add('active'); });
-  const p = document.getElementById('t_partner_badge'); if(p) p.textContent = d.partner_badge;
+  document.querySelectorAll('[data-key]').forEach(el=>{ 
+    const k = el.getAttribute('data-key'); 
+    if(d[k]) el.textContent = d[k]; 
+    el.classList.add('active'); 
+  });
+  const p = document.getElementById('t_partner_badge'); 
+  if(p) p.textContent = d.partner_badge;
+  breakFirstWordInHero(); // виклик після оновлення текстів
 }
 const sel = document.getElementById('langSel');
 sel.addEventListener('change',()=>{ setLang(sel.value); try{localStorage.setItem('ads_lang', sel.value);}catch(e){} });
@@ -541,20 +568,4 @@ sel.value = (localStorage.getItem('ads_lang')||'en');
 
 /* Header hide/show on scroll */
 let lastY = 0; const header = document.querySelector('header');
-window.addEventListener('scroll',()=>{ const y = window.pageYOffset||0; if(y>lastY && y>64){ header.classList.add('is-hidden'); } else { header.classList.remove('is-hidden'); } lastY = y; });
-</script>
-
-<!-- Structured data (unchanged) -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "AdSphere Global",
-  "url": "https://whitetargetagency.site",
-  "sameAs": ["https://t.me/GOOGLEADSBRAZIL"],
-  "description": "Certified Google Partner agency for compliant Google Ads creation, setup, optimization, and verification.",
-  "contactPoint": [{"@type": "ContactPoint", "contactType": "sales", "url": "https://t.me/GOOGLEADSBRAZIL"}]
-}
-</script>
-</body>
-</html>
+window.addEventListener('scroll',()=>{ const y =
