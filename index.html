@@ -1,563 +1,311 @@
 <!doctype html>
-<html lang="en">
+<html lang="uk">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AdSphere Global — Certified Google Partner</title>
-<meta name="description" content="AdSphere Global — Certified Google Partner. We create, set up and manage compliant Google Ads campaigns (crypto, gambling, fintech, e-commerce), plus certificates and business verification.">
-<style>
-  :root{
-    --bg:#060709; --ink:#f5f7fb; --muted:#b8c1d1; --line:rgba(255,255,255,.08);
-    --blue:#0b84ff; --green:#34a853; --red:#ea4335; --yellow:#fbbc05;
-    --panel:rgba(14,17,26,.65); --card:rgba(20,24,36,.55); --glass-border:rgba(255,255,255,.18);
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
-  a{color:inherit;text-decoration:none}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EchoVerse — Your emotions become worlds</title>
+  <meta name="description" content="EchoVerse — веб‑досвід, де твої емоції перетворюються на інтерактивні 3D світи. Введи настрій — згенеруй світ — досліджуй і ділись." />
+  <meta property="og:title" content="EchoVerse — Your emotions become worlds" />
+  <meta property="og:description" content="Введи емоцію — отримай інтерактивний 3D‑світ. Вірусний AI × WebGL досвід для всіх." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://dummyimage.com/1200x630/0b1220/ffffff&text=EchoVerse" />
+  <meta name="theme-color" content="#0b1220" />
 
-  /* Ambient */
-  body:before, body:after{content:"";position:fixed;inset:auto;z-index:-2;border-radius:50%;filter:blur(70px);opacity:.35}
-  body:before{width:700px;height:700px;left:-140px;top:-180px;background:radial-gradient(closest-side, rgba(11,132,255,.6), transparent)}
-  body:after{width:780px;height:780px;right:-180px;bottom:-220px;background:radial-gradient(closest-side, rgba(52,168,83,.55), transparent)}
+  <!-- Tailwind via CDN (no build step) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { bg:'#0b1220', ink:'#E6F0FF', mute:'#9AB3C7', acc:'#7C5CFF', acc2:'#0FF0FC' } } } }
+  </script>
+  <style>
+    html,body{background:#0b1220; color:#E6F0FF}
+    .glass{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); box-shadow:0 10px 40px rgba(0,0,0,.4);}
+    .grad-text{background:linear-gradient(90deg,#7C5CFF, #0FF0FC); -webkit-background-clip:text; background-clip:text; color:transparent}
+    .btn{transition:transform .2s ease}
+    .btn:active{transform:translateY(1px)}
+    canvas{display:block}
+  </style>
 
-  /* Header */
-  header{position:sticky;top:0;z-index:60;transform:translateY(0);transition:transform .28s ease, box-shadow .28s ease}
-  header .wrap{backdrop-filter:saturate(160%) blur(14px);background:var(--panel);border-bottom:1px solid var(--line)}
-  header.is-hidden{transform:translateY(-100%)}
-  .nav{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
-  .brand{display:flex;align-items:center;gap:.7rem}
-  .logo{width:36px;height:36px;border-radius:10px;background:
-    conic-gradient(from 120deg,var(--blue),var(--green),var(--red),var(--yellow),var(--blue));
-    box-shadow:0 6px 18px rgba(0,0,0,.35), inset 0 0 0 2px rgba(255,255,255,.1)}
-  .pill{display:inline-flex;align-items:center;padding:.32rem .7rem;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);font-size:.78rem;color:#e6ecff}
-
-  .nav-links{display:none;gap:20px}
-  .nav-links a{position:relative;padding:.4rem .1rem}
-  .nav-links a:after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:linear-gradient(90deg,var(--blue),var(--green),var(--yellow));opacity:0;transform:scaleX(.3);transition:.2s}
-  .nav-links a:hover:after{opacity:1;transform:scaleX(1)}
-  @media(min-width:900px){ .nav-links{display:flex} }
-
-  /* Compact link-style button for “Shop …” */
-  .link-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem .75rem;border-radius:10px;
-    background:transparent;border:1px solid rgba(255,255,255,.18);font-weight:600;color:#e6e8ee}
-  .link-btn:hover{border-color:rgba(255,255,255,.35);transform:translateY(-1px)}
-  .btn{display:inline-flex;align-items:center;gap:.7rem;padding:1rem 1.25rem;border-radius:14px;border:1px solid transparent;font-weight:800;white-space:nowrap;transition:.2s}
-  .btn.primary{background:linear-gradient(135deg,var(--blue),#5ab0ff);color:#06101f;box-shadow:0 10px 28px rgba(11,132,255,.25)}
-  .btn.primary:hover{transform:translateY(-1px) scale(1.02)}
-  select.lang{background:#0b1326;color:#e6e8ee;border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:.5rem .65rem}
-
-  /* Hero */
-  .hero{position:relative;isolation:isolate}
-  .hero:before{content:"";position:absolute;inset:0;z-index:-1;
-    background:linear-gradient(135deg, rgba(11,132,255,.28), rgba(251,188,5,.24) 45%, transparent 55%),
-               linear-gradient(180deg, rgba(255,255,255,.04), transparent);
-    -webkit-mask:linear-gradient(160deg, #000 65%, transparent 66%);
-            mask:linear-gradient(160deg, #000 65%, transparent 66%);
-    border-bottom:1px solid var(--line);
-    pointer-events:none;           /* <<— щоб не блокував кліки */
-  }
-  .container{max-width:1200px;margin:0 auto;padding:0 20px}
-  section{padding:82px 0}
-  .grid{display:grid;gap:22px}
-  .hero-grid{grid-template-columns:1.12fr .88fr}
-  @media(max-width:980px){ .hero-grid{grid-template-columns:1fr} }
-  h1{font-size:48px;line-height:1.08;margin:.25rem 0 1rem}
-  h2{font-size:32px;margin:0 0 18px}
-  p.lead{font-size:18px;color:var(--muted)}
-  .btn-row{margin:16px 0 26px}
-
-  /* Glass cards */
-  .card{background:var(--card);border:1px solid var(--glass-border);border-radius:16px;padding:18px;box-shadow:0 12px 30px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.04)}
-  .card:hover{box-shadow:0 16px 36px rgba(0,0,0,.42)}
-  .list{display:grid;grid-template-columns:1fr;gap:16px}
-  .cols-2{grid-template-columns:repeat(2,1fr)}
-  .cols-3{grid-template-columns:repeat(3,1fr)}
-  .cols-4{grid-template-columns:repeat(4,1fr)}
-  @media(max-width:960px){ .cols-2,.cols-3,.cols-4{grid-template-columns:1fr} }
-  .muted{color:var(--muted)}
-  .chip{display:inline-block;border:1px dashed rgba(255,255,255,.22);color:#e5e9f2;padding:.35rem .7rem;border-radius:999px;font-size:.82rem;background:rgba(255,255,255,.05)}
-  .price{font-weight:800;font-size:26px;margin:8px 0;color:#ffd7dc}
-
-  .section-alt{position:relative;background:linear-gradient(180deg, rgba(255,255,255,.02), transparent)}
-  .section-alt:before{content:"";position:absolute;inset:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-    -webkit-mask:linear-gradient(180deg,#000 92%, transparent);mask:linear-gradient(180deg,#000 92%, transparent);
-    pointer-events:none;           /* <<— щоб не блокував кліки */
-  }
-
-  footer{border-top:1px solid var(--line);background:rgba(10,12,16,.9);backdrop-filter:blur(6px);color:#cdd4e3}
-
-  /* Dock */
-  .dock{position:fixed;right:18px;bottom:18px;z-index:65;display:flex;flex-direction:column;gap:10px}
-  .dock .btn{border-radius:16px}
-  .dock .btn:hover{transform:translateY(-2px)}
-
-  /* i18n visibility */
-  .i18n{display:none}
-  .i18n.active{display:initial}
-
-  /* ——— Force first word of hero title to new line ——— */
-  .hero-title .break-first-word{display:block}
-
-  /* responsive */
-  @media(max-width:560px){
-    h1{font-size:36px}
-    section{padding:64px 0}
-    .nav{padding:10px 16px}
-  }
-
-  /* Contact section CTA spacing + z-index fix */
-  #contactCtas{
-    margin:14px 0 22px;     /* відступ зверху і знизу */
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-    position:relative;      /* підняти поверх декоративних шарів */
-    z-index:1;
-  }
-  #contactCtas > a{ flex:1 1 260px }  /* ширина кнопки */
-  @media (max-width:560px){
-    #contactCtas > a{ flex-basis:100% }  /* на мобілках одна під одною */
-    #contact .list.cols-2{ margin-top:14px !important }
-  }
-</style>
+  <!-- Three.js / helpers -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://unpkg.com/simplex-noise@4.0.1/dist/esm/simplex-noise.min.js"></script>
 </head>
-<body>
+<body class="antialiased">
+  <!-- NAV -->
+  <header class="fixed top-0 left-0 right-0 z-40">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="glass mt-4 rounded-2xl px-4 py-3 flex items-center justify-between">
+        <a href="#" class="font-semibold tracking-tight text-xl">Echo<span class="grad-text">Verse</span></a>
+        <nav class="hidden md:flex gap-6 text-sm text-mute">
+          <a href="#how" class="hover:text-ink">How it works</a>
+          <a href="#demo" class="hover:text-ink">Live demo</a>
+          <a href="#gallery" class="hover:text-ink">Gallery</a>
+          <a href="#pitch" class="hover:text-ink">Pitch</a>
+        </nav>
+        <a href="#waitlist" class="btn bg-acc text-bg px-4 py-2 rounded-xl font-semibold shadow hover:opacity-90">Join waitlist</a>
+      </div>
+    </div>
+  </header>
 
-<header class="is-visible">
-  <div class="wrap">
-    <div class="nav">
-      <div class="brand">
-        <div class="logo"></div>
-        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
-          <strong>AdSphere Global</strong>
-          <span class="pill" id="t_partner_badge">Certified Google Partner</span>
+  <!-- HERO with WebGL canvas background -->
+  <section class="relative pt-28 md:pt-36" id="top">
+    <div class="absolute inset-0 -z-10 overflow-hidden">
+      <canvas id="world" class="w-full h-full"></canvas>
+      <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(124,92,255,.25),transparent_60%)]"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div class="space-y-6">
+          <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">
+            Your emotions <span class="grad-text">become worlds</span>
+          </h1>
+          <p class="text-mute md:text-lg max-w-xl">Напиши «я спокійний і натхненний» — і побач світ, який відображає твій стан. Інтерактивний AI × 3D досвід у браузері.</p>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <a href="#demo" class="btn bg-white/90 text-bg px-5 py-3 rounded-xl font-semibold text-sm sm:text-base">Try live demo</a>
+            <a href="#pitch" class="btn bg-white/10 backdrop-blur px-5 py-3 rounded-xl font-semibold">Read the pitch</a>
+          </div>
+          <div class="text-xs text-mute">No account needed • Works on desktop & mobile • WebGL</div>
+        </div>
+        <div class="glass rounded-3xl p-4 md:p-6">
+          <div class="rounded-xl bg-black/30 border border-white/5 p-4">
+            <label class="block text-sm text-mute mb-2">Enter mood / emotion</label>
+            <div class="flex gap-2">
+              <input id="prompt" class="w-full bg-white/5 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-acc/60" placeholder="lonely but hopeful" />
+              <button id="genBtn" class="btn bg-acc text-bg px-4 py-3 rounded-xl font-semibold">Generate</button>
+            </div>
+            <p class="text-[12px] text-mute mt-2">Демо працює локально: ми мапимо емоції → палітру → параметри шуму та світла.</p>
+          </div>
+          <div class="grid grid-cols-3 gap-2 mt-3 text-xs text-center">
+            <button class="preset btn glass rounded-lg py-2" data-prompt="calm and inspired">calm</button>
+            <button class="preset btn glass rounded-lg py-2" data-prompt="anxious but determined">focus</button>
+            <button class="preset btn glass rounded-lg py-2" data-prompt="joyful and playful">joy</button>
+          </div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <nav class="nav-links">
-        <a href="#services" class="i18n active" data-key="nav_services">Services</a>
-        <a href="#geo" class="i18n active" data-key="nav_geo">GEO</a>
-        <a href="#pricing" class="i18n active" data-key="nav_pricing">Pricing</a>
-        <a href="#certificates" class="i18n active" data-key="nav_certificates">Certificates</a>
-        <a href="#policy" class="i18n active" data-key="nav_policy">Policy</a>
-        <a href="#faq" class="i18n active" data-key="nav_faq">FAQ</a>
-        <a href="#contact" class="i18n active" data-key="nav_contact">Contact</a>
-      </nav>
-
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <a class="link-btn" id="sheetsBtn" target="_blank" rel="noopener">Shop Google Ads accounts</a>
-        <a class="btn primary" id="tgBtn" target="_blank" rel="noopener">CONTACT US</a>
-        <select class="lang" id="langSel" aria-label="Language">
-          <option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option><option value="ru">RU</option>
-        </select>
+  <!-- HOW -->
+  <section id="how" class="py-20">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="glass rounded-2xl p-6">
+          <div class="text-2xl font-bold mb-2">1 → Type</div>
+          <p class="text-mute">Введи емоцію або фразу. Ми перетворюємо текст на вектор настрою.</p>
+        </div>
+        <div class="glass rounded-2xl p-6">
+          <div class="text-2xl font-bold mb-2">2 → Generate</div>
+          <p class="text-mute">Алгоритм мапить настрій на палітру, геометрію та світ сцени.</p>
+        </div>
+        <div class="glass rounded-2xl p-6">
+          <div class="text-2xl font-bold mb-2">3 → Explore</div>
+          <p class="text-mute">Досліджуй 3D‑світ, ділись посиланням або зберігай seed для відтворення.</p>
+        </div>
       </div>
     </div>
-  </div>
-</header>
+  </section>
 
-<!-- Banner -->
-<div class="container" style="padding:10px 20px;color:#dfe8ff">
-  <div class="i18n active" data-key="compliance">
-    We sell and transfer Google Ads accounts. We also provide services for creating, configuring, managing, auditing, and complying with policies in accordance with Google policies.
-  </div>
-</div>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="container grid hero-grid">
-    <div>
-      <span class="pill i18n active" data-key="hero_kicker">Performance marketing for growth</span>
-      <h1 class="i18n active hero-title" data-key="hero_title">Your Certified Google Partner for High-Performance Advertising</h1>
-      <p class="lead i18n active" data-key="hero_sub">
-        From crypto and gambling to fintech and e-commerce — we build, set up and manage compliant Google Ads campaigns, then scale them with ROI-focused optimization.
-      </p>
-      <div class="btn-row" style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="btn primary" id="ctaTelegram" target="_blank" rel="noopener"><span class="i18n active" data-key="cta_telegram">Message on Telegram</span></a>
-        <a class="link-btn" href="#services"><span class="i18n active" data-key="cta_services">Explore services</span></a>
-        <a class="link-btn" id="ctaSheets" target="_blank" rel="noopener"><span class="i18n active" data-key="cta_sheets">View packages (Sheets)</span></a>
-      </div>
-      <div style="display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:14px">
-        <span>⏱ 1 days to start</span><span>📈 ROI-driven</span><span>💳 Transparent pricing</span>
+  <!-- DEMO note -->
+  <section id="demo" class="py-4">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="glass rounded-2xl p-6">
+        <h2 class="text-2xl md:text-3xl font-bold mb-3">Live demo (on‑page)</h2>
+        <p class="text-mute">Цей демо не використовує зовнішній AI — усе параметрично в браузері. На реальному продукті підключимо LLM/эмбедінги для точного емоційного мапінгу.</p>
       </div>
     </div>
+  </section>
 
-    <div class="list cols-2">
-      <div class="card">
-        <div class="i18n active" data-key="s1_title"><strong>Sell Account Google ads</strong></div>
-        <div class="muted i18n active" data-key="s1_desc">Safe creation, verification, billing setup, and guidance to stay compliant.</div>
+  <!-- GALLERY (placeholders driven by canvas snapshots) -->
+  <section id="gallery" class="py-20">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-end justify-between mb-6">
+        <h2 class="text-2xl md:text-3xl font-bold">Gallery</h2>
+        <button id="snap" class="btn glass rounded-xl px-4 py-2">Save snapshot</button>
       </div>
-      <div class="card">
-        <div class="i18n active" data-key="s2_title"><strong>Campaign Setup & Structure</strong></div>
-        <div class="muted i18n active" data-key="s2_desc">Keywords, tracking, assets, and conversion architecture.</div>
-      </div>
-      <div class="card">
-        <div class="i18n active" data-key="s3_title"><strong>Ongoing Optimization</strong></div>
-        <div class="muted i18n active" data-key="s3_desc">Tests, negatives, bids, audiences, creatives.</div>
-      </div>
-      <div class="card">
-        <div class="i18n active" data-key="s4_title"><strong>Certificates & Business Verification</strong></div>
-        <div class="muted i18n active" data-key="s4_desc">Official documents and assistance for smoother approvals.</div>
-      </div>
+      <div id="shots" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="geo" class="section-alt">
-  <div class="container">
-    <h2 class="i18n active" data-key="geo_title">GEO Coverage</h2>
-    <p class="muted i18n active" data-key="geo_desc">Primary markets we serve. For Europe, Asia and LATAM — contact us for availability.</p>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <span class="chip">Ukraine (UA)</span>
-      <span class="chip">Belarus (BY)</span>
-      <span class="chip">Kazakhstan (KZ)</span>
-      <span class="chip">United States (USA)</span>
-      <span class="chip">Europe (EU)</span>
-    </div>
-  </div>
-</section>
-
-<section id="services">
-  <div class="container">
-    <h2 class="i18n active" data-key="services_title">What we do</h2>
-    <div class="list cols-4">
-      <div class="card"><strong class="i18n active" data-key="s1_title">Sell Account Google ads</strong><div class="muted i18n active" data-key="s1_desc">Safe creation, verification, billing setup, and guidance to stay compliant.</div></div>
-      <div class="card"><strong class="i18n active" data-key="s2_title">Campaign Setup & Structure</strong><div class="muted i18n active" data-key="s2_desc">Keywords, tracking, assets, and conversion architecture.</div></div>
-      <div class="card"><strong class="i18n active" data-key="s3_title">Ongoing Optimization</strong><div class="muted i18n active" data-key="s3_desc">Tests, negatives, bids, audiences, creatives.</div></div>
-      <div class="card"><strong class="i18n active" data-key="s4_title">Certificates & Business Verification</strong><div class="muted i18n active" data-key="s4_desc">Official documents and assistance for smoother approvals.</div></div>
-    </div>
-  </div>
-</section>
-
-<section id="certificates" class="section-alt">
-  <div class="container">
-    <h2 class="i18n active" data-key="certificates_title">Certificates & Compliance Packages</h2>
-    <p class="muted i18n active" data-key="certificates_intro">
-      New additional services. Choose a package that matches your vertical and compliance needs.
-    </p>
-
-    <div class="list cols-3">
-      <div class="card">
-        <h3 class="i18n active" data-key="cert_casino_title">CASINO CERTIFICATE</h3>
-        <div class="price i18n active" data-key="cert_casino_price">$800</div>
-        <p class="muted i18n active" data-key="cert_casino_desc">Documentation and guidance for compliant advertising workflows.</p>
-      </div>
-      <div class="card">
-        <h3 class="i18n active" data-key="cert_gambling_title">GAMBLING CERTIFICATE</h3>
-        <div class="price i18n active" data-key="cert_gambling_price">$800</div>
-        <p class="muted i18n active" data-key="cert_gambling_desc">Documentation and guidance for compliant advertising workflows.</p>
-      </div>
-      <div class="card">
-        <h3 class="i18n active" data-key="cert_crypto_title">CERTIFICATE FOR CRYPTO</h3>
-        <div class="price i18n active" data-key="cert_crypto_price">$1000</div>
-        <p class="muted i18n active" data-key="cert_crypto_desc">Documentation and guidance for compliant advertising workflows.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="policy">
-  <div class="container">
-    <h2 class="i18n active" data-key="policy_title">Substitution & Change Policy</h2>
-
-    <div class="card" style="margin-bottom:14px">
-      <h3 class="i18n active" data-key="policy_sub_title">Substitutions</h3>
-      <p class="muted i18n active" data-key="policy_sub_text">
-        The replacement is carried out if the accounts were blocked before you made any changes to the advertising campaigns,
-        payment data or to bind your payment method, or if you could not log in to the purchased/provided accounts.
-      </p>
-    </div>
-
-    <div class="card">
-      <h3 class="i18n active" data-key="policy_changes_title">Changes in the account</h3>
-      <p class="muted i18n active" data-key="policy_changes_text">
-        You can't make any changes to the account: edit anything, attach a card, or modify billing details.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section id="pricing" class="section-alt">
-  <div class="container">
-    <h2 class="i18n active" data-key="pricing_title">Simple pricing</h2>
-    <div class="list cols-3">
-      <div class="card">
-        <h3 class="i18n active" data-key="p1_title">Starter</h3>
-        <div class="muted i18n active" data-key="p1_desc">Best for testing and MVPs</div>
-        <div class="price i18n active" data-key="p1_price">$499/mo</div>
-        <ul class="muted" style="padding-left:18px;margin:0">
-          <li>Account creation & billing</li>
-          <li>1 conversion goal setup</li>
-          <li>Up to $5k monthly ad spend</li>
+  <!-- PITCH -->
+  <section id="pitch" class="py-20">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="glass rounded-3xl p-8">
+        <h2 class="text-2xl md:text-4xl font-extrabold mb-4">Why EchoVerse will trend</h2>
+        <ul class="list-disc pl-6 space-y-2 text-mute">
+          <li><span class="text-ink">UGC flywheel:</span> кожен користувач творить власний світ → нескінченний контент.</li>
+          <li><span class="text-ink">Shareability:</span> короткі посилання на персональні «емоційні світи», ідеально для соцмереж.</li>
+          <li><span class="text-ink">Cross‑platform:</span> WebGL у браузері + мобільні обгортки (Capacitor).</li>
+          <li><span class="text-ink">Monetization‑ready:</span> лайтовий AI‑пас, платні скіни/сцени, бренд‑світи.</li>
+          <li><span class="text-ink">Buyer fit:</span> підходить для Google/YouTube Music, Epic, Poki, CrazyGames, Meta.</li>
         </ul>
-      </div>
-      <div class="card" style="border-color:#2f9e6a">
-        <h3 class="i18n active" data-key="p2_title">Growth</h3>
-        <div class="muted i18n active" data-key="p2_desc">For growing brands</div>
-        <div class="price i18n active" data-key="p2_price">$1,200/mo</div>
-        <ul class="muted" style="padding-left:18px;margin:0">
-          <li>Full campaign build-out</li>
-          <li>Weekly optimization</li>
-          <li>Up to $50k monthly ad spend</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3 class="i18n active" data-key="p3_title">Scale</h3>
-        <div class="muted i18n active" data-key="p3_desc">Custom for high spend</div>
-        <div class="price i18n active" data-key="p3_price">Custom</div>
-        <ul class="muted" style="padding-left:18px;margin:0">
-          <li>Dedicated strategist</li>
-          <li>Experiments & audits</li>
-          <li>Unlimited spend advisory</li>
-        </ul>
+        <div class="mt-6 grid md:grid-cols-2 gap-4">
+          <div class="glass rounded-2xl p-4">
+            <div class="font-semibold mb-1">Tech stack</div>
+            <div class="text-mute text-sm">Three.js • Tailwind • Optional: FastAPI + Vector DB для mood‑ембедінгів</div>
+          </div>
+          <div class="glass rounded-2xl p-4">
+            <div class="font-semibold mb-1">Growth</div>
+            <div class="text-mute text-sm">TikTok/Reels демки, комʼюніті челенджі «#MyMoodWorld», партнерські світи артистів.</div>
+          </div>
+        </div>
       </div>
     </div>
-    <p class="muted i18n active" data-key="pricing_note" style="margin-top:10px">All plans exclude media spend and include a monthly performance report.</p>
-  </div>
-</section>
+  </section>
 
-<section id="faq">
-  <div class="container">
-    <h2 class="i18n active" data-key="faq_title">Frequently asked questions</h2>
-    <div class="list cols-3">
-      <div class="card">
-        <h3 class="i18n active" data-key="faq_q1">Do you sell Google Ads accounts?</h3>
-        <div class="muted i18n active" data-key="faq_a1">Yes. We sell and transfer accounts. We also create and manage them on your behalf or on behalf of your company to ensure full compliance.</div>
+  <!-- CTA -->
+  <section id="waitlist" class="py-20">
+    <div class="max-w-3xl mx-auto px-4 text-center">
+      <div class="glass rounded-3xl p-8">
+        <h3 class="text-2xl md:text-3xl font-bold mb-2">Get early access</h3>
+        <p class="text-mute mb-4">Першими отримаєте посилання на приватну альфу з реальним AI‑мапінгом емоцій.</p>
+        <form id="wl" class="flex flex-col sm:flex-row gap-3 justify-center">
+          <input required type="email" placeholder="you@email" class="w-full sm:w-96 bg-white/5 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-acc/60" />
+          <button class="btn bg-acc text-bg px-5 py-3 rounded-xl font-semibold">Join</button>
+        </form>
+        <p id="wlMsg" class="text-xs text-mute mt-2">Ми збережемо лише email локально (демо).</p>
       </div>
-      <div class="card">
-        <h3 class="i18n active" data-key="faq_q2">Can you work with existing accounts?</h3>
-        <div class="muted i18n active" data-key="faq_a2">Yes. We can audit and manage your current account, fix policy issues, and restructure campaigns.</div>
-      </div>
-      <div class="card">
-        <h3 class="i18n active" data-key="faq_q3">How fast can we start?</h3>
-        <div class="muted i18n active" data-key="faq_a3">Usually within 1 business days after scope alignment and access.</div>
+      <p class="text-[11px] text-mute mt-3">© EchoVerse. MIT demo. Designed for acquisition pitch.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="pb-10">
+    <div class="max-w-7xl mx-auto px-4 text-xs text-mute">
+      <div class="flex flex-col md:flex-row gap-2 md:gap-6 justify-between">
+        <div>Made by Dmytro • <a class="underline" href="#top">Back to top</a></div>
+        <div>Deploy: push <code>index.html</code> to GitHub → Settings → Pages → Source: <em>Main / Root</em></div>
       </div>
     </div>
-  </div>
-</section>
+  </footer>
 
-<section id="contact" class="section-alt">
-  <div class="container" style="display:grid;grid-template-columns:1fr;gap:20px">
-    <div>
-      <h2 class="i18n active" data-key="contact_title">Get a free consultation</h2>
-      <p class="muted i18n active" data-key="contact_sub">Tell us about your goals, industry, and monthly budget. We’ll reply with next steps and a proposed plan.</p>
-      <div id="contactCtas" style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="btn primary" id="contactTg" target="_blank" rel="noopener">CONTACT US</a>
-        <a class="link-btn" id="contactSheets" target="_blank" rel="noopener">Shop Google ads accounts</a>
-      </div>
-      <div class="list cols-2" style="margin-top:16px">
-        <div class="card kpi"><div class="muted" style="font-size:12px">Avg. ROAS lift</div><div style="font-weight:800;font-size:20px;color:#34d399">+38%</div></div>
-        <div class="card kpi"><div class="muted" style="font-size:12px">Kickoff</div><div style="font-weight:800;font-size:20px">1 days</div></div>
-        <div class="card kpi"><div class="muted" style="font-size:12px">Keywords managed</div><div style="font-weight:800;font-size:20px">&gt;120k</div></div>
-        <div class="card kpi"><div class="muted" style="font-size:12px">Policy issues fixed</div><div style="font-weight:800;font-size:20px">&gt;200</div></div>
-      </div>
-    </div>
-  </div>
-</section>
+  <script>
+  // ====== EchoVerse demo world (procedural) ======
+  const canvas = document.getElementById('world');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, 16/9, 0.1, 1000);
+  camera.position.set(0, 1.2, 3.4);
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = 0.05; controls.enablePan = false; controls.minDistance = 2; controls.maxDistance = 6;
 
-<footer>
-  <div class="container" style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:18px 0">
-    <div style="display:flex;align-items:center;gap:.5rem"><div class="logo" style="width:28px;height:28px"></div><strong>AdSphere Global</strong></div>
-    <div class="muted">© <span id="year"></span> AdSphere Global. All rights reserved.</div>
-  </div>
-</footer>
-
-<!-- Floating CTA Dock -->
-<div class="dock">
-  <a class="btn primary" id="tgDock" target="_blank" rel="noopener">Contact on Telegram</a>
-  <a class="link-btn" id="sheetsDock" target="_blank" rel="noopener">View packages</a>
-</div>
-
-<script>
-/* Links */
-const TELEGRAM_HANDLE = "GOOGLEADSBRAZIL";
-const SHEETS_URL = "https://docs.google.com/spreadsheets/d/1rfCcHIL9k31HTwuc-DpyQE5Lvz1513q99jW5qFjbJiQ/edit?usp=sharing";
-const tgUrl = "https://t.me/" + TELEGRAM_HANDLE;
-["tgBtn","ctaTelegram","contactTg","tgDock"].forEach(id=>{ const el=document.getElementById(id); if(el) el.href=tgUrl; });
-["sheetsBtn","ctaSheets","contactSheets","sheetsDock"].forEach(id=>{ const el=document.getElementById(id); if(el) el.href=SHEETS_URL; });
-document.getElementById("year").textContent = new Date().getFullYear();
-
-/* i18n dictionaries */
-const dict = {
-  en:{ partner_badge:"Certified Google Partner",
-    compliance:"We sell and transfer Google Ads accounts. We also provide services for creating, configuring, managing, auditing, and complying with policies in accordance with Google policies.",
-    nav_services:"Services", nav_geo:"GEO", nav_pricing:"Pricing", nav_certificates:"Certificates", nav_policy:"Policy", nav_faq:"FAQ", nav_contact:"Contact",
-    hero_kicker:"Performance marketing for growth",
-    hero_title:"Your Certified Google Partner for High-Performance Advertising",
-    hero_sub:"From crypto and gambling to fintech and e-commerce — we build, set up and manage compliant Google Ads campaigns, then scale them with ROI-focused optimization.",
-    cta_telegram:"Message on Telegram", cta_services:"Explore services", cta_sheets:"View packages (Sheets)",
-    services_title:"What we do",
-    s1_title:"Account Creation & Policy Compliance", s1_desc:"Safe creation, verification, billing setup, and guidance to stay compliant.",
-    s2_title:"Campaign Setup & Structure", s2_desc:"Keywords, tracking, assets, and conversion architecture.",
-    s3_title:"Ongoing Optimization", s3_desc:"Tests, negatives, bids, audiences, creatives.",
-    s4_title:"Certificates & Business Verification", s4_desc:"Official documents and assistance for smoother approvals.",
-    geo_title:"GEO Coverage", geo_desc:"Primary markets we serve. For Europe, Asia and LATAM — contact us for availability.",
-    pricing_title:"Simple pricing",
-    p1_title:"Starter", p1_desc:"Best for testing and MVPs", p1_price:"$499/mo",
-    p2_title:"Growth",  p2_desc:"For growing brands", p2_price:"$1,200/mo",
-    p3_title:"Scale",   p3_desc:"Custom for high spend",  p3_price:"Custom",
-    pricing_note:"All plans exclude media spend and include a monthly performance report.",
-    faq_title:"Frequently asked questions",
-    faq_q1:"Do you sell Google Ads accounts?", faq_a1:"Yes. We sell and transfer accounts. We also create and manage them on your behalf or on behalf of your company to ensure full compliance.",
-    faq_q2:"Can you work with existing accounts?", faq_a2:"Yes. We can audit and manage your current account, fix policy issues, and restructure campaigns.",
-    faq_q3:"How fast can we start?", faq_a3:"Usually within 1 business days after scope alignment and access.",
-    contact_title:"Get a free consultation", contact_sub:"Tell us about your goals, industry, and monthly budget. We’ll reply with next steps and a proposed plan.",
-    certificates_title:"Certificates & Compliance Packages",
-    certificates_intro:"New additional services. Choose a package that matches your vertical and compliance needs.",
-    cert_casino_title:"CASINO CERTIFICATE", cert_casino_price:"$800", cert_casino_desc:"Documentation and guidance for compliant advertising workflows.",
-    cert_gambling_title:"GAMBLING CERTIFICATE", cert_gambling_price:"$800", cert_gambling_desc:"Documentation and guidance for compliant advertising workflows.",
-    cert_crypto_title:"CERTIFICATE FOR CRYPTO", cert_crypto_price:"$1000", cert_crypto_desc:"Documentation and guidance for compliant advertising workflows.",
-    policy_title:"Substitution & Change Policy",
-    policy_sub_title:"Substitutions",
-    policy_sub_text:"The replacement is carried out if the accounts were blocked before you made any changes to the advertising campaigns, payment data or to bind your payment method, or if you could not log in to the purchased/provided accounts.",
-    policy_changes_title:"Changes in the account",
-    policy_changes_text:"You can't make any changes to the account: edit anything, attach a card, or modify billing details."
-  },
-  es:{ partner_badge:"Google Partner certificado",
-    compliance:"Vendemos y transferimos cuentas de Google Ads. También ofrecemos servicios de creación, configuración, gestión, auditoría y cumplimiento de las políticas de Google.",
-    nav_services:"Servicios", nav_geo:"GEO", nav_pricing:"Precios", nav_certificates:"Certificados", nav_policy:"Política", nav_faq:"FAQ", nav_contact:"Contacto",
-    hero_kicker:"Marketing de rendimiento para crecer",
-    hero_title:"Tu Google Partner certificado para publicidad de alto rendimiento",
-    hero_sub:"Desde crypto y gambling hasta fintech y e-commerce: creamos, configuramos y gestionamos campañas en cumplimiento y las escalamos con optimización enfocada al ROI.",
-    cta_telegram:"Escribir por Telegram", cta_services:"Ver servicios", cta_sheets:"Ver paquetes (Sheets)",
-    services_title:"Qué hacemos",
-    s1_title:"Creación de cuenta y cumplimiento", s1_desc:"Creación segura, verificación y facturación con guía de políticas.",
-    s2_title:"Configuración y estructura de campañas", s2_desc:"Keywords, tracking, assets y arquitectura de conversiones.",
-    s3_title:"Optimización continua", s3_desc:"Tests, negativas, pujas, audiencias y creatividades.",
-    s4_title:"Certificados y verificación empresarial", s4_desc:"Documentos oficiales y asistencia para aprobaciones más fluidas.",
-    geo_title:"Cobertura GEO", geo_desc:"Mercados principales. Para Europa, Asia y LATAM — consúltanos.",
-    pricing_title:"Precios sencillos",
-    p1_title:"Starter", p1_desc:"Ideal para pruebas y MVPs", p1_price:"$499/mes",
-    p2_title:"Growth",  p2_desc:"Para marcas en crecimiento", p2_price:"$1.200/mes",
-    p3_title:"Scale",   p3_desc:"A medida para alto gasto",   p3_price:"A medida",
-    pricing_note:"Todos los planes excluyen la inversión en medios e incluyen un informe mensual.",
-    faq_title:"Preguntas frecuentes",
-    faq_q1:"¿Venden cuentas de Google Ads?", faq_a1:"Sí. Vendemos y transferimos cuentas. También las creamos y gestionamos en su nombre o en nombre de su empresa.",
-    faq_q2:"¿Pueden trabajar con cuentas existentes?", faq_a2:"Sí. Auditamos y gestionamos tu cuenta, resolvemos políticas y reestructuramos campañas.",
-    faq_q3:"¿Qué tan rápido podemos empezar?", faq_a3:"Normalmente en 1 días laborables tras alinear alcance y accesos.",
-    contact_title:"Pide una consulta gratuita", contact_sub:"Cuéntanos tus objetivos, sector y presupuesto mensual. Te responderemos con los próximos pasos.",
-    certificates_title:"Paquetes de certificados y cumplimiento",
-    certificates_intro:"Nuevos servicios adicionales. Elige el paquete que se ajuste a tu vertical y necesidades de cumplimiento.",
-    cert_casino_title:"CERTIFICADO DE CASINO", cert_casino_price:"$800", cert_casino_desc:"Documentación y guía para flujos publicitarios en cumplimiento.",
-    cert_gambling_title:"CERTIFICADO DE APUESTAS", cert_gambling_price:"$800", cert_gambling_desc:"Documentación y guía para flujos publicitarios en cumplimiento.",
-    cert_crypto_title:"CERTIFICADO PARA CRYPTO", cert_crypto_price:"$1000", cert_crypto_desc:"Documentación y guía para flujos publicitarios en cumplimiento.",
-    policy_title:"Política de sustitución y cambios",
-    policy_sub_title:"Sustituciones",
-    policy_sub_text:"La sustitución se realiza si las cuentas fueron bloqueadas antes de que realizaras cambios en las campañas publicitarias, en los datos de pago o al vincular tu método de pago, o si no pudiste iniciar sesión en las cuentas proporcionadas.",
-    policy_changes_title:"Cambios en la cuenta",
-    policy_changes_text:"No puedes realizar cambios en la cuenta: editar ajustes, adjuntar tarjeta de pago ni modificar la facturación."
-  },
-  pt:{ partner_badge:"Google Partner certificado",
-    compliance:"Nós vendemos e transferimos contas do Google Ads. Além disso, prestamos serviços de criação, configuração, gerenciamento, auditoria e garantia de conformidade com as políticas do Google.",
-    nav_services:"Serviços", nav_geo:"GEO", nav_pricing:"Planos", nav_certificates:"Certificados", nav_policy:"Política", nav_faq:"FAQ", nav_contact:"Contato",
-    hero_kicker:"Marketing de performance para crescer",
-    hero_title:"Seu Google Partner certificado para publicidade de alta performance",
-    hero_sub:"De crypto e gambling a fintech e e-commerce — criamos, configuramos e gerimos campanhas em conformidade e escalamos com otimização focada em ROI.",
-    cta_telegram:"Falar no Telegram", cta_services:"Ver serviços", cta_sheets:"Ver pacotes (Sheets)",
-    services_title:"O que fazemos",
-    s1_title:"Criação de conta & conformidade", s1_desc:"Criação segura, verificação, faturamento e orientação de políticas.",
-    s2_title:"Setup & estrutura de campanhas", s2_desc:"Palavras-chave, tracking, assets e conversões.",
-    s3_title:"Otimização contínua", s3_desc:"Testes, negativas, lances, audiências, criativos.",
-    s4_title:"Certificados & verificação empresarial", s4_desc:"Documentos oficiais e suporte para aprovações mais suaves.",
-    geo_title:"Cobertura GEO", geo_desc:"Mercados principais. Para Europa, Ásia e LATAM — fale conosco.",
-    pricing_title:"Planos simples",
-    p1_title:"Starter", p1_desc:"Ideal para testes e MVPs", p1_price:"$499/mês",
-    p2_title:"Growth",  p2_desc:"Para marcas em crescimento", p2_price:"$1.200/mês",
-    p3_title:"Scale",   p3_desc:"Sob medida para alto investimento", p3_price:"Sob consulta",
-    pricing_note:"Todos os planos excluem mídia e incluem relatório mensal.",
-    faq_title:"Perguntas frequentes",
-    faq_q1:"Vocês vendem contas do Google Ads?", faq_a1:"Sim. Também criamos e gerenciamos em seu nome para garantir a conformidade com os requisitos.",
-    faq_q2:"Podem trabalhar com contas existentes?", faq_a2:"Sim. Auditamos e gerimos, corrigimos políticas e reestruturamos campanhas.",
-    faq_q3:"Quão rápido podemos começar?", faq_a3:"Geralmente em 1 dias úteis após alinhamento e acessos.",
-    contact_title:"Peça uma consultoria gratuita", contact_sub:"Conte seus objetivos, setor e orçamento mensal. Responderemos com próximos passos.",
-    certificates_title:"Pacotes de certificados e conformidade",
-    certificates_intro:"Novos serviços adicionais. Escolha o pacote que se encaixa no seu vertical e nas exigências de conformidade.",
-    cert_casino_title:"CERTIFICADO DE CASSINO", cert_casino_price:"$800", cert_casino_desc:"Documentação e orientação para fluxos de publicidade em conformidade.",
-    cert_gambling_title:"CERTIFICADO DE APOSTAS", cert_gambling_price:"$800", cert_gambling_desc:"Documentação e orientação para fluxos de publicidade em conformidade.",
-    cert_crypto_title:"CERTIFICADO PARA CRYPTO", cert_crypto_price:"$1000", cert_crypto_desc:"Documentação e orientação para fluxos de publicidade em conformidade.",
-    policy_title:"Política de substituição e alterações",
-    policy_sub_title:"Substituições",
-    policy_sub_text:"A substituição é realizada se as contas forem bloqueadas antes de você fazer quaisquer alterações nas campanhas publicitárias, nos dados de pagamento ou na vinculação do método de pagamento, ou se você não conseguir fazer login nas contas fornecidas.",
-    policy_changes_title:"Alterações na conta",
-    policy_changes_text:"Você não pode fazer alterações na conta: editar configurações, anexar cartão ou modificar dados de faturamento."
-  },
-  ru:{ partner_badge:"Сертифицированный Google Partner",
-    compliance:"Мы продаём и передаём аккаунты Google Ads. И оказываем услуги по созданию, настройке, ведению, аудитам и комплаенсу согласно политикам Google.",
-    nav_services:"Услуги", nav_geo:"GEO", nav_pricing:"Тарифы", nav_certificates:"Сертификаты", nav_policy:"Политика", nav_faq:"FAQ", nav_contact:"Контакты",
-    hero_kicker:"Performance-маркетинг для роста",
-    hero_title:"Ваш сертифицированный Google Partner для высокоэффективной рекламы",
-    hero_sub:"От crypto и gambling до fintech и e-commerce — создаём, настраиваем и ведём кампании в соответствии с политикам и масштабируем их с упором на ROI.",
-    cta_telegram:"Написать в Telegram", cta_services:"Посмотреть услуги", cta_sheets:"Пакеты (Sheets)",
-    services_title:"Что мы делаем",
-    s1_title:"Создание аккаунта и комплаенс", s1_desc:"Безопасное создание, верификация, биллинг и рекомендации по политикам.",
-    s2_title:"Настройка и структура кампаний", s2_desc:"Ключевые слова, трекинг, ассеты и архитектура конверсий.",
-    s3_title:"Постоянная оптимизация", s3_desc:"Тесты, минус-слова, ставки, аудитории, креативы.",
-    s4_title:"Сертификаты и проверка бизнеса", s4_desc:"Официальные документы и помощь для более плавных апрувов.",
-    geo_title:"GEO покрытие", geo_desc:"Основные рынки. Для Европы, Азии и LATAM — напишите нам.",
-    pricing_title:"Простые тарифы",
-    p1_title:"Starter", p1_desc:"Для тестов и MVP", p1_price:"$499/мес",
-    p2_title:"Growth",  p2_desc:"Для растущих брендов", p2_price:"$1,200/мес",
-    p3_title:"Scale",   p3_desc:"Индивидуально для большого бюджета", p3_price:"Индивидуально",
-    pricing_note:"Тарифы не включают рекламный бюджет и содержат ежемесячный отчёт.",
-    faq_title:"Частые вопросы",
-    faq_q1:"Вы продаёте аккаунты Google Ads?", faq_a1:"Да. Мы продаем аккаунты гугл адс с историей расходов.",
-    faq_q2:"Работаете с существующими аккаунтами?", faq_a2:"Да. Проведём аудит, исправим проблемы и перестроим кампании.",
-    faq_q3:"Как быстро стартуем?", faq_a3:"Обычно 1 рабочих дней после согласования и доступов.",
-    contact_title:"Получите бесплатную консультацию", contact_sub:"Опишите цели, нишу и бюджет — ответим с планом и шагами.",
-    certificates_title:"Пакеты сертификатов и комплаенса",
-    certificates_intro:"Новые дополнительные услуги. Выберите пакет под вашу вертикаль и требования комплаенса.",
-    cert_casino_title:"СЕРТИФИКАТ ДЛЯ CASINO", cert_casino_price:"$800", cert_casino_desc:"Документация и рекомендации для рекламных процессов в соответствии с правилами.",
-    cert_gambling_title:"СЕРТИФИКАТ ДЛЯ GAMBLING", cert_gambling_price:"$800", cert_gambling_desc:"Документация и рекомендации для рекламных процессов в соответствии с правилами.",
-    cert_crypto_title:"СЕРТИФИКАТ ДЛЯ CRYPTO", cert_crypto_price:"$1000", cert_crypto_desc:"Документация и рекомендации для рекламных процессов в соответствии с правилами.",
-    policy_title:"Политика замены и изменений",
-    policy_sub_title:"Замены",
-    policy_sub_text:"Замена выполняется, если аккаунты были заблокированы до того, как вы внесли какие-либо изменения в рекламные кампании, платёжные данные или привязку метода оплаты, либо если вы не смогли войти в предоставленные аккаунты.",
-    policy_changes_title:"Изменения в аккаунте",
-    policy_changes_text:"Нельзя вносить изменения в аккаунт: редактировать настройки, прикреплять карту или менять биллинг."
+  // resize
+  function fit(){
+    const w = canvas.clientWidth, h = Math.max(canvas.clientHeight, 420);
+    renderer.setSize(w, h, false); camera.aspect = w/h; camera.updateProjectionMatrix();
   }
-};
+  window.addEventListener('resize', fit); fit();
 
-/* Helper: force first word of hero title to new line */
-function breakFirstWordInHero(){
-  const el = document.querySelector('.hero-title');
-  if(!el) return;
-  const t = el.textContent.trim();
-  const i = t.indexOf(' ');
-  if(i>0){ el.innerHTML = '<span class="break-first-word">'+t.slice(0,i)+'</span>'+t.slice(i); }
-}
+  // lights
+  const hemi = new THREE.HemisphereLight(0x88ccff, 0x081018, 1.0); scene.add(hemi);
+  const dir = new THREE.DirectionalLight(0xffffff, 0.9); dir.position.set(3,4,2); scene.add(dir);
 
-/* Set language */
-function setLang(lang){
-  const d = dict[lang] || dict.en;
-  document.querySelectorAll('[data-key]').forEach(el=>{
-    const k = el.getAttribute('data-key');
-    if(d[k]) el.textContent = d[k];
-    el.classList.add('active');
+  // ground plane (foggy disk)
+  const groundGeo = new THREE.CircleGeometry(20, 64);
+  const groundMat = new THREE.MeshBasicMaterial({color:0x0d1624, transparent:true, opacity:0.6});
+  const ground = new THREE.Mesh(groundGeo, groundMat); ground.rotation.x = -Math.PI/2; ground.position.y = -1.1; scene.add(ground);
+
+  // sky particles
+  const stars = new THREE.Points(
+    new THREE.BufferGeometry(),
+    new THREE.PointsMaterial({size:0.01, color:0x7C5CFF})
+  );
+  const starCount = 1200; const positions = new Float32Array(starCount*3);
+  for(let i=0;i<starCount;i++){ positions[i*3+0]=(Math.random()-0.5)*18; positions[i*3+1]=Math.random()*6; positions[i*3+2]=(Math.random()-0.5)*18; }
+  stars.geometry.setAttribute('position', new THREE.BufferAttribute(positions,3));
+  scene.add(stars);
+
+  // planet (lowpoly sphere with noise)
+  const planetGeo = new THREE.IcosahedronGeometry(1, 5);
+  const planetMat = new THREE.MeshStandardMaterial({color:0x4cc9f0, roughness:0.6, metalness:0.1, flatShading:true});
+  const planet = new THREE.Mesh(planetGeo, planetMat); scene.add(planet);
+
+  // noise
+  const simplex = new SimplexNoise('seed');
+  function displace(amp=0.25, freq=1.2){
+    const pos = planet.geometry.attributes.position;
+    for(let i=0;i<pos.count;i++){
+      const vx = pos.getX(i), vy = pos.getY(i), vz = pos.getZ(i);
+      const n = simplex.noise3D(vx*freq, vy*freq, vz*freq);
+      const m = 1 + n*amp;
+      const v = new THREE.Vector3(vx,vy,vz).normalize().multiplyScalar(m);
+      pos.setXYZ(i, v.x, v.y, v.z);
+    }
+    planet.geometry.computeVertexNormals(); pos.needsUpdate = true;
+  }
+
+  // mood → params
+  function moodToParams(text){
+    text = (text||'').toLowerCase();
+    let amp=0.2,freq=1.2, hue=210, sat=70, light=60, glow=0x7C5CFF;
+    if(text.includes('calm')||text.includes('спок')){ amp=0.12; hue=200; sat=55; light=70; glow=0x0FF0FC; }
+    if(text.includes('joy')||text.includes('раді')||text.includes('happy')){ amp=0.18; hue=300; sat=80; light=65; glow=0xff8bd1; }
+    if(text.includes('anx')||text.includes('трив')){ amp=0.26; freq=1.6; hue=210; sat=60; light=55; glow=0x7C5CFF; }
+    if(text.includes('dark')||text.includes('sad')||text.includes('сум')){ amp=0.28; freq=1.4; hue=220; sat=35; light=45; glow=0x5462ff; }
+    return {amp,freq,hsl:`hsl(${hue} ${sat}% ${light}%)`, glow};
+  }
+
+  function applyMood(text){
+    const p = moodToParams(text);
+    // recolor
+    planet.material.color = new THREE.Color(p.hsl);
+    hemi.color = new THREE.Color(p.hsl);
+    // reset geometry & re-displace (recreate for clean base)
+    planet.geometry.dispose();
+    planet.geometry = new THREE.IcosahedronGeometry(1,5);
+    displace(p.amp, p.freq);
+    // star glow
+    stars.material.color = new THREE.Color(p.glow);
+    // subtle pulse
+    pulseTarget = 0.015 + p.amp*0.02;
+  }
+
+  // animate
+  let t=0, pulse=0, pulseTarget=0.02;
+  function tick(){
+    t+=0.005; controls.update();
+    planet.rotation.y += 0.0025;
+    // star twinkle
+    pulse += (pulseTarget - pulse)*0.02;
+    stars.rotation.y -= 0.0005;
+    stars.position.y = Math.sin(t*0.6)*0.05;
+    // slight breathing
+    const s = 1.0 + Math.sin(t*0.9)*pulse;
+    planet.scale.setScalar(s);
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+  }
+  tick();
+
+  // UI wiring
+  const prompt = document.getElementById('prompt');
+  const genBtn = document.getElementById('genBtn');
+  const presets = document.querySelectorAll('.preset');
+  genBtn.addEventListener('click', ()=> applyMood(prompt.value || 'calm and inspired'));
+  presets.forEach(b=>b.addEventListener('click', ()=>{ prompt.value=b.dataset.prompt; applyMood(prompt.value); }));
+  // initial mood
+  applyMood('calm and inspired');
+
+  // gallery snapshots
+  const snapBtn = document.getElementById('snap');
+  const shots = document.getElementById('shots');
+  snapBtn.addEventListener('click', ()=>{
+    const data = renderer.domElement.toDataURL('image/png');
+    const img = new Image(); img.src=data; img.className='w-full h-56 object-cover rounded-xl border border-white/10';
+    const card = document.createElement('div'); card.className='glass rounded-2xl p-2'; card.appendChild(img);
+    shots.prepend(card);
   });
-  const p = document.getElementById('t_partner_badge');
-  if(p) p.textContent = d.partner_badge;
-  breakFirstWordInHero();
-}
-const sel = document.getElementById('langSel');
-sel.addEventListener('change',()=>{ setLang(sel.value); try{localStorage.setItem('ads_lang', sel.value);}catch(e){} });
-setLang( (localStorage.getItem('ads_lang')||'en') );
-sel.value = (localStorage.getItem('ads_lang')||'en');
 
-/* Header hide/show on scroll */
-let lastY = 0; const header = document.querySelector('header');
-window.addEventListener('scroll',()=>{ const y = window.pageYOffset||0; if(y>lastY && y>64){ header.classList.add('is-hidden'); } else { header.classList.remove('is-hidden'); } lastY = y; });
-</script>
-
-<!-- Structured data -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "AdSphere Global",
-  "url": "https://whitetargetagency.site",
-  "sameAs": ["https://t.me/GOOGLEADSBRAZIL"],
-  "description": "Certified Google Partner agency for compliant Google Ads creation, setup, optimization, and verification.",
-  "contactPoint": [{"@type": "ContactPoint", "contactType": "sales", "url": "https://t.me/GOOGLEADSBRAZIL"}]
-}
-</script>
+  // waitlist demo (local only)
+  document.getElementById('wl').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const email = e.target.querySelector('input').value.trim();
+    const list = JSON.parse(localStorage.getItem('echov_wl')||'[]');
+    list.push({email, at: Date.now()});
+    localStorage.setItem('echov_wl', JSON.stringify(list));
+    document.getElementById('wlMsg').textContent = 'Saved locally. (For prod — hook to Formspree / your API)';
+    e.target.reset();
+  });
+  </script>
 </body>
 </html>
