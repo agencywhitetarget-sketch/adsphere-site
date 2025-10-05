@@ -12,6 +12,10 @@ import { v4 as uuidv4 } from "uuid";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DATA_PATH = path.join(__dirname, "data.json");
+const ALLOWED_ORIGINS = (process.env.ALLOW_ORIGINS || "http://localhost:8787,http://localhost:5500,http://127.0.0.1:5500,https://whitetargetagency.site").split(",");
+const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN || ".whitetargetagency.site"; // для всіх піддоменів
+const COOKIE_SECURE = process.env.COOKIE_SECURE === "1"; // на проді = 1
+const SAME_SITE = COOKIE_SECURE ? "None" : "Lax";
 
 // ---------- Simple JSON "DB" ----------
 function readDB() {
