@@ -4,6 +4,17 @@ const $$ = q => Array.from(document.querySelectorAll(q));
 // Локально лишай localhost. На проді постав HTTPS бекенд-домен:
 const API = "https://adsphere-site-2.onrender.com";
 // const API = "https://api.whitetargetagency.site";
+(function applyTokenFromURL(){
+  try {
+    const url = new URL(window.location.href);
+    const t = url.searchParams.get("token");
+    if (t) {
+      localStorage.setItem("noir_token", t);
+      url.searchParams.delete("token");
+      window.history.replaceState({}, "", url.toString());
+    }
+  } catch(e){}
+})();
 
 let state = {
   me: null,
