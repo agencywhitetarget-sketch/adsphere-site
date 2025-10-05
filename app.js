@@ -1,11 +1,13 @@
 const $ = q => document.querySelector(q);
 const $$ = q => Array.from(document.querySelectorAll(q));
-const API = "https://api.whitetargetagency.site";
 
-// якщо деплоїш сервер, заміни на його HTTPS URL
+// Локально лишай localhost. На проді постав HTTPS бекенд-домен:
+const API = "http://localhost:8787"; 
+// const API = "https://api.whitetargetagency.site";
+
 let state = {
   me: null,
-  token: null, // з cookie, але тримаємо копію для socket.auth
+  token: localStorage.getItem("noir_token") || null,
   chats: [],
   activeId: null,
   messages: {}
@@ -38,28 +40,37 @@ tabRegister.onclick = ()=>{ mode="register"; tabRegister.classList.add("active")
 loginBtn.onclick = openAuth;
 closeAuth.onclick = closeAuthModal;
 
-// ---------- API helpers ----------
+// ---------- API helper (підтримує Bearer токен + cookies) ----------
 async function api(path, options={}){
-  const r = await fetch(API+path, { credentials:"include", ...options });
-  const j = await r.json();
+  const headers = { "Content-Type":"application/json", ...(options.headers||{}) };
+  if (state.token) headers["Authorization"] = "Bearer " + state.token;
+  const r = await fetch(API+path, { credentials:"include", ...options, headers });
+  const j = await r.json().catch(()=>({}));
   if (!r.ok) throw new Error(j.error || "api_error");
   return j;
 }
 
+// ---------- Auth actions ----------
 authSubmit.onclick = async ()=>{
   authErr.textContent = "";
   try{
     if (mode === "login") {
-      await api("/api/login", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ email:authEmail.value, password:authPassword.value }) });
+      const j = await api("/api/login", { method:"POST", body: JSON.stringify({ email:authEmail.value, password:authPassword.value }) });
+      state.token = j.token; localStorage.setItem("noir_token", j.token);
     } else {
-      await api("/api/register", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ email:authEmail.value, password:authPassword.value, name:authName.value }) });
+      const j = await api("/api/register", { method:"POST", body: JSON.stringify({ email:authEmail.value, password:authPassword.value, name:authName.value }) });
+      state.token = j.token; localStorage.setItem("noir_token", j.token);
     }
     await fetchMe();
     closeAuthModal();
   }catch(e){ authErr.textContent = "Помилка: "+e.message; }
 };
 
-logoutBtn.onclick = async ()=>{ try{ await api("/api/logout",{method:"POST"}); }catch{} state.me=null; renderUser(); renderChats(); renderActive(); };
+logoutBtn.onclick = async ()=>{
+  try{ await api("/api/logout",{method:"POST"}); }catch{}
+  state.me=null; state.token=null; localStorage.removeItem("noir_token");
+  renderUser(); renderChats(); renderActive();
+};
 
 // ---------- Me / Chats ----------
 async function fetchMe(){
@@ -69,9 +80,8 @@ async function fetchMe(){
     renderUser();
     await fetchChats();
     await initSocket();
-  }catch{
-    state.me = null;
-    renderUser();
+  }catch(e){
+    state.me = null; renderUser();
   }
 }
 
@@ -93,14 +103,16 @@ async function fetchMessages(chatId){
 // ---------- Socket.io ----------
 let socket = null;
 async function initSocket(){
-  // витягнемо поточний cookie токен, щоб авторизувати сокет
-  const token = document.cookie.split("; ").find(x=>x.startsWith("noir_token="))?.split("=")[1] || null;
-  state.token = token;
-  if (!token) return;
+  if (!state.token) {
+    // спробуємо дістати токен із сервера (якщо є кукі)
+    try { const j = await api("/api/token"); state.token = j.token; localStorage.setItem("noir_token", j.token); }
+    catch {}
+  }
+  if (!state.token) return;
 
   if (socket) socket.disconnect();
   socket = io(API, { withCredentials:true });
-  socket.on("connect", ()=> socket.emit("auth", token));
+  socket.on("connect", ()=> socket.emit("auth", state.token));
   socket.on("message", ({ chatId, message })=>{
     if (!state.messages[chatId]) state.messages[chatId]=[];
     state.messages[chatId].push(message);
@@ -110,7 +122,7 @@ async function initSocket(){
   });
 }
 
-// ---------- Render: user / chats / active ----------
+// ---------- Render ----------
 function renderUser(){
   const userMini = $("#userMini");
   if (!state.me){
@@ -154,4 +166,52 @@ function renderChats(filter=""){
 function renderActive(){
   const wrap = $("#messages");
   const chat = state.chats.find(c=>c.id===state.activeId);
-  if (!chat){ $("#activeTitle").textContent="No chat selected"; $("#activeMeta").textContent=""; wrap.innerHTML=`<div class="placeholder">Обери чат ліворуч або створи нов
+  if (!chat){ $("#activeTitle").textContent="No chat selected"; $("#activeMeta").textContent=""; wrap.innerHTML=`<div class="placeholder">Увійди та обери чат або створи новий.</div>`; return; }
+
+  $("#activeTitle").textContent = chat.title;
+  $("#activeMeta").textContent = `${(chat.participants||[]).length} учасників`;
+  const msgs = state.messages[chat.id] || [];
+  wrap.innerHTML = "";
+  for (const ms of msgs){
+    const el = document.createElement("div");
+    el.className = "msg" + (ms.userId===state.me?.id ? " me":"");
+    el.innerHTML = `<div>${esc(ms.text)}</div><div class="meta-s">${new Date(ms.created_at).toLocaleString()}</div>`;
+    wrap.appendChild(el);
+  }
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+// ---------- Actions ----------
+$("#newChat").onclick = async ()=>{
+  if (!state.me) return openAuth();
+  const title = prompt("Назва чату:", "New chat"); if (!title) return;
+  const invites = prompt("Email-адреси учасників (через кому, опційно):", "");
+  const inviteeEmails = invites ? invites.split(",").map(s=>s.trim()).filter(Boolean) : [];
+  const j = await api("/api/chats", { method:"POST", body: JSON.stringify({ title, inviteeEmails }) });
+  state.chats.unshift(j.chat);
+  renderChats($("#search").value);
+  state.activeId = j.chat.id;
+  await fetchMessages(j.chat.id);
+  renderActive();
+};
+
+$("#sendBtn").onclick = send;
+$("#msgInput").addEventListener("keydown", e=>{ if(e.key==="Enter") send(); });
+async function send(){
+  if (!state.me) return openAuth();
+  const chatId = state.activeId; if (!chatId) return;
+  const inp = $("#msgInput"); const text = inp.value.trim(); if (!text) return;
+  const j = await api(`/api/messages/${chatId}`, { method:"POST", body: JSON.stringify({ text }) });
+  if (!state.messages[chatId]) state.messages[chatId]=[];
+  state.messages[chatId].push(j.message);
+  const chat = state.chats.find(c=>c.id===chatId);
+  if (chat){ chat.last = { text: j.message.text, at: j.message.created_at, userId: j.message.userId }; chat.updated_at = j.message.created_at; }
+  inp.value = "";
+  renderChats($("#search").value);
+  renderActive();
+}
+
+$("#search").addEventListener("input", e => renderChats(e.target.value));
+
+// ---------- init ----------
+fetchMe();
