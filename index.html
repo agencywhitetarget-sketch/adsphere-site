@@ -1,83 +1,85 @@
 <!doctype html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NoirChat — Chrome</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>NoirChat — Telegram-like</title>
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-  <div id="app" class="app">
+  <div class="layout">
+
+    <!-- SIDEBAR (ЧАТИ) -->
     <aside class="sidebar">
-      <div class="brand">
-        <img src="assets/logo.svg" alt="NoirChat" />
-        <div class="brand-text">
-          <strong>NoirChat</strong>
-          <span class="sub">AI × Telegram</span>
+      <header class="sidebar-top">
+        <div class="brand">
+          <img src="assets/icon48.png" alt="NoirChat"/>
+          <div>
+            <div class="b-title">NoirChat</div>
+            <div class="b-sub">AI × Telegram</div>
+          </div>
         </div>
-      </div>
 
-      <div class="tg-login card">
-        <h3>Telegram Login</h3>
-       <!-- Telegram Login Widget (SSO для NoirChat) -->
-<script async src="https://telegram.org/js/telegram-widget.js?22"
-  data-telegram-login="noirchat1bot"   <!-- <-- ТВОЄ ІМ’Я БОТА -->
-  data-size="large"
-  data-userpic="false"
-  data-request-access="write"
-  data-onauth="noirOnTelegramAuth">
-</script>
-
-        <p class="muted s">* Для продакшену верифікуй хеш на сервері.</p>
-        <div id="tgUserBox" class="tg-user hidden"></div>
-      </div>
-
-      <div class="card quick-links">
-        <h3>Швидкі переходи</h3>
-        <div class="links">
-          <button data-open-web="@yourchannel">Відкрити @yourchannel</button>
-          <button data-open-web="@YOUR_BOT_NAME">Відкрити бот</button>
-          <button id="openCustom">Відкрити @username…</button>
+        <div class="auth">
+          <button id="loginBtn" class="primary s">Увійти з Telegram</button>
+          <div id="userMini" class="user-mini hidden"></div>
         </div>
-      </div>
 
-      <div class="card chats-list">
-        <div class="row">
-          <h3>Чати (демо)</h3>
-          <button id="newChat" class="ghost">+ Новий</button>
+        <div class="search">
+          <input id="search" placeholder="Пошук"/>
         </div>
-        <div id="chatItems" class="chat-items"></div>
-      </div>
+      </header>
 
-      <div class="card footer">
-        <button id="exportData" class="ghost s">Експорт даних</button>
-        <button id="clearData" class="danger s">Очистити все</button>
+      <div id="chatList" class="chat-list"></div>
+      <div class="sidebar-bottom">
+        <button id="newChat" class="ghost">+ Новий чат</button>
       </div>
     </aside>
 
+    <!-- MAIN (ДІАЛОГ) -->
     <main class="main">
       <header class="topbar">
-        <div class="chat-title">
-          <span id="activeChatName">No chat selected</span>
-          <span id="activeChatMeta" class="muted s"></span>
+        <div>
+          <div id="activeTitle" class="title">No chat selected</div>
+          <div id="activeMeta" class="meta"></div>
         </div>
         <div class="actions">
-          <button id="themeToggle" title="Перемкнути тему">🌓</button>
-          <button id="openInTG" title="Відкрити в Telegram">↗</button>
+          <button id="openInTG" title="Відкрити у Telegram">↗</button>
         </div>
       </header>
 
       <section id="messages" class="messages">
-        <div class="placeholder">
-          Обери чат ліворуч або створи новий.
-        </div>
+        <div class="placeholder">Обери чат ліворуч або створи новий.</div>
       </section>
 
       <footer class="composer">
-        <input id="msgInput" type="text" placeholder="Написати повідомлення…" />
+        <input id="msgInput" placeholder="Написати повідомлення…"/>
         <button id="sendBtn">►</button>
       </footer>
     </main>
+  </div>
+
+  <!-- MODAL: Telegram Login Widget -->
+  <div id="loginModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>Увійти через Telegram</div>
+        <button id="closeModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="tgWidgetWrap">
+          <script async src="https://telegram.org/js/telegram-widget.js?22"
+            data-telegram-login="noirchat1bot"
+            data-size="large"
+            data-userpic="false"
+            data-request-access="write"
+            data-onauth="noirOnTelegramAuth">
+          </script>
+        </div>
+        <p class="muted s">* Після входу ми створимо сесію NoirChat. Підпис перевіряє бекенд.</p>
+        <div id="tgUserBox" class="tg-user hidden"></div>
+      </div>
+    </div>
   </div>
 
   <script src="app.js"></script>
