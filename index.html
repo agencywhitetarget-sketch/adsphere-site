@@ -3,422 +3,153 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EchoVerse — Your emotions become worlds</title>
-  <meta name="description" content="EchoVerse — веб‑досвід, де твої емоції перетворюються на інтерактивні 3D світи. Введи настрій — згенеруй світ — досліджуй і ділись." />
-  <meta property="og:title" content="EchoVerse — Your emotions become worlds" />
-  <meta property="og:description" content="Введи емоцію — отримай інтерактивний 3D‑світ. Вірусний AI × WebGL досвід для всіх." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://dummyimage.com/1200x630/0b1220/ffffff&text=EchoVerse" />
-  <meta name="theme-color" content="#0b1220" />
+  <title>EchoVerse — AI Image Generator (LCM, ngrok)</title>
 
-  <!-- Tailwind via CDN (no build step) -->
+  <!-- Tailwind (CDN) для швидкого стилю -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = { theme: { extend: { colors: { bg:'#0b1220', ink:'#E6F0FF', mute:'#9AB3C7', acc:'#7C5CFF', acc2:'#0FF0FC' } } } }
+    tailwind.config = {
+      theme: { extend: { colors: { bg:"#0b1220", ink:"#e6f0ff", acc:"#7C5CFF", cyan:"#0FF0FC" } } }
+    }
   </script>
   <style>
-    html,body{background:#0b1220; color:#E6F0FF}
+    html,body{background:#0b1220;color:#e6f0ff}
     .glass{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); box-shadow:0 10px 40px rgba(0,0,0,.4);}
-    .grad-text{background:linear-gradient(90deg,#7C5CFF, #0FF0FC); -webkit-background-clip:text; background-clip:text; color:transparent}
-    .btn{transition:transform .2s ease}
-    .btn:active{transform:translateY(1px)}
-    canvas{display:block}
+    .grad{background:linear-gradient(90deg,#7C5CFF,#0FF0FC); -webkit-background-clip:text; background-clip:text; color:transparent}
   </style>
-
-  <!-- Three.js / helpers -->
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-  <script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
-  <script src="https://unpkg.com/simplex-noise@4.0.1/dist/esm/simplex-noise.min.js"></script>
 </head>
 <body class="antialiased">
   <!-- NAV -->
-  <header class="fixed top-0 left-0 right-0 z-40">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="glass mt-4 rounded-2xl px-4 py-3 flex items-center justify-between">
-        <a href="#" class="font-semibold tracking-tight text-xl">Echo<span class="grad-text">Verse</span></a>
-        <nav class="hidden md:flex gap-6 text-sm text-mute">
-          <a href="#how" class="hover:text-ink">How it works</a>
-          <a href="#demo" class="hover:text-ink">Live demo</a>
-          <a href="#gallery" class="hover:text-ink">Gallery</a>
-          <a href="#pitch" class="hover:text-ink">Pitch</a>
-        </nav>
-        <a href="#waitlist" class="btn bg-acc text-bg px-4 py-2 rounded-xl font-semibold shadow hover:opacity-90">Join waitlist</a>
-      </div>
+  <header class="max-w-6xl mx-auto px-4 mt-6">
+    <div class="glass rounded-2xl px-4 py-3 flex items-center justify-between">
+      <div class="font-bold">Echo<span class="grad">Verse</span></div>
+      <div class="text-xs text-white/60">LCM · self-hosted</div>
     </div>
   </header>
 
-  <!-- HERO with WebGL canvas background -->
-  <section class="relative pt-28 md:pt-36" id="top">
-    <div class="absolute inset-0 -z-10 overflow-hidden">
-      <canvas id="world" class="w-full h-full"></canvas>
-      <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(124,92,255,.25),transparent_60%)]"></div>
-    </div>
-
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="grid md:grid-cols-2 gap-8 items-center">
-        <div class="space-y-6">
-          <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">
-            Your emotions <span class="grad-text">become worlds</span>
-          </h1>
-          <p class="text-mute md:text-lg max-w-xl">Напиши «я спокійний і натхненний» — і побач світ, який відображає твій стан. Інтерактивний AI × 3D досвід у браузері.</p>
-          <div class="flex flex-col sm:flex-row gap-3">
-            <a href="#demo" class="btn bg-white/90 text-bg px-5 py-3 rounded-xl font-semibold text-sm sm:text-base">Try live demo</a>
-            <a href="#pitch" class="btn bg-white/10 backdrop-blur px-5 py-3 rounded-xl font-semibold">Read the pitch</a>
+  <!-- HERO -->
+  <section class="max-w-6xl mx-auto px-4 py-12">
+    <div class="grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">
+          Generate <span class="grad">AI images</span> on your server
+        </h1>
+        <p class="text-white/70 mt-4 max-w-xl">
+          Короткий демо-сайт, що викликає твій локальний/публічний API через ngrok.
+          Модель: LCM (швидка), 4–6 кроків.
+        </p>
+        <div class="text-xs text-white/50 mt-2">Порада: для GitHub Pages використовуй HTTPS-адресу ngrok.</div>
+      </div>
+      <div class="glass rounded-2xl p-4">
+        <div class="rounded-xl bg-black/30 border border-white/10 p-4">
+          <label class="block text-sm text-white/70 mb-2">Prompt</label>
+          <div class="flex gap-2">
+            <input id="prompt" class="w-full bg-white/5 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-cyan/60" placeholder="neon dreamy city at night, reflections">
+            <button id="gen" class="bg-acc hover:opacity-90 px-4 py-3 rounded-xl font-semibold">Generate</button>
           </div>
-          <div class="text-xs text-mute">No account needed • Works on desktop & mobile • WebGL</div>
-        </div>
-        <div class="glass rounded-3xl p-4 md:p-6">
-          <div class="rounded-xl bg-black/30 border border-white/5 p-4">
-            <label class="block text-sm text-mute mb-2">Enter mood / emotion</label>
-            <div class="flex gap-2">
-              <input id="prompt" class="w-full bg-white/5 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-acc/60" placeholder="lonely but hopeful" />
-              <button id="genBtn" class="btn bg-acc text-bg px-4 py-3 rounded-xl font-semibold">Generate</button>
-            </div>
-            <p class="text-[12px] text-mute mt-2">Демо працює локально: ми мапимо емоції → палітру → параметри шуму та світла.</p>
+          <div class="flex gap-2 mt-3 text-xs">
+            <button class="preset glass px-3 py-1 rounded" data-p="sunlit alpine lake, hyperrealistic">alpine</button>
+            <button class="preset glass px-3 py-1 rounded" data-p="neon cyberpunk street at night, rain, reflections">cyberpunk</button>
+            <button class="preset glass px-3 py-1 rounded" data-p="dreamy watercolor forest, soft light">watercolor</button>
           </div>
-          <div class="grid grid-cols-3 gap-2 mt-3 text-xs text-center">
-            <button class="preset btn glass rounded-lg py-2" data-prompt="calm and inspired">calm</button>
-            <button class="preset btn glass rounded-lg py-2" data-prompt="anxious but determined">focus</button>
-            <button class="preset btn glass rounded-lg py-2" data-prompt="joyful and playful">joy</button>
+          <div class="mt-2 text-xs text-white/60">
+            size:
+            <select id="size" class="bg-white/10 rounded px-2 py-1">
+              <option value="384">384×384 (швидко)</option>
+              <option value="448">448×448 (якісніше)</option>
+            </select>
+            steps:
+            <select id="steps" class="bg-white/10 rounded px-2 py-1">
+              <option value="4">4</option>
+              <option value="6">6</option>
+            </select>
           </div>
+          <div id="status" class="text-xs text-white/60 mt-2"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- HOW -->
-  <section id="how" class="py-20">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="glass rounded-2xl p-6">
-          <div class="text-2xl font-bold mb-2">1 → Type</div>
-          <p class="text-mute">Введи емоцію або фразу. Ми перетворюємо текст на вектор настрою.</p>
-        </div>
-        <div class="glass rounded-2xl p-6">
-          <div class="text-2xl font-bold mb-2">2 → Generate</div>
-          <p class="text-mute">Алгоритм мапить настрій на палітру, геометрію та світ сцени.</p>
-        </div>
-        <div class="glass rounded-2xl p-6">
-          <div class="text-2xl font-bold mb-2">3 → Explore</div>
-          <p class="text-mute">Досліджуй 3D‑світ, ділись посиланням або зберігай seed для відтворення.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- DEMO note -->
-  <section id="demo" class="py-4">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="glass rounded-2xl p-6">
-        <h2 class="text-2xl md:text-3xl font-bold mb-3">Live demo (on‑page)</h2>
-        <p class="text-mute">Цей демо не використовує зовнішній AI — усе параметрично в браузері. На реальному продукті підключимо LLM/эмбедінги для точного емоційного мапінгу.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- GALLERY (placeholders driven by canvas snapshots) -->
-  <section id="gallery" class="py-20">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="flex items-end justify-between mb-6">
-        <h2 class="text-2xl md:text-3xl font-bold">Gallery</h2>
-        <button id="snap" class="btn glass rounded-xl px-4 py-2">Save snapshot</button>
-      </div>
-      <div id="shots" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-    </div>
-  </section>
-<!-- AI image demo (self-hosted) -->
-<section id="ai" class="py-20">
-  <div class="max-w-7xl mx-auto px-4">
-    <div class="glass rounded-3xl p-6">
-      <h2 class="text-2xl md:text-3xl font-bold mb-3">AI image demo</h2>
-      <p class="text-mute mb-3">Генерує зображення через твій локальний AI-сервер.</p>
-      <div class="flex flex-col md:flex-row gap-3">
-        <input id="aiPrompt" class="w-full bg-white/5 rounded-xl px-4 py-3 outline-none"
-               placeholder="neon dreamy city at night, reflective water" />
-        <button id="aiBtn" class="btn bg-acc text-bg px-5 py-3 rounded-xl font-semibold">
-          Generate image
-        </button>
-      </div>
-      <div id="aiStatus" class="text-xs text-mute mt-2"></div>
-      <div id="aiShots" class="grid md:grid-cols-2 gap-4 mt-4"></div>
-    </div>
-  </div>
-</section>
-
-  <!-- PITCH -->
-  <section id="pitch" class="py-20">
-    <div class="max-w-5xl mx-auto px-4">
-      <div class="glass rounded-3xl p-8">
-        <h2 class="text-2xl md:text-4xl font-extrabold mb-4">Why EchoVerse will trend</h2>
-        <ul class="list-disc pl-6 space-y-2 text-mute">
-          <li><span class="text-ink">UGC flywheel:</span> кожен користувач творить власний світ → нескінченний контент.</li>
-          <li><span class="text-ink">Shareability:</span> короткі посилання на персональні «емоційні світи», ідеально для соцмереж.</li>
-          <li><span class="text-ink">Cross‑platform:</span> WebGL у браузері + мобільні обгортки (Capacitor).</li>
-          <li><span class="text-ink">Monetization‑ready:</span> лайтовий AI‑пас, платні скіни/сцени, бренд‑світи.</li>
-          <li><span class="text-ink">Buyer fit:</span> підходить для Google/YouTube Music, Epic, Poki, CrazyGames, Meta.</li>
-        </ul>
-        <div class="mt-6 grid md:grid-cols-2 gap-4">
-          <div class="glass rounded-2xl p-4">
-            <div class="font-semibold mb-1">Tech stack</div>
-            <div class="text-mute text-sm">Three.js • Tailwind • Optional: FastAPI + Vector DB для mood‑ембедінгів</div>
-          </div>
-          <div class="glass rounded-2xl p-4">
-            <div class="font-semibold mb-1">Growth</div>
-            <div class="text-mute text-sm">TikTok/Reels демки, комʼюніті челенджі «#MyMoodWorld», партнерські світи артистів.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section id="waitlist" class="py-20">
-    <div class="max-w-3xl mx-auto px-4 text-center">
-      <div class="glass rounded-3xl p-8">
-        <h3 class="text-2xl md:text-3xl font-bold mb-2">Get early access</h3>
-        <p class="text-mute mb-4">Першими отримаєте посилання на приватну альфу з реальним AI‑мапінгом емоцій.</p>
-        <form id="wl" class="flex flex-col sm:flex-row gap-3 justify-center">
-          <input required type="email" placeholder="you@email" class="w-full sm:w-96 bg-white/5 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-acc/60" />
-          <button class="btn bg-acc text-bg px-5 py-3 rounded-xl font-semibold">Join</button>
-        </form>
-        <p id="wlMsg" class="text-xs text-mute mt-2">Ми збережемо лише email локально (демо).</p>
-      </div>
-      <p class="text-[11px] text-mute mt-3">© EchoVerse. MIT demo. Designed for acquisition pitch.</p>
-    </div>
+  <!-- RESULT -->
+  <section class="max-w-6xl mx-auto px-4 pb-16">
+    <h2 class="text-2xl font-bold mb-3">Result / Gallery</h2>
+    <div id="shots" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
   </section>
 
   <!-- FOOTER -->
-  <footer class="pb-10">
-    <div class="max-w-7xl mx-auto px-4 text-xs text-mute">
-      <div class="flex flex-col md:flex-row gap-2 md:gap-6 justify-between">
-        <div>Made by Dmytro • <a class="underline" href="#top">Back to top</a></div>
-        <div>Deploy: push <code>index.html</code> to GitHub → Settings → Pages → Source: <em>Main / Root</em></div>
-      </div>
-    </div>
+  <footer class="max-w-6xl mx-auto px-4 pb-10 text-xs text-white/50">
+    <div>© EchoVerse — demo. <span class="ml-1">API via ngrok.</span></div>
   </footer>
 
+  <!-- APP -->
   <script>
-  // ====== EchoVerse demo world (procedural) ======
-  const canvas = document.getElementById('world');
-  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(55, 16/9, 0.1, 1000);
-  camera.position.set(0, 1.2, 3.4);
-  const controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true; controls.dampingFactor = 0.05; controls.enablePan = false; controls.minDistance = 2; controls.maxDistance = 6;
+    // 1) ВСТАВ СВІЙ АКТУАЛЬНИЙ NGROK ТУТ:
+    const API_URL = localStorage.getItem('echov_api')
+      || 'https://kimi-overweening-conception.ngrok-free.dev'; // <— замінюй при кожному перезапуску ngrok
 
-  // resize
-  function fit(){
-    const w = canvas.clientWidth, h = Math.max(canvas.clientHeight, 420);
-    renderer.setSize(w, h, false); camera.aspect = w/h; camera.updateProjectionMatrix();
-  }
-  window.addEventListener('resize', fit); fit();
+    // опціонально: з консолі можна перевизначити без редагування файлу:
+    // localStorage.setItem('echov_api','https://<новий>.ngrok-free.app')
 
-  // lights
-  const hemi = new THREE.HemisphereLight(0x88ccff, 0x081018, 1.0); scene.add(hemi);
-  const dir = new THREE.DirectionalLight(0xffffff, 0.9); dir.position.set(3,4,2); scene.add(dir);
+    const $ = s => document.querySelector(s);
+    const genBtn = $('#gen');
+    const statusEl = $('#status');
+    const shots = $('#shots');
 
-  // ground plane (foggy disk)
-  const groundGeo = new THREE.CircleGeometry(20, 64);
-  const groundMat = new THREE.MeshBasicMaterial({color:0x0d1624, transparent:true, opacity:0.6});
-  const ground = new THREE.Mesh(groundGeo, groundMat); ground.rotation.x = -Math.PI/2; ground.position.y = -1.1; scene.add(ground);
-
-  // sky particles
-  const stars = new THREE.Points(
-    new THREE.BufferGeometry(),
-    new THREE.PointsMaterial({size:0.01, color:0x7C5CFF})
-  );
-  const starCount = 1200; const positions = new Float32Array(starCount*3);
-  for(let i=0;i<starCount;i++){ positions[i*3+0]=(Math.random()-0.5)*18; positions[i*3+1]=Math.random()*6; positions[i*3+2]=(Math.random()-0.5)*18; }
-  stars.geometry.setAttribute('position', new THREE.BufferAttribute(positions,3));
-  scene.add(stars);
-
-  // planet (lowpoly sphere with noise)
-  const planetGeo = new THREE.IcosahedronGeometry(1, 5);
-  const planetMat = new THREE.MeshStandardMaterial({color:0x4cc9f0, roughness:0.6, metalness:0.1, flatShading:true});
-  const planet = new THREE.Mesh(planetGeo, planetMat); scene.add(planet);
-
-  // noise
-  const simplex = new SimplexNoise('seed');
-  function displace(amp=0.25, freq=1.2){
-    const pos = planet.geometry.attributes.position;
-    for(let i=0;i<pos.count;i++){
-      const vx = pos.getX(i), vy = pos.getY(i), vz = pos.getZ(i);
-      const n = simplex.noise3D(vx*freq, vy*freq, vz*freq);
-      const m = 1 + n*amp;
-      const v = new THREE.Vector3(vx,vy,vz).normalize().multiplyScalar(m);
-      pos.setXYZ(i, v.x, v.y, v.z);
-    }
-    planet.geometry.computeVertexNormals(); pos.needsUpdate = true;
-  }
-
-  // mood → params
-  function moodToParams(text){
-    text = (text||'').toLowerCase();
-    let amp=0.2,freq=1.2, hue=210, sat=70, light=60, glow=0x7C5CFF;
-    if(text.includes('calm')||text.includes('спок')){ amp=0.12; hue=200; sat=55; light=70; glow=0x0FF0FC; }
-    if(text.includes('joy')||text.includes('раді')||text.includes('happy')){ amp=0.18; hue=300; sat=80; light=65; glow=0xff8bd1; }
-    if(text.includes('anx')||text.includes('трив')){ amp=0.26; freq=1.6; hue=210; sat=60; light=55; glow=0x7C5CFF; }
-    if(text.includes('dark')||text.includes('sad')||text.includes('сум')){ amp=0.28; freq=1.4; hue=220; sat=35; light=45; glow=0x5462ff; }
-    return {amp,freq,hsl:`hsl(${hue} ${sat}% ${light}%)`, glow};
-  }
-
-  function applyMood(text){
-    const p = moodToParams(text);
-    // recolor
-    planet.material.color = new THREE.Color(p.hsl);
-    hemi.color = new THREE.Color(p.hsl);
-    // reset geometry & re-displace (recreate for clean base)
-    planet.geometry.dispose();
-    planet.geometry = new THREE.IcosahedronGeometry(1,5);
-    displace(p.amp, p.freq);
-    // star glow
-    stars.material.color = new THREE.Color(p.glow);
-    // subtle pulse
-    pulseTarget = 0.015 + p.amp*0.02;
-  }
-
-  // animate
-  let t=0, pulse=0, pulseTarget=0.02;
-  function tick(){
-    t+=0.005; controls.update();
-    planet.rotation.y += 0.0025;
-    // star twinkle
-    pulse += (pulseTarget - pulse)*0.02;
-    stars.rotation.y -= 0.0005;
-    stars.position.y = Math.sin(t*0.6)*0.05;
-    // slight breathing
-    const s = 1.0 + Math.sin(t*0.9)*pulse;
-    planet.scale.setScalar(s);
-    renderer.render(scene, camera);
-    requestAnimationFrame(tick);
-  }
-  tick();
-
-  // UI wiring
-  const prompt = document.getElementById('prompt');
-  const genBtn = document.getElementById('genBtn');
-  const presets = document.querySelectorAll('.preset');
-  genBtn.addEventListener('click', ()=> applyMood(prompt.value || 'calm and inspired'));
-  presets.forEach(b=>b.addEventListener('click', ()=>{ prompt.value=b.dataset.prompt; applyMood(prompt.value); }));
-  // initial mood
-  applyMood('calm and inspired');
-
-  // gallery snapshots
-  const snapBtn = document.getElementById('snap');
-  const shots = document.getElementById('shots');
-  snapBtn.addEventListener('click', ()=>{
-    const data = renderer.domElement.toDataURL('image/png');
-    const img = new Image(); img.src=data; img.className='w-full h-56 object-cover rounded-xl border border-white/10';
-    const card = document.createElement('div'); card.className='glass rounded-2xl p-2'; card.appendChild(img);
-    shots.prepend(card);
-  });
-
-  // waitlist demo (local only)
-  document.getElementById('wl').addEventListener('submit', (e)=>{
-    e.preventDefault();
-    const email = e.target.querySelector('input').value.trim();
-    const list = JSON.parse(localStorage.getItem('echov_wl')||'[]');
-    list.push({email, at: Date.now()});
-    localStorage.setItem('echov_wl', JSON.stringify(list));
-    document.getElementById('wlMsg').textContent = 'Saved locally. (For prod — hook to Formspree / your API)';
-    e.target.reset();
-  });
-  </script>
-  <script>
-  // 🔗 Вкажи адресу твого бекенда:
-  // Для локального тесту (звичайний Chrome/Safari, без проксі):
-  //   const API = 'http://127.0.0.1:8000';
-  // Для публічного сайту на GitHub Pages (через ngrok або VPS):
-  //   const API = 'https://<твій-ngrok-subdomain>.ngrok-free.app';
-  //   або const API = 'https://api.googleadschile.site';
-  const API = 'http://127.0.0.1:8000';
-
-  const aiBtn = document.getElementById('aiBtn');
-  const aiPrompt = document.getElementById('aiPrompt');
-  const aiStatus = document.getElementById('aiStatus');
-  const aiShots = document.getElementById('aiShots');
-
-  async function gen() {
-    const prompt = (aiPrompt.value || '').trim();
-    if (!prompt) { aiStatus.textContent = 'Введи опис (prompt)'; return; }
-    aiStatus.textContent = 'Генерація...';
-    aiBtn.disabled = true;
-
-    try {
-      const res = await fetch(API + '/txt2img', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, width: 384, height: 384, steps: 4, guidance: 1.0 })
-      });
-      if (!res.ok) throw new Error('API ' + res.status);
-      const data = await res.json();
-
-      // створюємо картинку з base64
-      const img = new Image();
-      img.src = 'data:image/png;base64,' + data.image_b64;
-      img.className = 'w-full rounded-2xl border border-white/10';
-
-      // картка у галереї
-      const card = document.createElement('div');
-      card.className = 'glass p-2 rounded-2xl';
-      card.appendChild(img);
-      const meta = document.createElement('div');
-      meta.className = 'text-[11px] text-mute mt-1';
-      meta.textContent = `ready • ${data.took_ms} ms`;
-      card.appendChild(meta);
-
-      aiShots.prepend(card);
-      aiStatus.textContent = 'Готово';
-    } catch (e) {
-      aiStatus.textContent = 'Помилка: ' + e.message +
-        (API.includes('localhost') || API.includes('127.0.0.1')
-          ? ' (пам’ятай: GitHub Pages не може звертатись до localhost)'
-          : '');
-    } finally {
-      aiBtn.disabled = false;
-    }
-  }
-
-  if (aiBtn) aiBtn.addEventListener('click', gen);
-</script>
-  <script>
-const API = 'https://kimi-overweening-conception.ngrok-free.dev';
-
-async function generateImage() {
-  const prompt = document.querySelector('#prompt').value;
-  const button = document.querySelector('#generate');
-  const img = document.querySelector('#result');
-
-  button.disabled = true;
-  button.innerText = 'Generating...';
-
-  try {
-    const response = await fetch(`${API}/png?prompt=${encodeURIComponent(prompt)}`, {
-      headers: {
-        "ngrok-skip-browser-warning": "true"
-      }
+    // пресети
+    document.querySelectorAll('.preset').forEach(b=>{
+      b.addEventListener('click', ()=> { $('#prompt').value = b.dataset.p; });
     });
 
-    if (!response.ok) throw new Error('Server error');
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-    img.src = url;
-  } catch (e) {
-    alert('Error generating image: ' + e.message);
-  } finally {
-    button.disabled = false;
-    button.innerText = 'Generate';
-  }
-}
-</script>
-  <div style="text-align:center; margin-top:50px;">
-  <h2>AI Image Generator</h2>
-  <input id="prompt" type="text" placeholder="Describe your image..." style="width:300px; padding:8px;">
-  <button id="generate" onclick="generateImage()" style="padding:8px 16px;">Generate</button>
-  <div style="margin-top:20px;">
-    <img id="result" width="512" height="512" style="border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.4);">
-  </div>
-</div>
+    function addCard(imgURL, metaText){
+      const card = document.createElement('div');
+      card.className = 'glass rounded-2xl p-2';
+      const img = new Image();
+      img.src = imgURL;
+      img.className = 'w-full h-auto rounded-xl border border-white/10';
+      const meta = document.createElement('div');
+      meta.className = 'text-[11px] text-white/60 mt-1';
+      meta.textContent = metaText;
+      card.appendChild(img); card.appendChild(meta);
+      shots.prepend(card);
+    }
+
+    async function generate(){
+      const p = ($('#prompt').value || '').trim();
+      if(!p){ statusEl.textContent = 'Введи prompt'; return; }
+      const size = parseInt($('#size').value,10) || 384;
+      const steps = parseInt($('#steps').value,10) || 4;
+
+      genBtn.disabled = true;
+      genBtn.textContent = 'Generating…';
+      statusEl.textContent = `API: ${API_URL} • ${size}×${size} • steps ${steps}`;
+
+      try{
+        const res = await fetch(`${API_URL}/txt2img`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true'
+          },
+          body: JSON.stringify({ prompt: p, width: size, height: size, steps, guidance: 1.0 })
+        });
+
+        if(!res.ok){
+          throw new Error(`API ${res.status}`);
+        }
+        const data = await res.json();
+        const url = 'data:image/png;base64,' + data.image_b64;
+        addCard(url, `ok • ${data.took_ms} ms`);
+        statusEl.textContent = 'Готово';
+      }catch(err){
+        statusEl.textContent = 'Помилка: ' + err.message +
+          (API_URL.includes('ngrok') ? ' (перевір, що ngrok активний у терміналі)' : '');
+      }finally{
+        genBtn.disabled = false;
+        genBtn.textContent = 'Generate';
+      }
+    }
+
+    genBtn.addEventListener('click', generate);
+  </script>
 </body>
 </html>
