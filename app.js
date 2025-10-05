@@ -1,160 +1,156 @@
 const $ = q => document.querySelector(q);
 const $$ = q => Array.from(document.querySelectorAll(q));
+const API = "http://localhost:8787"; // якщо деплоїш сервер, заміни на його HTTPS URL
 
-/* --------- STATE --------- */
-const store = {
-  get(){
-    try { return JSON.parse(localStorage.getItem('noirchat')) || {chats:[],active:null,tgUser:null}; }
-    catch { return {chats:[],active:null,tgUser:null}; }
-  },
-  set(s){ localStorage.setItem('noirchat', JSON.stringify(s)); }
+let state = {
+  me: null,
+  token: null, // з cookie, але тримаємо копію для socket.auth
+  chats: [],
+  activeId: null,
+  messages: {}
 };
-let state = store.get();
 
-const API_BASE = "http://localhost:8787"; // ← твій бекенд з /auth/telegram та /me
+function fmtTime(ts){ const d = new Date(ts); return d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); }
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c])); }
 
-/* --------- DEMO SEED --------- */
-if (state.chats.length === 0) {
-  state.chats = [
-    { id: uid(), title: "Design team", handle: "@yourchannel", last: "Почнемо з редизайну", messages:[
-      m(false,"Почнемо з редизайну"), m(true,"Ок, беру на себе UI")
-    ]},
-    { id: uid(), title: "NoirChat Bot", handle: "@noirchat1bot", last: "Готово до інтеграції", messages:[
-      m(false,"Готово до інтеграції"), m(true,"Тестую логін")
-    ]},
-  ];
-  state.active = state.chats[0].id;
-  store.set(state);
+// ---------- Auth modal ----------
+const authModal = $("#authModal");
+const loginBtn = $("#loginBtn");
+const logoutBtn = $("#logoutBtn");
+const closeAuth = $("#closeAuth");
+const tabLogin = $("#tabLogin");
+const tabRegister = $("#tabRegister");
+const authTitle = $("#authTitle");
+const nameWrap = $("#nameWrap");
+const authEmail = $("#authEmail");
+const authPassword = $("#authPassword");
+const authName = $("#authName");
+const authSubmit = $("#authSubmit");
+const authErr = $("#authErr");
+
+let mode = "login";
+function openAuth(){ authModal.classList.remove("hidden"); }
+function closeAuthModal(){ authModal.classList.add("hidden"); authErr.textContent=""; }
+tabLogin.onclick = ()=>{ mode="login"; tabLogin.classList.add("active"); tabRegister.classList.remove("active"); authTitle.textContent="Вхід"; nameWrap.classList.add("hidden"); };
+tabRegister.onclick = ()=>{ mode="register"; tabRegister.classList.add("active"); tabLogin.classList.remove("active"); authTitle.textContent="Реєстрація"; nameWrap.classList.remove("hidden"); };
+
+loginBtn.onclick = openAuth;
+closeAuth.onclick = closeAuthModal;
+
+// ---------- API helpers ----------
+async function api(path, options={}){
+  const r = await fetch(API+path, { credentials:"include", ...options });
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error || "api_error");
+  return j;
 }
 
-/* --------- HELPERS --------- */
-function uid(){ return Math.random().toString(36).slice(2,10); }
-function iso(){ return new Date().toISOString(); }
-function m(me,text){ return { id:uid(), me, text, ts: iso() }; }
-function active(){ return state.chats.find(c=>c.id===state.active) || null; }
-function escapeHTML(s){ return s.replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])); }
+authSubmit.onclick = async ()=>{
+  authErr.textContent = "";
+  try{
+    if (mode === "login") {
+      await api("/api/login", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ email:authEmail.value, password:authPassword.value }) });
+    } else {
+      await api("/api/register", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ email:authEmail.value, password:authPassword.value, name:authName.value }) });
+    }
+    await fetchMe();
+    closeAuthModal();
+  }catch(e){ authErr.textContent = "Помилка: "+e.message; }
+};
 
-/* --------- RENDER: CHAT LIST --------- */
-function renderList(filter=""){
-  const wrap = $("#chatList");
-  wrap.innerHTML = "";
-  state.chats
-    .filter(c => c.title.toLowerCase().includes(filter.toLowerCase()))
-    .forEach(c=>{
-      const el = document.createElement('div');
-      el.className = "chat-item" + (c.id===state.active ? " active":"");
-      const last = c.messages[c.messages.length-1];
-      el.innerHTML = `
-        <div class="ava">${c.title.slice(0,1).toUpperCase()}</div>
-        <div>
-          <div class="c-title">${escapeHTML(c.title)}</div>
-          <div class="c-last">${last ? (last.me?"Ти: ":"") + escapeHTML(last.text) : "Порожньо"}</div>
-        </div>
-        <div class="badge">demo</div>
-      `;
-      el.addEventListener('click',()=>{ state.active=c.id; store.set(state); renderMain(); renderList($("#search").value); });
-      wrap.appendChild(el);
-    });
-}
+logoutBtn.onclick = async ()=>{ try{ await api("/api/logout",{method:"POST"}); }catch{} state.me=null; renderUser(); renderChats(); renderActive(); };
 
-/* --------- RENDER: MAIN DIALOG --------- */
-function renderMain(){
-  const chat = active();
-  const msgWrap = $("#messages");
-  if(!chat){
-    $("#activeTitle").textContent = "No chat selected";
-    $("#activeMeta").textContent = "";
-    msgWrap.innerHTML = `<div class="placeholder">Обери чат ліворуч або створи новий.</div>`;
-    $("#openInTG").disabled = true;
-    return;
+// ---------- Me / Chats ----------
+async function fetchMe(){
+  try{
+    const j = await api("/api/me");
+    state.me = j.user;
+    renderUser();
+    await fetchChats();
+    await initSocket();
+  }catch{
+    state.me = null;
+    renderUser();
   }
-  $("#activeTitle").textContent = chat.title;
-  $("#activeMeta").textContent = chat.handle || "";
-  $("#openInTG").disabled = !chat.handle;
+}
 
-  msgWrap.innerHTML = "";
-  chat.messages.forEach(ms=>{
-    const el = document.createElement('div');
-    el.className = "msg" + (ms.me?" me":"");
-    el.innerHTML = `<div>${escapeHTML(ms.text)}</div><div class="meta-s">${new Date(ms.ts).toLocaleString()}</div>`;
-    msgWrap.appendChild(el);
+async function fetchChats(){
+  if (!state.me) return;
+  const j = await api("/api/chats");
+  state.chats = j.chats;
+  if (!state.activeId && state.chats[0]) state.activeId = state.chats[0].id;
+  renderChats();
+  renderActive();
+}
+
+async function fetchMessages(chatId){
+  const j = await api(`/api/messages/${chatId}`);
+  state.messages[chatId] = j.messages;
+  renderActive();
+}
+
+// ---------- Socket.io ----------
+let socket = null;
+async function initSocket(){
+  // витягнемо поточний cookie токен, щоб авторизувати сокет
+  const token = document.cookie.split("; ").find(x=>x.startsWith("noir_token="))?.split("=")[1] || null;
+  state.token = token;
+  if (!token) return;
+
+  if (socket) socket.disconnect();
+  socket = io(API, { withCredentials:true });
+  socket.on("connect", ()=> socket.emit("auth", token));
+  socket.on("message", ({ chatId, message })=>{
+    if (!state.messages[chatId]) state.messages[chatId]=[];
+    state.messages[chatId].push(message);
+    const chat = state.chats.find(c=>c.id===chatId);
+    if (chat){ chat.last = { text: message.text, at: message.created_at, userId: message.userId }; chat.updated_at = message.created_at; }
+    renderChats(); if (state.activeId===chatId) renderActive();
   });
-  msgWrap.scrollTop = msgWrap.scrollHeight;
 }
 
-/* --------- SEND --------- */
-function send(){
-  const chat = active(); if(!chat) return;
-  const input = $("#msgInput"); const text = input.value.trim(); if(!text) return;
-  chat.messages.push(m(true,text));
-  setTimeout(()=>{ chat.messages.push(m(false,"🤖 (демо) Відправлено. Відкрий цей діалог у Telegram для реальних повідомлень.")); store.set(state); renderMain(); }, 250);
-  input.value = ""; store.set(state); renderMain();
-}
-
-/* --------- TELEGRAM LOGIN (SSO) --------- */
-window.noirOnTelegramAuth = async function(user){
-  try{
-    const r = await fetch(`${API_BASE}/auth/telegram`, {
-      method:"POST", headers:{ "Content-Type":"application/json" },
-      credentials:"include", body: JSON.stringify(user)
-    });
-    const j = await r.json(); if(!j.ok) throw new Error(j.error||"Auth failed");
-    state.tgUser = j.session; store.set(state);
-    renderUser(); closeModal();
-  }catch(e){ alert("Auth error: "+e.message); }
-};
-
-async function checkMe(){
-  try{
-    const r = await fetch(`${API_BASE}/me`, { credentials:"include" });
-    const j = await r.json(); if(j.ok){ state.tgUser=j.session; store.set(state); }
-  }catch{}
-  renderUser();
-}
-
+// ---------- Render: user / chats / active ----------
 function renderUser(){
-  const mini = $("#userMini");
-  const box = $("#tgUserBox");
-  if(!state.tgUser){
-    mini.classList.add("hidden");
-    box?.classList.add("hidden");
+  const userMini = $("#userMini");
+  if (!state.me){
+    userMini.classList.add("hidden");
+    loginBtn.classList.remove("hidden");
+    logoutBtn.classList.add("hidden");
+    $("#msgInput").disabled = true;
+    $("#sendBtn").disabled = true;
     return;
   }
-  const u = state.tgUser;
-  mini.classList.remove("hidden");
-  mini.textContent = `${u.first_name || ""} ${u.last_name || ""}${u.username ? " (@"+u.username+")":""}`;
-  if(box){
-    box.classList.remove("hidden");
-    box.innerHTML = `<div class="s">Увійшов: <strong>${u.first_name||""} ${u.last_name||""}</strong> ${u.username? "(@"+u.username+")":""}</div>
-                     <div class="s muted">id: ${u.id}</div>`;
+  userMini.textContent = `${state.me.name} (${state.me.email})`;
+  userMini.classList.remove("hidden");
+  loginBtn.classList.add("hidden");
+  logoutBtn.classList.remove("hidden");
+  $("#msgInput").disabled = false;
+  $("#sendBtn").disabled = false;
+}
+
+function renderChats(filter=""){
+  const list = $("#chatList"); list.innerHTML = "";
+  const items = state.chats
+    .filter(c => c.title.toLowerCase().includes(filter.toLowerCase()))
+    .sort((a,b)=> (b.updated_at||0) - (a.updated_at||0));
+
+  for (const c of items){
+    const row = document.createElement("div");
+    row.className = "chat-item" + (c.id===state.activeId ? " active": "");
+    row.innerHTML = `
+      <div class="ava">${esc(c.title.slice(0,1)).toUpperCase()}</div>
+      <div>
+        <div class="c-title">${esc(c.title)}</div>
+        <div class="c-last">${c.last ? esc((c.last.userId===state.me?.id ? "Ти: " : "") + c.last.text) : "Порожньо"}</div>
+      </div>
+      <div class="time">${c.last ? esc(fmtTime(c.last.at)) : ""}</div>
+    `;
+    row.onclick = async ()=>{ state.activeId=c.id; renderChats($("#search").value); if (!state.messages[c.id]) await fetchMessages(c.id); renderActive(); };
+    list.appendChild(row);
   }
 }
 
-/* --------- MODAL --------- */
-function openModal(){ $("#loginModal").classList.remove("hidden"); }
-function closeModal(){ $("#loginModal").classList.add("hidden"); }
-
-/* --------- EVENTS --------- */
-$("#sendBtn").addEventListener('click', send);
-$("#msgInput").addEventListener('keydown', e=>{ if(e.key==="Enter") send(); });
-$("#newChat").addEventListener('click', ()=>{
-  const title = prompt("Назва чату:", "New chat"); if(!title) return;
-  const handle = prompt("Telegram @username (необов’язково):", "");
-  const c = { id:uid(), title, handle: handle||"", messages:[] };
-  state.chats.unshift(c); state.active = c.id; store.set(state);
-  renderList($("#search").value); renderMain();
-});
-$("#openInTG").addEventListener('click', ()=>{
-  const chat = active(); if(!chat || !chat.handle) return;
-  const u = chat.handle.startsWith("@") ? chat.handle.slice(1) : chat.handle;
-  window.open(`https://web.telegram.org/k/#@${u}`, "_blank");
-});
-$("#search").addEventListener('input', e => renderList(e.target.value));
-
-$("#loginBtn").addEventListener('click', openModal);
-$("#closeModal").addEventListener('click', closeModal);
-
-/* --------- INIT --------- */
-checkMe();
-renderList();
-renderMain();
+function renderActive(){
+  const wrap = $("#messages");
+  const chat = state.chats.find(c=>c.id===state.activeId);
+  if (!chat){ $("#activeTitle").textContent="No chat selected"; $("#activeMeta").textContent=""; wrap.innerHTML=`<div class="placeholder">Обери чат ліворуч або створи нов
