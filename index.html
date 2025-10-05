@@ -382,5 +382,43 @@
 
   if (aiBtn) aiBtn.addEventListener('click', gen);
 </script>
+  <script>
+const API = 'https://kimi-overweening-conception.ngrok-free.dev';
+
+async function generateImage() {
+  const prompt = document.querySelector('#prompt').value;
+  const button = document.querySelector('#generate');
+  const img = document.querySelector('#result');
+
+  button.disabled = true;
+  button.innerText = 'Generating...';
+
+  try {
+    const response = await fetch(`${API}/png?prompt=${encodeURIComponent(prompt)}`, {
+      headers: {
+        "ngrok-skip-browser-warning": "true"
+      }
+    });
+
+    if (!response.ok) throw new Error('Server error');
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    img.src = url;
+  } catch (e) {
+    alert('Error generating image: ' + e.message);
+  } finally {
+    button.disabled = false;
+    button.innerText = 'Generate';
+  }
+}
+</script>
+  <div style="text-align:center; margin-top:50px;">
+  <h2>AI Image Generator</h2>
+  <input id="prompt" type="text" placeholder="Describe your image..." style="width:300px; padding:8px;">
+  <button id="generate" onclick="generateImage()" style="padding:8px 16px;">Generate</button>
+  <div style="margin-top:20px;">
+    <img id="result" width="512" height="512" style="border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.4);">
+  </div>
+</div>
 </body>
 </html>
