@@ -1,25 +1,11 @@
 {
-  "name": "NoirChat — Telegram-based demo (purple/black)",
-  "description": "NoirChat: sleek purple–black chat UI with Telegram login widget and quick-bridge to Telegram Web.",
-  "version": "1.0.0",
+  "name": "NoirChat — Telegram SSO",
+  "version": "1.1.0",
   "manifest_version": 3,
-  "action": {
-    "default_title": "NoirChat",
-    "default_popup": "index.html"
-  },
-  "icons": {
-    "16": "assets/icon16.png",
-    "32": "assets/icon32.png",
-    "48": "assets/icon48.png",
-    "128": "assets/icon128.png"
-  },
-  "permissions": [],
-  "host_permissions": [
-    "https://telegram.org/*",
-    "https://web.telegram.org/*"
-  ],
+  "action": { "default_title": "NoirChat", "default_popup": "index.html" },
+  "icons": { "16":"assets/icon16.png","32":"assets/icon32.png","48":"assets/icon48.png","128":"assets/icon128.png" },
+  "host_permissions": ["https://telegram.org/*","https://web.telegram.org/*","http://localhost:8787/*"],
   "content_security_policy": {
     "extension_pages": "script-src 'self' https://telegram.org; object-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
   }
 }
-
