@@ -1,6 +1,6 @@
 const $ = q => document.querySelector(q);
 const $$ = q => Array.from(document.querySelectorAll(q));
-const API = "http://localhost:8787";
+const API = "https://api.whitetargetagency.site";
 
 // якщо деплоїш сервер, заміни на його HTTPS URL
 let state = {
