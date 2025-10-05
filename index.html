@@ -3,26 +3,27 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>NoirChat — Telegram-like</title>
+  <title>NoirChat — Web</title>
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
   <div class="layout">
 
-    <!-- SIDEBAR (ЧАТИ) -->
+    <!-- LEFT: chats -->
     <aside class="sidebar">
       <header class="sidebar-top">
         <div class="brand">
           <img src="assets/icon48.png" alt="NoirChat"/>
           <div>
             <div class="b-title">NoirChat</div>
-            <div class="b-sub">AI × Telegram</div>
+            <div class="b-sub">AI × Secure Messaging</div>
           </div>
         </div>
 
         <div class="auth">
-          <button id="loginBtn" class="primary s">Увійти з Telegram</button>
           <div id="userMini" class="user-mini hidden"></div>
+          <button id="loginBtn" class="primary s">Увійти</button>
+          <button id="logoutBtn" class="ghost s hidden">Вийти</button>
         </div>
 
         <div class="search">
@@ -31,57 +32,61 @@
       </header>
 
       <div id="chatList" class="chat-list"></div>
+
       <div class="sidebar-bottom">
-        <button id="newChat" class="ghost">+ Новий чат</button>
+        <button id="newChat" class="primary">+ Новий чат</button>
       </div>
     </aside>
 
-    <!-- MAIN (ДІАЛОГ) -->
+    <!-- RIGHT: conversation -->
     <main class="main">
       <header class="topbar">
         <div>
           <div id="activeTitle" class="title">No chat selected</div>
           <div id="activeMeta" class="meta"></div>
         </div>
-        <div class="actions">
-          <button id="openInTG" title="Відкрити у Telegram">↗</button>
-        </div>
       </header>
 
       <section id="messages" class="messages">
-        <div class="placeholder">Обери чат ліворуч або створи новий.</div>
+        <div class="placeholder">Увійди та обери чат або створи новий.</div>
       </section>
 
       <footer class="composer">
-        <input id="msgInput" placeholder="Написати повідомлення…"/>
-        <button id="sendBtn">►</button>
+        <input id="msgInput" placeholder="Написати повідомлення…" disabled/>
+        <button id="sendBtn" disabled>►</button>
       </footer>
     </main>
   </div>
 
-  <!-- MODAL: Telegram Login Widget -->
-  <div id="loginModal" class="modal hidden">
+  <!-- MODAL: auth -->
+  <div id="authModal" class="modal hidden">
     <div class="modal-card">
       <div class="modal-head">
-        <div>Увійти через Telegram</div>
-        <button id="closeModal">✕</button>
+        <div id="authTitle">Вхід</div>
+        <button id="closeAuth">✕</button>
       </div>
       <div class="modal-body">
-        <div id="tgWidgetWrap">
-          <script async src="https://telegram.org/js/telegram-widget.js?22"
-            data-telegram-login="noirchat1bot"
-            data-size="large"
-            data-userpic="false"
-            data-request-access="write"
-            data-onauth="noirOnTelegramAuth">
-          </script>
+        <div class="tabs">
+          <button id="tabLogin" class="tab active">Вхід</button>
+          <button id="tabRegister" class="tab">Реєстрація</button>
         </div>
-        <p class="muted s">* Після входу ми створимо сесію NoirChat. Підпис перевіряє бекенд.</p>
-        <div id="tgUserBox" class="tg-user hidden"></div>
+        <div class="form">
+          <label>Email</label>
+          <input id="authEmail" type="email" placeholder="you@example.com"/>
+          <label>Пароль</label>
+          <input id="authPassword" type="password" placeholder="••••••••"/>
+          <div id="nameWrap" class="hidden">
+            <label>Ім’я (опц.)</label>
+            <input id="authName" type="text" placeholder="Dmytro"/>
+          </div>
+          <button id="authSubmit" class="primary" style="width:100%;margin-top:10px">Підтвердити</button>
+          <div id="authErr" class="muted s" style="margin-top:8px;"></div>
+        </div>
       </div>
     </div>
   </div>
 
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-Dw2e2mKq5mN0y3n0Hk0r3g4a3m6hJXgkzE1c7cK8rS0T3D3xw1o3k9o1kZz27Nf3" crossorigin="anonymous"></script>
   <script src="app.js"></script>
 </body>
 </html>
