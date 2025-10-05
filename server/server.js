@@ -54,6 +54,43 @@ app.use(cookieParser());
 
 /* ---------- Health ---------- */
 app.get("/health", (_, res) => res.json({ ok: true, ts: Date.now() }));
+// ===== ADMIN ACCESS (debug tools) =====
+const ADMIN_KEY = process.env.ADMIN_KEY || null;
+
+// ⚠️ Скидання БД (очищає users/chats/messages)
+app.post("/admin/reset", (req, res) => {
+  if (!ADMIN_KEY || req.query.key !== ADMIN_KEY) return res.status(403).json({ ok:false });
+  writeDB({ users: [], chats: [], messages: [] });
+  sessions.clear();
+  res.json({ ok:true, cleared:true });
+});
+
+// Увійти як email (створить користувача, якщо нема)
+app.get("/admin/login-as", async (req, res) => {
+  if (!ADMIN_KEY || req.query.key !== ADMIN_KEY) return res.status(403).json({ ok:false });
+
+  const email = String(req.query.email || "").toLowerCase();
+  const name  = String(req.query.name || email.split("@")[0] || "User");
+  if (!email) return res.status(400).json({ ok:false, error:"email_required" });
+
+  const db = readDB();
+  let user = db.users.find(u => u.email.toLowerCase() === email);
+  if (!user) {
+    user = {
+      id: uuidv4(),
+      email,
+      name,
+      password_hash: await bcrypt.hash(uuidv4(), 10),
+      created_at: Date.now()
+    };
+    db.users.push(user);
+    writeDB(db);
+  }
+  const token = uuidv4();
+  sessions.set(token, user.id);
+  setAuthCookie(res, token);
+  res.json({ ok:true, token, user:{ id:user.id, email:user.email, name:user.name } });
+});
 
 /* ---------- Sessions ---------- */
 const sessions = new Map(); // token -> userId
