@@ -2,7 +2,7 @@ const $ = q => document.querySelector(q);
 const $$ = q => Array.from(document.querySelectorAll(q));
 
 // Локально лишай localhost. На проді постав HTTPS бекенд-домен:
-const API = "http://localhost:8787"; 
+const API = "https://adsphere-site-2.onrender.com";
 // const API = "https://api.whitetargetagency.site";
 
 let state = {
