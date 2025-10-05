@@ -126,6 +126,24 @@
       <div id="shots" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </div>
   </section>
+<!-- AI image demo (self-hosted) -->
+<section id="ai" class="py-20">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="glass rounded-3xl p-6">
+      <h2 class="text-2xl md:text-3xl font-bold mb-3">AI image demo</h2>
+      <p class="text-mute mb-3">Генерує зображення через твій локальний AI-сервер.</p>
+      <div class="flex flex-col md:flex-row gap-3">
+        <input id="aiPrompt" class="w-full bg-white/5 rounded-xl px-4 py-3 outline-none"
+               placeholder="neon dreamy city at night, reflective water" />
+        <button id="aiBtn" class="btn bg-acc text-bg px-5 py-3 rounded-xl font-semibold">
+          Generate image
+        </button>
+      </div>
+      <div id="aiStatus" class="text-xs text-mute mt-2"></div>
+      <div id="aiShots" class="grid md:grid-cols-2 gap-4 mt-4"></div>
+    </div>
+  </div>
+</section>
 
   <!-- PITCH -->
   <section id="pitch" class="py-20">
@@ -307,5 +325,62 @@
     e.target.reset();
   });
   </script>
+  <script>
+  // 🔗 Вкажи адресу твого бекенда:
+  // Для локального тесту (звичайний Chrome/Safari, без проксі):
+  //   const API = 'http://127.0.0.1:8000';
+  // Для публічного сайту на GitHub Pages (через ngrok або VPS):
+  //   const API = 'https://<твій-ngrok-subdomain>.ngrok-free.app';
+  //   або const API = 'https://api.googleadschile.site';
+  const API = 'http://127.0.0.1:8000';
+
+  const aiBtn = document.getElementById('aiBtn');
+  const aiPrompt = document.getElementById('aiPrompt');
+  const aiStatus = document.getElementById('aiStatus');
+  const aiShots = document.getElementById('aiShots');
+
+  async function gen() {
+    const prompt = (aiPrompt.value || '').trim();
+    if (!prompt) { aiStatus.textContent = 'Введи опис (prompt)'; return; }
+    aiStatus.textContent = 'Генерація...';
+    aiBtn.disabled = true;
+
+    try {
+      const res = await fetch(API + '/txt2img', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, width: 384, height: 384, steps: 4, guidance: 1.0 })
+      });
+      if (!res.ok) throw new Error('API ' + res.status);
+      const data = await res.json();
+
+      // створюємо картинку з base64
+      const img = new Image();
+      img.src = 'data:image/png;base64,' + data.image_b64;
+      img.className = 'w-full rounded-2xl border border-white/10';
+
+      // картка у галереї
+      const card = document.createElement('div');
+      card.className = 'glass p-2 rounded-2xl';
+      card.appendChild(img);
+      const meta = document.createElement('div');
+      meta.className = 'text-[11px] text-mute mt-1';
+      meta.textContent = `ready • ${data.took_ms} ms`;
+      card.appendChild(meta);
+
+      aiShots.prepend(card);
+      aiStatus.textContent = 'Готово';
+    } catch (e) {
+      aiStatus.textContent = 'Помилка: ' + e.message +
+        (API.includes('localhost') || API.includes('127.0.0.1')
+          ? ' (пам’ятай: GitHub Pages не може звертатись до localhost)'
+          : '');
+    } finally {
+      aiBtn.disabled = false;
+    }
+  }
+
+  if (aiBtn) aiBtn.addEventListener('click', gen);
+</script>
 </body>
 </html>
