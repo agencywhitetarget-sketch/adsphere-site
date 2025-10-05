@@ -1,7 +1,8 @@
 const $ = q => document.querySelector(q);
 const $$ = q => Array.from(document.querySelectorAll(q));
-const API = "http://localhost:8787"; // якщо деплоїш сервер, заміни на його HTTPS URL
+const API = "http://localhost:8787";
 
+// якщо деплоїш сервер, заміни на його HTTPS URL
 let state = {
   me: null,
   token: null, // з cookie, але тримаємо копію для socket.auth
